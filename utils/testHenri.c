@@ -63,7 +63,7 @@ int main( void )
 
 	printf( "*** ( EV3 ) Hello! ***\n" );
 
-	/*printf( "Found tacho motors:\n" );
+	printf( "Found tacho motors:\n" );
 	for ( i = 0; i < DESC_LIMIT; i++ ) {
 		if ( ev3_tacho[ i ].type_inx != TACHO_TYPE__NONE_ ) {
 			printf( "  type = %s\n", ev3_tacho_type( ev3_tacho[ i ].type_inx ));
@@ -72,7 +72,7 @@ int main( void )
 		}
 	}
 	//Run motors in order from port A to D
-	int port1=65;
+	/*int port1=65;
 	for (port1=65; port1<68; port1++){
 	if ( ev3_search_tacho_plugged_in(port1,0, &sn, 0 )) {
 		int max_speed;
@@ -87,7 +87,7 @@ int main( void )
 		set_tacho_ramp_down_sp( sn, 2000 );
 		set_tacho_command_inx( sn, TACHO_RUN_TIMED );	
 		/* Wait tacho stop */
-		Sleep( 100 );
+		/*Sleep( 100 );
 		do {
 			get_tacho_state_flags( sn, &state );
 		} while ( state );
