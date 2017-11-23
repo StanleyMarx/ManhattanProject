@@ -72,9 +72,9 @@ int main( void )
 		}
 	}
 	//Run motors in order from port A to D
-	/*int port1=65;
-	for (port1=65; port1<68; port1++){
-	if ( ev3_search_tacho_plugged_in(port1,0, &sn, 0 )) {
+	int port=65;
+	for (port=65; port<69; port++){
+	if ( ev3_search_tacho_plugged_in(port,0, &sn, 0 )) {
 		int max_speed;
 
 		printf( "LEGO_EV3_M_MOTOR 1 is found, run for 5 sec...\n" );
@@ -85,9 +85,9 @@ int main( void )
 		set_tacho_time_sp( sn, 5000 );
 		set_tacho_ramp_up_sp( sn, 2000 );
 		set_tacho_ramp_down_sp( sn, 2000 );
-		set_tacho_command_inx( sn, TACHO_RUN_TIMED );	
+		set_tacho_command_inx( sn, TACHO_RUN_TIMED );
 		/* Wait tacho stop */
-		/*Sleep( 100 );
+		Sleep( 100 );
 		do {
 			get_tacho_state_flags( sn, &state );
 		} while ( state );
@@ -104,7 +104,7 @@ int main( void )
 	} else {
 		printf( "LEGO_EV3_M_MOTOR 1 is NOT found\n" );
 	}
-	}*/
+	}
 	
 //Run all sensors
 	ev3_sensor_init();
@@ -171,7 +171,7 @@ int main( void )
 		Sleep( 200 );
 	}
 
-	ev3_uninit();*/
+	ev3_uninit();
 	printf( "*** ( EV3 ) Bye! ***\n" );
 
 	return ( 0 );
