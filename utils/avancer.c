@@ -1,8 +1,3 @@
-/*
-usage:        ./avancer [distance]
-description:  fait avancer le robot d'une distance proportionnelle à la distance entrée en paramètre
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "ev3.h"
@@ -14,15 +9,16 @@ int main(int argc, char** argv){
     int A=1000;
     int B=0.66;
     
-    if (argc!=3){
+    if (argc!=2){
         printf("Wrong usage: param1 = dist to run\n");
+        exit()
     }
     int dist=atoi(argv[1]);
     int port;
     uint8_t sn;
     for (port=65; port<69; port++){
         if (ev3_search_tacho_plugged_in(port,0,&sn,0)){
-            printf("Motor is found\n");
+            printf("Motor is found at port %d\n",port);
             int max_speed;
             get_tacho_max_speed(sn,&max_speed);
             printf("Found maximum speed of motors: %d\n",max_speed);
@@ -34,5 +30,7 @@ int main(int argc, char** argv){
             set_tacho_command_inx(sn,TACHO_RUN_TIMED);
             printf("done\n");
         }
+        printf("Motor not found at port %d\n",port)
     }
+    printf("exiting...\n");
 }
