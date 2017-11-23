@@ -16,7 +16,7 @@ int main(int argc, char** argv){
     int dist=atoi(argv[1]);
     int port;
     uint8_t sn;
-    for (port=65; port<69; port++){
+    for (port=65; port<73; port++){
         if (ev3_search_tacho_plugged_in(port,0,&sn,0)){
             printf("Motor is found at port %d\n",port);
             int max_speed;
