@@ -11,7 +11,7 @@ int main(int argc, char** argv){
     
     if (argc!=2){
         printf("Wrong usage: param1 = dist to run\n");
-        exit()
+        exit(1);
     }
     int dist=atoi(argv[1]);
     int port;
@@ -30,7 +30,7 @@ int main(int argc, char** argv){
             set_tacho_command_inx(sn,TACHO_RUN_TIMED);
             printf("done\n");
         }
-        printf("Motor not found at port %d\n",port)
+        printf("Motor not found at port %d\n",port);
     }
     printf("exiting...\n");
 }
