@@ -21,7 +21,7 @@ int main(int argc, char** argv){
     int port;
     uint8_t sn;
     for (port=65; port<69; port++){
-        if (ev3_search_tacho_plugged_in(port,0,&sn)){
+        if (ev3_search_tacho_plugged_in(port,0,&sn,0)){
             printf("Motor is found\n");
             int max_speed;
             get_tacho_max_speed(sn,&max_speed);
