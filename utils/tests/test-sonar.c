@@ -22,8 +22,8 @@ const char const *color[] = { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "W
 int main( void )
 {
 	int i;
-	uint8_t sn;
-	FLAGS_T state;
+	//uint8_t sn;
+	//FLAGS_T state;
 	//uint8_t sn_touch;
 	//uint8_t sn_color;
 	//uint8_t sn_compass;
