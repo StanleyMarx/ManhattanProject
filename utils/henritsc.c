@@ -80,9 +80,9 @@ int main( void )
 		int max_speed2;
 		printf( "LEGO_EV3_M_MOTOR 1 and 2 are found, about to run for 5 sec...\n" );
 		printf("tacho 1 connected to port: %d", port);
-        printf("tacho 2 connected to port: %d", port+1);
-        get_tacho_max_speed( sn, &max_speed );
-        get_tacho_max_speed( sn2, &max_speed2 );
+        	printf("tacho 2 connected to port: %d", port+1);
+        	get_tacho_max_speed( sn, &max_speed );
+        	get_tacho_max_speed( sn2, &max_speed2 );
 		printf("  max speed = %d\n", max_speed );
 		printf("  max speed 2 = %d\n", max_speed2 );
 		set_tacho_stop_action_inx( sn, TACHO_COAST );
@@ -99,44 +99,48 @@ int main( void )
 		set_tacho_command_inx( sn2, TACHO_RUN_TIMED );
 		/* Wait tacho stop */
 		Sleep( 100 );
+//________________________________________
+		ev3_sensor_init();
+	
+		printf( "Found sensors:\n" );
+		for ( i = 0; i < DESC_LIMIT; i++ ) {
+			if ( ev3_sensor[ i ].type_inx != SENSOR_TYPE__NONE_ ) {
+				printf( "  type = %s\n", ev3_sensor_type( ev3_sensor[ i ].type_inx ));
+				printf( "  port = %s\n", ev3_sensor_port_name( i, s ));
+				if ( get_sensor_mode( i, s, sizeof( s ))) {
+					printf( "  mode = %s\n", s );
+				}
+				if ( get_sensor_num_values( i, &n )) {
+					for ( ii = 0; ii < n; ii++ ) {
+						if ( get_sensor_value( ii, i, &val )) {
+							printf( "  value%d = %d\n", ii, val );
+						}
+					}
+				}
+			}
+		}
+		if ( ev3_search_sensor( LEGO_EV3_TOUCH, &sn_touch, 0 )) {
+			printf( "TOUCH sensor is found, press BUTTON for EXIT...\n" );
+		} 
+		for ( ; ; ){
+			if ( _check_pressed( sn_touch )) break;
+			Sleep( 200 );
+			printf( "\r        " );
+			fflush( stdout );
+			if ( _check_pressed( sn_touch )) break;
+			Sleep( 200 );
+		}
+
+		ev3_uninit();
+		
+		
+//________________________________________
 	} else {
 		printf( "LEGO_EV3_M_MOTOR 1 is NOT found\n" );
 	}
 	}
 	
-//Run all sensors
-	ev3_sensor_init();
-	
-	printf( "Found sensors:\n" );
-for ( i = 0; i < DESC_LIMIT; i++ ) {
-		if ( ev3_sensor[ i ].type_inx != SENSOR_TYPE__NONE_ ) {
-			printf( "  type = %s\n", ev3_sensor_type( ev3_sensor[ i ].type_inx ));
-			printf( "  port = %s\n", ev3_sensor_port_name( i, s ));
-			if ( get_sensor_mode( i, s, sizeof( s ))) {
-				printf( "  mode = %s\n", s );
-			}
-			if ( get_sensor_num_values( i, &n )) {
-				for ( ii = 0; ii < n; ii++ ) {
-					if ( get_sensor_value( ii, i, &val )) {
-						printf( "  value%d = %d\n", ii, val );
-					}
-				}
-			}
-		}
-	}
-	if ( ev3_search_sensor( LEGO_EV3_TOUCH, &sn_touch, 0 )) {
-		printf( "TOUCH sensor is found, press BUTTON for EXIT...\n" );
-	} 
-	for ( ; ; ){
-		if ( _check_pressed( sn_touch )) break;
-		Sleep( 200 );
-		printf( "\r        " );
-		fflush( stdout );
-		if ( _check_pressed( sn_touch )) break;
-		Sleep( 200 );
-	}
 
-	ev3_uninit();
 	printf( "*** ( EV3 ) Bye! ***\n" );
 
 	return ( 0 );
