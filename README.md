@@ -28,7 +28,7 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 	+  pelle: attraper/ garder/ relâcher 
 	+  pointeur: réagir
 	+  couleur: bien reconnaitre les couleurs/ poser la distance au sol et sa position/ réagir
-	+  position: créer un historique des positions
+	+ PAS DE CAPTEUR DE POSITION créer un historique des positions
 	+  distance: réagir à une distance X d’un obstacle
 	+  compas: orienter le robot dans une direction en particulier/ créer un historique des orientations
 
