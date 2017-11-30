@@ -61,7 +61,7 @@ int main( void )
 		}
 	}
 	for ( ; ; ){
-		if (ev3_search_sensor(NXT_ANALOG, &sn_sonar,0)){
+		if (ev3_search_sensor(LEGO_EV3_US, &sn_sonar,0)){
 			printf("Sonar sensor found, reading distance...\n");
 			if ( !get_sensor_value0(sn_sonar, &value )) {
 				value = 0;
