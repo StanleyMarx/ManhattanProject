@@ -1,11 +1,11 @@
 ### back ports
 * A -
-* B
-* C
+* B - right motor
+* C - left motor 
 * D -
 
 ### front ports
-* 1 - right motor
-* 2
-* 3
-* 4 - left motor
+* 1 - 
+* 2 -
+* 3 -
+* 4 -
