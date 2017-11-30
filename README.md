@@ -14,3 +14,8 @@
 + **Maîtriser la communication client/serveur**
 + **Développer l'autonomie**: coder des programmes permettant au robot d'évoluer en effectuant des tâches simples comme se déplacer en évitant les obstacles
 + **Fixer une stratégie** pour la commplétion du projet final qui est celui de cartographier un espace
++ **Pour le 18 décembre** 
++ Test #1. Small stadium: be able to explore the stadium without bumping into obstacles.
++ Test #2. Small stadium: be able to start from the beginner position, and send to the BT server the position of the robot.
++ Test #3. Be able to make the difference between non-movable and movable objects.
++ Test #4. Be able to release an object.
