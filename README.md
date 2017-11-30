@@ -33,7 +33,7 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 	+  compas: orienter le robot dans une direction en particulier/ créer un historique des orientations
 
 + **poser l’interaction de plusieurs éléments en même temps**
-	+  éviter tout les obstacles
+	+  éviter tous les obstacles
 	+  suivre une bande de couleur
 	+  suivre un mur
 	+  faire le tour d’un objet
