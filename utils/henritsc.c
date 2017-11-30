@@ -35,7 +35,6 @@ int main( void )
 {
 	int i;
 	uint8_t sn;
-    uint8_t sn2;
 	FLAGS_T state;
 	uint8_t sn_touch;
 	uint8_t sn_color;
@@ -74,73 +73,105 @@ int main( void )
 	}
 	//Run motors in order from port A to D
 	int port=65;
-	for (port=65; port<66; port++){
-	if ( ev3_search_tacho_plugged_in(port,0, &sn, 0 ) && ev3_search_tacho_plugged_in(port+1,0, &sn2, 0)) {
+	port=65
+	if ( ev3_search_tacho_plugged_in(port,0, &sn, 0 )) {
 		int max_speed;
-		int max_speed2;
-		printf( "LEGO_EV3_M_MOTOR 1 and 2 are found, about to run for 5 sec...\n" );
-		printf("tacho 1 connected to port: %d", port);
-        	printf("tacho 2 connected to port: %d", port+1);
-        	get_tacho_max_speed( sn, &max_speed );
-        	get_tacho_max_speed( sn2, &max_speed2 );
+
+		printf( "LEGO_EV3_M_MOTOR 1 is found, run for 5 sec...\n" );
+		get_tacho_max_speed( sn, &max_speed );
 		printf("  max speed = %d\n", max_speed );
-		printf("  max speed 2 = %d\n", max_speed2 );
 		set_tacho_stop_action_inx( sn, TACHO_COAST );
-		set_tacho_stop_action_inx( sn2, TACHO_COAST );
 		set_tacho_speed_sp( sn, max_speed * 2 / 3 );
-		set_tacho_speed_sp( sn2, max_speed2 * 2 / 3 );
 		set_tacho_time_sp( sn, 5000 );
-		set_tacho_time_sp( sn2, 5000 );
 		set_tacho_ramp_up_sp( sn, 2000 );
-		set_tacho_ramp_up_sp( sn2, 2000 );
 		set_tacho_ramp_down_sp( sn, 2000 );
-		set_tacho_ramp_down_sp( sn2, 2000 );
 		set_tacho_command_inx( sn, TACHO_RUN_TIMED );
-		set_tacho_command_inx( sn2, TACHO_RUN_TIMED );
 		/* Wait tacho stop */
 		Sleep( 100 );
-//________________________________________
-		ev3_sensor_init();
+		do {
+			get_tacho_state_flags( sn, &state );
+		} while ( state );
+		printf( "run to relative position...\n" );
+		set_tacho_speed_sp( sn, max_speed / 2 );
+		set_tacho_ramp_up_sp( sn, 0 );
+		set_tacho_ramp_down_sp( sn, 0 );
+		set_tacho_position_sp( sn, 90 );
+		for ( i = 0; i < 8; i++ ) {
+			set_tacho_command_inx( sn, TACHO_RUN_TO_REL_POS );
+			Sleep( 500 );
+		}
 	
-		printf( "Found sensors:\n" );
-		for ( i = 0; i < DESC_LIMIT; i++ ) {
-			if ( ev3_sensor[ i ].type_inx != SENSOR_TYPE__NONE_ ) {
-				printf( "  type = %s\n", ev3_sensor_type( ev3_sensor[ i ].type_inx ));
-				printf( "  port = %s\n", ev3_sensor_port_name( i, s ));
-				if ( get_sensor_mode( i, s, sizeof( s ))) {
-					printf( "  mode = %s\n", s );
-				}
-				if ( get_sensor_num_values( i, &n )) {
-					for ( ii = 0; ii < n; ii++ ) {
-						if ( get_sensor_value( ii, i, &val )) {
-							printf( "  value%d = %d\n", ii, val );
-						}
+	} else {
+		printf( "LEGO_EV3_M_MOTOR 1 is NOT found\n" );
+	}
+	
+	
+//Run all sensors
+	ev3_sensor_init();
+	
+	printf( "Found sensors:\n" );
+	for ( i = 0; i < DESC_LIMIT; i++ ) {
+		if ( ev3_sensor[ i ].type_inx != SENSOR_TYPE__NONE_ ) {
+			printf( "  type = %s\n", ev3_sensor_type( ev3_sensor[ i ].type_inx ));
+			printf( "  port = %s\n", ev3_sensor_port_name( i, s ));
+			if ( get_sensor_mode( i, s, sizeof( s ))) {
+				printf( "  mode = %s\n", s );
+			}
+			if ( get_sensor_num_values( i, &n )) {
+				for ( ii = 0; ii < n; ii++ ) {
+					if ( get_sensor_value( ii, i, &val )) {
+						printf( "  value%d = %d\n", ii, val );
 					}
 				}
 			}
 		}
-		if ( ev3_search_sensor( LEGO_EV3_TOUCH, &sn_touch, 0 )) {
-			printf( "TOUCH sensor is found, press BUTTON for EXIT...\n" );
-		} 
-		for ( ; ; ){
-			if ( _check_pressed( sn_touch )) break;
-			Sleep( 200 );
-			printf( "\r        " );
+	}
+	if ( ev3_search_sensor( LEGO_EV3_TOUCH, &sn_touch, 0 )) {
+		printf( "TOUCH sensor is found, press BUTTON for EXIT...\n" );
+	} 
+	for ( ; ; ){
+	    	if ( ev3_search_sensor( LEGO_EV3_COLOR, &sn_color, 0 )) {
+			printf( "COLOR sensor is found, reading COLOR...\n" );
+			if ( !get_sensor_value( 0, sn_color, &val ) || ( val < 0 ) || ( val >= COLOR_COUNT )) {
+				val = 0;
+			}
+			printf( "\r(%s) \n", color[ val ]);
 			fflush( stdout );
-			if ( _check_pressed( sn_touch )) break;
-			Sleep( 200 );
 		}
+	    	if (ev3_search_sensor(HT_NXT_COMPASS, &sn_compass,0)){
+			printf("COMPASS found, reading compass...\n");
+		 	if ( !get_sensor_value0(sn_compass, &value )) {
+				value = 0;
+			}
+			printf( "\r(%f) \n", value);
+			fflush( stdout );
+	    	}
+		if (ev3_search_sensor(LEGO_EV3_US, &sn_sonar,0)){
+			printf("SONAR found, reading sonar...\n");
+			if ( !get_sensor_value0(sn_sonar, &value )) {
+				value = 0;
+			}
+			printf( "\r(%f) \n", value);
+			fflush( stdout );
+	    	}
+		if (ev3_search_sensor(NXT_ANALOG, &sn_mag,0)){
+			printf("Magnetic sensor found, reading magnet...\n");
+			if ( !get_sensor_value0(sn_mag, &value )) {
+				value = 0;
+			}
+			printf( "\r(%f) \n", value);
+			fflush( stdout );
+	    	}
 
-		ev3_uninit();
-		
-		
-//________________________________________
-	} else {
-		printf( "LEGO_EV3_M_MOTOR 1 is NOT found\n" );
+		if ( _check_pressed( sn_touch )) break;
+		Sleep( 200 );
+		printf( "\r        " );
+		fflush( stdout );
+		if ( _check_pressed( sn_touch )) break;
+		Sleep( 200 );
 	}
-	}
-	
 
+	ev3_uninit();
 	printf( "*** ( EV3 ) Bye! ***\n" );
 
 	return ( 0 );
