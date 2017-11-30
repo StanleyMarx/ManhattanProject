@@ -24,20 +24,20 @@
 ## Jeudi 30 Novembre
 Voici une liste de différents paliers à atteindre pour progresser sur le projet
  + **commander indépendament chaque élément**
-	_ roues: avant/ arrière/ gauche/ droite/ vitesse/ tourner droite et gauche/ demi-tour 
-	_ pelle: attraper/ garder/ relâcher 
-	_ pointeur: réagir
-	_ couleur: bien reconnaitre les couleurs/ poser la distance au sol et sa position/ réagir
-	_ position: créer un historique des positions
-	_ distance: réagir à une distance X d’un obstacle
-	_ compas: orienter le robot dans une direction en particulier/ créer un historique des orientations
+	+ _ roues: avant/ arrière/ gauche/ droite/ vitesse/ tourner droite et gauche/ demi-tour 
+	+ _ pelle: attraper/ garder/ relâcher 
+	+ _ pointeur: réagir
+	+ _ couleur: bien reconnaitre les couleurs/ poser la distance au sol et sa position/ réagir
+	+ _ position: créer un historique des positions
+	+ _ distance: réagir à une distance X d’un obstacle
+	+ _ compas: orienter le robot dans une direction en particulier/ créer un historique des orientations
 
 + **poser l’interaction de plusieurs éléments en même temps**
-	_ éviter tout les obstacles
-	_ suivre une bande de couleur
-	_ suivre un mur
-	_ faire le tour d’un objet
-	_ différencier un objet fixe d’un objet qu’on peut bouger
-	_ suivre un chemin prédéfini
-	_ revenir au point de départ par le chemin le plus rapide
+	+ _ éviter tout les obstacles
+	+ _ suivre une bande de couleur
+	+ _ suivre un mur
+	+ _ faire le tour d’un objet
+	+ _ différencier un objet fixe d’un objet qu’on peut bouger
+	+ _ suivre un chemin prédéfini
+	+ _ revenir au point de départ par le chemin le plus rapide
 
