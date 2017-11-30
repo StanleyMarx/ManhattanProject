@@ -88,7 +88,7 @@ int main( void )
 		set_tacho_stop_action_inx( sn, TACHO_COAST );
 		set_tacho_stop_action_inx( sn2, TACHO_COAST );
 		set_tacho_speed_sp( sn, max_speed * 2 / 3 );
-		set_tacho_speed_sp( sn2, max_speed2 * 2 / 3 );
+		set_tacho_speed_sp( sn2, -max_speed2 * 2 / 3 );
 		set_tacho_time_sp( sn, 5000 );
 		set_tacho_time_sp( sn2, 5000 );
 		set_tacho_ramp_up_sp( sn, 2000 );
