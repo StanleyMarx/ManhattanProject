@@ -40,4 +40,8 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 	+  différencier un objet fixe d’un objet qu’on peut bouger
 	+  suivre un chemin prédéfini
 	+  revenir au point de départ par le chemin le plus rapide
-
+	
+## 4 dec : To-do list
++ Communication client-serveur
++ Strategie d'exploration de la carte
++ Comprendre le code de la soeur d'Henry
