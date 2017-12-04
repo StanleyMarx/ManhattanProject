@@ -45,7 +45,7 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 ### to-do list
 + Communication client-serveur
 + Strategie d'exploration de la carte
-+ Comprendre le code de la soeur d'Henry
++ Comprendre le code de la soeur d'Henri
 ### done list
 
 + Communication CS comprise, cf [infos/client-server.md](https://github.com/StanleyMarx/ManhattanProject/blob/master/infos/client-server.md): courte explication de la communication, et [utils/client.c](https://github.com/StanleyMarx/ManhattanProject/blob/master/utils/client.c): code du professeur compris et commenté qui implemente assez simplement l'envoi de paquets usuels
