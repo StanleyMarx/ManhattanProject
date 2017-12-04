@@ -3,6 +3,7 @@
 #include "ev3.h"
 #include "ev3_port.h"
 #include "ev3_sensor.h"
+#include "turns.h"
 // WIN32 /////////////////////////////////////////
 #ifdef __WIN32__
 
@@ -115,6 +116,9 @@ int main(void) {
 	findMotors();	
 	ev3_sensor_init();
 	findSensors();
+	size_t gyroVal;
+	get_sensor_value0(sn_gyro, &gyroVal);
+	printf("gyro val: %f", gyroVal);
 	ev3_uninit();
 	printf( "*** ( EV3 ) Bye! ***\n" );
 	return ( 0 );

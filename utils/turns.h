@@ -3,6 +3,5 @@
 #include "ev3_sensor.h"
 #include "ev3_tacho.h"
 
-extern void simpleTurn(int speed, int angle)
-extern void turnLeft()
-extern void turnRight()
+extern void turnLeft(sn_left, sn_right, sn_gyro);
+extern void turnRight(sn_left, sn_right, sn_gyro);
