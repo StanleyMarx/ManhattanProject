@@ -49,5 +49,5 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 ### done list
 
 Communication CS comprise, cf:
-+ [ce TLDR](https://github.com/StanleyMarx/ManhattanProject/blob/master/infos/client-server.md)
++ [infos/client-server.md](https://github.com/StanleyMarx/ManhattanProject/blob/master/infos/client-server.md): courte explication de la communication
 + [utils/client.c](https://github.com/StanleyMarx/ManhattanProject/blob/master/utils/client.c): code du professeur compris et commenté qui implemente assez simplement l'envoi de paquets usuels
