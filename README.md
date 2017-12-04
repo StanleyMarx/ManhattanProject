@@ -53,3 +53,4 @@ Communication CS comprise, cf:
 + [utils/client.c](https://github.com/StanleyMarx/ManhattanProject/blob/master/utils/client.c): code du professeur compris et commenté qui implemente assez simplement l'envoi de paquets usuels
 + **creation MAIN.c** : initialisation, recherche sensors & moteurs A TESTER AVEC LE ROBOT
 + **tourner** : turns.c permet de tourner à droite ou à gauche (90°) A TESTER AVEC LE ROBOT
++ **Forward** : aller tout droit (pdt 9s) A TESTER AVEC LE ROBOT
