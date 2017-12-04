@@ -51,3 +51,5 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 Communication CS comprise, cf:
 + [infos/client-server.md](https://github.com/StanleyMarx/ManhattanProject/blob/master/infos/client-server.md): courte explication de la communication
 + [utils/client.c](https://github.com/StanleyMarx/ManhattanProject/blob/master/utils/client.c): code du professeur compris et commenté qui implemente assez simplement l'envoi de paquets usuels
++ [creation MAIN.c] : initialisation, recherche sensors & moteurs A TESTER AVEC LE ROBOT
++ [tourner] : turns.c permet de tourner à droite ou à gauche (90°) A TESTER AVEC LE ROBOT
