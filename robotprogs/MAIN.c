@@ -6,6 +6,7 @@
 
 #include "turns.h"
 #include "avancer.h"
+#include "avancer_sonar.h"
 //#include "test-gyro.h"
 // WIN32 /////////////////////////////////////////
 #ifdef __WIN32__
