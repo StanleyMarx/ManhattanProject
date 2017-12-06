@@ -3,5 +3,5 @@
 #include "ev3_sensor.h"
 #include "ev3_tacho.h"
 
-extern void turnLeft(sn_left, sn_right, sn_gyro);
-extern void turnRight(sn_left, sn_right, sn_gyro);
+extern void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro);
+extern void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro);

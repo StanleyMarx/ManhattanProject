@@ -4,7 +4,7 @@
 #include "ev3_sensor.h"
 #include "ev3_tacho.h"
 
-void turnRight(sn_left, sn_right, sn_gyro) {
+void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
         size_t gyroVal;
 	get_sensor_value0(sn_gyro, &gyroVal);
 	printf("initial gyro value: %f", gyroVal);
@@ -26,7 +26,7 @@ void turnRight(sn_left, sn_right, sn_gyro) {
 	set_tacho_command(sn_right, STOP);
 }
 
-void turnLeft(sn_left, sn_right, sn_gyro) {
+void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	size_t gyroVal;
 	get_sensor_value0(sn_gyro, &gyroVal);
 	printf("initial gyro value: %f", gyroVal);

@@ -4,7 +4,7 @@
 #include "ev3_sensor.h"
 #include "ev3_tacho.h"
 
-void forward(sn_left, sn_right) {
+void forward(uint8_t sn_left, uint8_t sn_right) {
 	int max_speed;
 	get_tacho_max_speed(sn_left, &max_speed );
 	printf("  max speed = %d\n", max_speed );

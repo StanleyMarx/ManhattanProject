@@ -3,4 +3,4 @@
 #include "ev3_sensor.h"
 #include "ev3_tacho.h"
 
-extern void forward(sn_left, sn_right)
+extern void forward(uint8_t sn_left, uint8_t sn_right);
