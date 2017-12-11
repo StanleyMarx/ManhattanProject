@@ -20,6 +20,12 @@
 + Test #3. Be able to make the difference between non-movable and movable objects.
 + Test #4. Be able to release an object.
 
+## Lundi 11/12
+PB : 
++ pb avec les .h 
++ pb avec avancer (le moteur de la pelle bouge et pas les autres alors qu'on veut l'inverse)
++ comment trouver la position de départ? 
++ communication avec le serveur à tester 
 
 ## Jeudi 30 Novembre
 Voici une liste de différents paliers à atteindre pour progresser sur le projet
