@@ -88,7 +88,7 @@ void findSensors(uint8_t sn_compass, uint8_t sn_sonar, uint8_t sn_gyro) {
 void findMotors(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle) {
 	// find left motor	
 	if ( ev3_search_tacho_plugged_in(LEFT_PORT,0, &sn_left, 0 )) {
-		printf( "LEGO_EV3_M_MOTOR LEFT is found\n" );
+		printf( "LEGO_EV3_M_MOTOR LEFT is found\n");
 	} else {
 		printf( "LEGO_EV3_M_MOTOR LEFT is NOT found\n" );
 	}

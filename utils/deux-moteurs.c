@@ -74,15 +74,15 @@ int main( void )
 	}
 	//Run motors in order from port A to D
 	int port=65;
-	for (port=65; port<66; port++){
+	for (port=66; port<67; port++){
 	if ( ev3_search_tacho_plugged_in(port,0, &sn, 0 ) && ev3_search_tacho_plugged_in(port+1,0, &sn2, 0)) {
 		int max_speed;
 		int max_speed2;
 		printf( "LEGO_EV3_M_MOTOR 1 and 2 are found, about to run for 5 sec...\n" );
 		printf("tacho 1 connected to port: %d", port);
-        printf("tacho 2 connected to port: %d", port+1);
-        get_tacho_max_speed( sn, &max_speed );
-        get_tacho_max_speed( sn2, &max_speed2 );
+        	printf("tacho 2 connected to port: %d", port+2);
+        	get_tacho_max_speed( sn, &max_speed );
+        	get_tacho_max_speed( sn2, &max_speed2 );
 		printf("  max speed = %d\n", max_speed );
 		printf("  max speed 2 = %d\n", max_speed2 );
 		set_tacho_stop_action_inx( sn, TACHO_COAST );
