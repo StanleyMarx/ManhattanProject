@@ -22,9 +22,9 @@
 //////////////////////////////////////////////////
 #endif
 
-const int LEFT_PORT = 67;// port C
+const int LEFT_PORT = 68;// port D
 const int RIGHT_PORT = 66; //port B
-const int PELLE_PORT = 68; // port D
+const int PELLE_PORT = 67; // port C
 
 ////////////////// INITIALISATION ///////////////////////
 
