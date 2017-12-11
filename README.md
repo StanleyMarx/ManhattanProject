@@ -22,9 +22,9 @@
 
 ## Lundi 11/12
 PB : 
-+ pb avec les .h 
++ pb avec les .h : Makefile 
 + pb avec avancer (le moteur de la pelle bouge et pas les autres alors qu'on veut l'inverse)
-+ comment trouver la position de départ? 
++ comment trouver la position de départ? NON. task : le robot est déjà placé à la position de départ 
 + communication avec le serveur à tester 
 
 ## Jeudi 30 Novembre
