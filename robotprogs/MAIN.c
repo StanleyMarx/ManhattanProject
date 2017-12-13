@@ -3,6 +3,7 @@
 #include "ev3.h"
 //#include "ev3c.h"
 #include "ev3_port.h"
+#include "ev3_tacho.h"
 #include "ev3_sensor.h"
 
 #include "turns.h"
@@ -86,24 +87,39 @@ void findSensors(uint8_t sn_compass, uint8_t sn_sonar, uint8_t sn_gyro) {
 
 }
 
-void findMotors(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle) {
+uint8_t findLeftMotor(uint8_t sn_left) {
 	// find left motor	
 	if ( ev3_search_tacho_plugged_in(LEFT_PORT,0, &sn_left, 0 )) {
-		printf( "LEGO_EV3_M_MOTOR LEFT is found\n");
+		printf( "LEGO_EV3_M_MOTOR LEFT is found on port %d, for sn=%d\n", LEFT_PORT, sn_left);
+		set_tacho_command(sn_left, "reset");
+		return sn_left;
 	} else {
 		printf( "LEGO_EV3_M_MOTOR LEFT is NOT found\n" );
+		return -1;
 	}
-	// find right motor
+}
+
+uint8_t findRightMotor(uint8_t sn_right) {
+	// find right motor	
 	if ( ev3_search_tacho_plugged_in(RIGHT_PORT,0, &sn_right, 0 )) {
-		printf( "LEGO_EV3_M_MOTOR RIGHT is found\n" );
+		printf( "LEGO_EV3_M_MOTOR RIGHT is found on port %d, for sn=%d\n", RIGHT_PORT, sn_right);
+		set_tacho_command(sn_right, "reset");
+		return sn_right;
 	} else {
 		printf( "LEGO_EV3_M_MOTOR RIGHT is NOT found\n" );
+		exit(-1);
 	}
-	// find pelle motor
+}
+
+uint8_t findPelleMotor(uint8_t sn_pelle) {
+	// find pelle motor	
 	if ( ev3_search_tacho_plugged_in(PELLE_PORT,0, &sn_pelle, 0 )) {
-		printf( "LEGO_EV3_M_MOTOR PELLE is found\n" );
+		printf( "LEGO_EV3_M_MOTOR PELLE is found on port %d, for sn=%d\n", PELLE_PORT, sn_pelle);
+		set_tacho_command(sn_pelle, "reset");
+		return sn_pelle;
 	} else {
 		printf( "LEGO_EV3_M_MOTOR PELLE is NOT found\n" );
+		exit(-1);
 	}
 }
 
@@ -156,72 +172,55 @@ float getSonar(uint8_t sn_sonar) {
 
 //////////////// MOTORS /////////////////////
 
-void forward(uint8_t sn_left, uint8_t sn_right) {
-	int max_speed_right;
-	int max_speed_left;
-	get_tacho_max_speed( sn_right, &max_speed_right );
-	get_tacho_max_speed( sn_left, &max_speed_left );
-	set_tacho_stop_action_inx( sn_right, TACHO_COAST );
-	set_tacho_stop_action_inx( sn_left, TACHO_COAST );
-	set_tacho_speed_sp( sn_right, max_speed_right * 2 / 3 );
-	set_tacho_speed_sp( sn_left, max_speed_left * 2 / 3 );
-	set_tacho_time_sp( sn_right, 5000 );
-	set_tacho_time_sp( sn_left, 5000 );
-	set_tacho_ramp_up_sp( sn_right, 1000 );
-	set_tacho_ramp_up_sp( sn_left, 1000 );
-	set_tacho_ramp_down_sp( sn_right, 1000 );
-	set_tacho_ramp_down_sp( sn_left, 1000 );
-	set_tacho_command_inx( sn_right, TACHO_RUN_TIMED );
-	set_tacho_command_inx( sn_left, TACHO_RUN_TIMED );
+void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
+	set_tacho_speed_sp(sn_right, 500);
+	set_tacho_speed_sp(sn_left, 500);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	sleep(seconds);
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+	printf("[TACHO] function forward is over!\n");
 }
 
 void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
-    float gyroVal;
-    float gyroValInitial;
-    int max_speed;
-    //int position = ((1*360)/(2*3.1415*2.8));
-    get_tacho_max_speed(sn_left, &max_speed );
-    printf("  max speed = %d\n", max_speed );
+	float gyroVal;
+    	float gyroValInitial;
 	gyroValInitial = getGyro(sn_gyro);
 	gyroVal = getGyro(sn_gyro);
 	printf("initial gyro value: %f\n", gyroValInitial);
-	//int pos = (5.8)/(2.8); // tiny rotation - see if we can change this value (or actually calculate it?)
-	set_tacho_speed_sp(sn_left, max_speed / 2 );
-	set_tacho_ramp_up_sp( sn_left, 0 );
-	set_tacho_ramp_down_sp( sn_left, 0 );
-	set_tacho_position_sp( sn_left, 90 );
-
-	set_tacho_speed_sp(sn_right, - max_speed / 2 );
-	set_tacho_ramp_up_sp( sn_right, 0 );
-	set_tacho_ramp_down_sp( sn_right, 0 );
-	set_tacho_position_sp( sn_right, 90 );
+	set_tacho_speed_sp(sn_left, 100);
+	set_tacho_speed_sp(sn_right, -100);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
 	while (abs(gyroVal - gyroValInitial) < 90) {
-		/*ev3_set_speed_sp(sn_left, 300);
-		ev3_set_speed_sp(sn_right, 300);
-		ev3_set_position_sp(sn_left, pos);
-		ev3_set_position_sp(sn_right, -pos));*/
-		//ev3_set_speed_sp(sn_right, -50);
-		//ev3_set_speed_sp(sn_left, 50);
-		//set_tacho_stop_action_inx( sn, TACHO_COAST );
-		//set_tacho_speed_sp(sn_left, max_speed * 2 / 3 );
-		//set_tacho_speed_sp(sn_right, - max_speed * 2 / 3 );
-		//set_tacho_command(sn_left, "TACHO_RUN_FOREVER");
-		//set_tacho_command(sn_left, "TACHO_RUN_FOREVER");
-		//set_tacho_command(sn_right, "TACHO_RUN_FOREVER");
-		/*ev3_set_speed_sp(sn_left, max_speed);
-        ev3_set_speed_sp(sn_right, -max_speed);
-        ev3_set_position_sp(sn_left, position);
-        ev3_set_position_sp(sn_right, position);
-        ev3_command_motor_by_name(sn_right, "run-to-rel-pos");
-        ev3_command_motor_by_name(sn_left, "run-to-rel-pos");*/
-		set_tacho_command_inx(sn_left, TACHO_RUN_TO_REL_POS );
-		set_tacho_command_inx(sn_right, TACHO_RUN_TO_REL_POS );
 		gyroVal = getGyro(sn_gyro);
-		/*ev3_command_motor_by_name(motor1, "run-to-rel-pos");
-        ev3_command_motor_by_name(motor2, "run-to-rel-pos");*/
 	}
-	//set_tacho_command(sn_left, "TACHO_STOP");
-	//set_tacho_command(sn_right, "TACHO_STOP");
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+}
+
+void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
+	float gyroVal;
+    	float gyroValInitial;
+	gyroValInitial = getGyro(sn_gyro);
+	gyroVal = getGyro(sn_gyro);
+	printf("initial gyro value: %f\n", gyroValInitial);
+	set_tacho_speed_sp(sn_left, -100);
+	set_tacho_speed_sp(sn_right, 100);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	while (abs(gyroVal - gyroValInitial) < 90) {
+		gyroVal = getGyro(sn_gyro);
+	}
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
 }
 
 
@@ -261,8 +260,10 @@ int main(void) {
 	printf( "*** ( EV3 ) Hello! ***\n" );
 	
 	// FIND ALL THREE MOTORS
-	findMotors(sn_left, sn_right, sn_pelle);
-
+	sn_left = findLeftMotor(sn_left);	
+	sn_right = findRightMotor(sn_right);
+	sn_pelle = findPelleMotor(sn_pelle);
+	printf("%d %d %d\n", sn_left, sn_right, sn_pelle);
 	// GETS READY TO READ SENSORS
 	ev3_sensor_init();
 
@@ -289,7 +290,7 @@ int main(void) {
 		printf("[ERROR] Could not find SONAR!");
 	}
 	printf("SONAR val: %f\n", sonarVal);
-	forward(sn_left, sn_right);
+	forwardTimed(sn_left, sn_right, 4);
 	/*
 	// TURN RIGHT
 	printf("turning right\n");
