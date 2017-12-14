@@ -292,12 +292,14 @@ size_t initializePelle(uint8_t sn_pelle) {
 ///////////////////////////////////// MMMMAAAAIIIIINNNNNN ///////////////////////////////////
 
 void movepell(uint8_t sn_left) {
-	ev3_set_speed_sp(sn_left, 100); 			//speed
-	ev3_set_position_sp(sn_left, -90); 			//angle °	, int angle = ((distance*360)/(2*PI*2.8)); 
-	ev3_command_motor_by_name( sn_left, "run-to-rel-pos");
+	set_tacho_speed_sp(sn_left, 100); 			//speed
+	set_tacho_position(sn_left, -90); 			//angle °	, int angle = ((distance*360)/(2*PI*2.8)); 
+	set_tacho_command( sn_left, "run-to-rel-pos");
 	set_tacho_command(sn_left, "stop");
 	sleep(1);
 }
+
+
 ///////////////////////////////////// MMMMAAAAIIIIINNNNNN ///////////////////////////////////
 
 int main(void) {
@@ -373,7 +375,7 @@ int main(void) {
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);*/
-	movepell(uint8_t sn_left);
+	movepell(sn_left);
 	/*turnLeft(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
 	*/
