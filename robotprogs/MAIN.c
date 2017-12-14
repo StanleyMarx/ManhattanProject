@@ -8,7 +8,7 @@
 
 #include "turns.h"
 #include "avancer.h"
-#include "avancer_sonar.h"
+//#include "avancer_sonar.h"
 //#include "test-gyro.h"
 // WIN32 /////////////////////////////////////////
 #ifdef __WIN32__
@@ -185,6 +185,21 @@ void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
 	printf("[TACHO] function forward is over!\n");
 }
 
+void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
+	float sonarVal = getSonar(sn_sonar);
+	set_tacho_speed_sp(sn_right, 500);
+	set_tacho_speed_sp(sn_left, 500);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	while (sonarVal > sonarThreshold) {
+		sonarVal = getSonar(sn_sonar);
+	}
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+}
+
 void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	float gyroVal;
     	float gyroValInitial;
@@ -264,6 +279,7 @@ int main(void) {
 	sn_right = findRightMotor(sn_right);
 	sn_pelle = findPelleMotor(sn_pelle);
 	printf("%d %d %d\n", sn_left, sn_right, sn_pelle);
+	
 	// GETS READY TO READ SENSORS
 	ev3_sensor_init();
 
@@ -290,12 +306,16 @@ int main(void) {
 		printf("[ERROR] Could not find SONAR!");
 	}
 	printf("SONAR val: %f\n", sonarVal);
-	forwardTimed(sn_left, sn_right, 4);
-	/*
-	// TURN RIGHT
-	printf("turning right\n");
+
+	// TEST MOTORS
+	//forwardTimed(sn_left, sn_right, 2);
+	forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
+	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
-	printf("finished the turn\n");*/
+	forwardTimed(sn_left, sn_right, 2);
+	turnLeft(sn_left, sn_right, sn_gyro);
+	forwardTimed(sn_left, sn_right, 2);
+	*/
 
 	// ENDS MAIN
 	ev3_uninit();
