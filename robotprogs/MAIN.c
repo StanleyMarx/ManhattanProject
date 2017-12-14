@@ -170,7 +170,7 @@ float getSonar(uint8_t sn_sonar) {
     }
 }
 
-//////////////// MOTORS /////////////////////
+//////////////// MOTORS WHEELS /////////////////////
 
 void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
 	set_tacho_speed_sp(sn_right, 500);
@@ -236,6 +236,50 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	printf("[TACHO] stopping tachos\n");
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
+}
+
+///////////////////////////// PELLE MOTOR ///////////////////////////////////
+
+size_t initializePelle(uint8_t sn_pelle) {
+	printf("[PELLE] initializing pelle with sn = %d", sn_pelle);
+	set_tacho_position_sp(sn_pelle, 10); // 10 ?
+	size_t oldPos = get_tacho_position(sn_pelle);
+	printf("[PELLE] initial position of pelle: %d", oldPos);
+	size_t newPos;
+	bool stuck = false;
+	while (!stuck) {
+		set_tacho_command(sn_pelle, "run-to-rel-pos");
+		newPos = get_tacho_position(sn_pelle);
+		printf("[PELLE] new position of pelle: %d", newPos);
+		if (newPos==oldPos) {
+			stuck = true;
+		} else {
+			oldPos = newPos;
+		} 
+	}
+	set_tacho_command(sn_pelle, "stop"); // just in case
+	// PELLE SHOULD BE DOWN RIGHT NOW
+	printf("[PELLE] should be down right now!");
+	set_tacho_position(sn_pelle, 0); // 0 is the down position
+	// GONNA GO UP
+	printf("[PELLE] gonna try to go up!");
+	set_tacho_position_sp(sn_pelle, -10); // 10 ?
+	oldPos = get_tacho_position(sn_pelle); // should be equal to 0
+	printf("[PELLE] initial position of pelle: %d", oldPos);
+	bool stuck = false;
+	while (!stuck) {
+		set_tacho_command(sn_pelle, "run-to-rel-pos");
+		newPos = get_tacho_position(sn_pelle);
+		printf("[PELLE] new position of pelle: %d", newPos);
+		if (newPos==oldPos) {
+			stuck = true;
+		} else {
+			oldPos = newPos;
+		} 
+	}
+	size_t posUp = oldPos;
+	printf("[PELLE] should be up right now!");
+	return posUp;
 }
 
 
@@ -309,7 +353,8 @@ int main(void) {
 
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
-	forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
+	//forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
+	size_t pellePosUp = initializePelle(sn_pelle);
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
