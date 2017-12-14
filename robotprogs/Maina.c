@@ -185,6 +185,18 @@ void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
 	printf("[TACHO] function forward is over!\n");
 }
 
+void forwardTimed2(uint8_t sn_left, uint8_t sn_right, int ms){
+	set_tacho_speed_sp(sn_right, 500);
+	set_tacho_speed_sp(sn_left, 500); 
+	set_tacho_time_sp(sn_left, ms);
+	set_tacho_time_sp(sn_right, ms);
+	printf("[TACHO] starting forwardTimed2");
+	set_tacho_command(sn_left, "run-timed");
+	set_tacho_command(sn_right, "run-timed");
+	printf("[TACHPO function forwardTimed2 over");
+}
+
+
 void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
 	float sonarVal = getSonar(sn_sonar);
 	set_tacho_speed_sp(sn_right, 500);
@@ -240,7 +252,8 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 
 void detectType(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_sonar, float sonarTreshold){
 	turnLeft(sn_left, sn_right, sn_gyro);
-	forwardTimed(sn_left, sn_right, 1);
+	forwardTimed2(sn_left, sn_right, 500);
+	sleep(3);
 	turnRight(sn_left, sn_right, sn_gyro);
 	if(getSonar(sn_sonar) > sonarTreshold){
 		printf("[OBSTACLE] movable object\n");
