@@ -250,7 +250,7 @@ size_t initializePelle(uint8_t sn_pelle) {
 	int newPos;
 	bool stuck = false;
 	int pos_sp;
-	while (!stuck) {
+	/*while (!stuck) {
 		get_tacho_position_sp(sn_pelle, &pos_sp);
 		printf("[PELLE] position_sp: %d\n", pos_sp);
 		set_tacho_command(sn_pelle, "run-to-rel-pos");
@@ -266,7 +266,7 @@ size_t initializePelle(uint8_t sn_pelle) {
 	set_tacho_command(sn_pelle, "stop"); // just in case
 	// PELLE SHOULD BE DOWN RIGHT NOW
 	printf("[PELLE] should be down right now!\n");
-	sleep(2);	
+	sleep(2);*/	
 	set_tacho_position(sn_pelle, 0); // 0 is the down position
 	// GONNA GO UP
 	printf("[PELLE] gonna try to go up!\n");
