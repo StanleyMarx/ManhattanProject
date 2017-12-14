@@ -278,7 +278,7 @@ size_t initializePelle(uint8_t sn_pelle) {
 			oldPos = newPos;
 		} 
 	}
-	size_t posUp = oldPos;
+	int posUp = oldPos;
 	printf("[PELLE] should be up right now!");
 	return posUp;
 }
