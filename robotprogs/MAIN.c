@@ -241,17 +241,21 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
 
 size_t initializePelle(uint8_t sn_pelle) {
-	printf("[PELLE] initializing pelle with sn = %d", sn_pelle);
+	printf("[PELLE] initializing pelle with sn = %d\n", sn_pelle);
 	set_tacho_position_sp(sn_pelle, 10); // 10 ?
 	int oldPos;
 	get_tacho_position(sn_pelle, &oldPos);
-	printf("[PELLE] initial position of pelle: %d", oldPos);
+	printf("[PELLE] initial position of pelle: %d\n", oldPos);
 	int newPos;
 	bool stuck = false;
+	int pos_sp;
 	while (!stuck) {
+		get_tacho_position_sp(sn_pelle, &pos_sp);
+		printf("[PELLE] position_sp: %d\n", pos_sp);
 		set_tacho_command(sn_pelle, "run-to-rel-pos");
 		get_tacho_position(sn_pelle, &newPos);
-		printf("[PELLE] new position of pelle: %d", newPos);
+		printf("[PELLE] new position of pelle: %d\n", newPos);
+		sleep(2);
 		if (newPos==oldPos) {
 			stuck = true;
 		} else {
@@ -260,18 +264,19 @@ size_t initializePelle(uint8_t sn_pelle) {
 	}
 	set_tacho_command(sn_pelle, "stop"); // just in case
 	// PELLE SHOULD BE DOWN RIGHT NOW
-	printf("[PELLE] should be down right now!");
+	printf("[PELLE] should be down right now!\n");
+	sleep(2);	
 	set_tacho_position(sn_pelle, 0); // 0 is the down position
 	// GONNA GO UP
-	printf("[PELLE] gonna try to go up!");
+	printf("[PELLE] gonna try to go up!\n");
 	set_tacho_position_sp(sn_pelle, -10); // 10 ?
 	get_tacho_position(sn_pelle, &oldPos); // should be equal to 0
-	printf("[PELLE] initial position of pelle: %d", oldPos);
+	printf("[PELLE] initial position of pelle: %d\n", oldPos);
 	stuck = false;
 	while (!stuck) {
 		set_tacho_command(sn_pelle, "run-to-rel-pos");
 		get_tacho_position(sn_pelle, &newPos);
-		printf("[PELLE] new position of pelle: %d", newPos);
+		printf("[PELLE] new position of pelle: %d\n", newPos);
 		if (newPos==oldPos) {
 			stuck = true;
 		} else {
@@ -279,7 +284,7 @@ size_t initializePelle(uint8_t sn_pelle) {
 		} 
 	}
 	int posUp = oldPos;
-	printf("[PELLE] should be up right now!");
+	printf("[PELLE] should be up right now!\n");
 	return posUp;
 }
 
