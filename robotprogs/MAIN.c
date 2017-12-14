@@ -243,13 +243,14 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 size_t initializePelle(uint8_t sn_pelle) {
 	printf("[PELLE] initializing pelle with sn = %d", sn_pelle);
 	set_tacho_position_sp(sn_pelle, 10); // 10 ?
-	size_t oldPos = get_tacho_position(sn_pelle);
+	int oldPos;
+	get_tacho_position(sn_pelle, &oldPos);
 	printf("[PELLE] initial position of pelle: %d", oldPos);
-	size_t newPos;
+	int newPos;
 	bool stuck = false;
 	while (!stuck) {
 		set_tacho_command(sn_pelle, "run-to-rel-pos");
-		newPos = get_tacho_position(sn_pelle);
+		get_tacho_position(sn_pelle, &newPos);
 		printf("[PELLE] new position of pelle: %d", newPos);
 		if (newPos==oldPos) {
 			stuck = true;
@@ -264,12 +265,12 @@ size_t initializePelle(uint8_t sn_pelle) {
 	// GONNA GO UP
 	printf("[PELLE] gonna try to go up!");
 	set_tacho_position_sp(sn_pelle, -10); // 10 ?
-	oldPos = get_tacho_position(sn_pelle); // should be equal to 0
+	get_tacho_position(sn_pelle, &oldPos); // should be equal to 0
 	printf("[PELLE] initial position of pelle: %d", oldPos);
-	bool stuck = false;
+	stuck = false;
 	while (!stuck) {
 		set_tacho_command(sn_pelle, "run-to-rel-pos");
-		newPos = get_tacho_position(sn_pelle);
+		get_tacho_position(sn_pelle, &newPos);
 		printf("[PELLE] new position of pelle: %d", newPos);
 		if (newPos==oldPos) {
 			stuck = true;
