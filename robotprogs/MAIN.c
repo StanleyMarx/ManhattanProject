@@ -271,7 +271,7 @@ size_t initializePelle(uint8_t sn_pelle) {
 	// GONNA GO UP
 	printf("[PELLE] gonna try to go up!\n");
 	set_tacho_position_sp(sn_pelle, -10); 
-	set_tacho_speed_sp(sn_pelle, 50);
+	set_tacho_speed_sp(sn_pelle, 100);
 	get_tacho_position(sn_pelle, &oldPos); // should be equal to 0
 	printf("[PELLE] initial position of pelle: %d\n", oldPos);
 	stuck = false;
