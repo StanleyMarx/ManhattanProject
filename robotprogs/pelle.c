@@ -369,11 +369,12 @@ int main(void) {
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
 	//forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
-	size_t pellePosUp = initializePelle(sn_pelle);
+	//size_t pellePosUp = initializePelle(sn_pelle);
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
-	forwardTimed(sn_left, sn_right, 2);
-	turnLeft(sn_left, sn_right, sn_gyro);
+	forwardTimed(sn_left, sn_right, 2);*/
+	movepell(uint8_t sn_left);
+	/*turnLeft(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
 	*/
 
