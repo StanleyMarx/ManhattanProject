@@ -242,7 +242,8 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 
 size_t initializePelle(uint8_t sn_pelle) {
 	printf("[PELLE] initializing pelle with sn = %d\n", sn_pelle);
-	set_tacho_position_sp(sn_pelle, 10); // 10 ?
+	set_tacho_position_sp(sn_pelle, 10); // OK
+	set_tacho_speed_sp(sn_pelle, 50);
 	int oldPos;
 	get_tacho_position(sn_pelle, &oldPos);
 	printf("[PELLE] initial position of pelle: %d\n", oldPos);
@@ -361,6 +362,7 @@ int main(void) {
 	//forwardTimed(sn_left, sn_right, 2);
 	//forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 	size_t pellePosUp = initializePelle(sn_pelle);
+	printf("[PELLE] pellePosUp: %d\n", pellePosUp);
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
