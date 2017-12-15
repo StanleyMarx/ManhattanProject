@@ -280,18 +280,28 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 
 
 
-void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn_sonar, uint8_t sn_gyro) {
+void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn_sonar, uint8_t sn_gyro, float delta) {
 	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -20);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
 	float sonarValG = getSonar(sn_sonar);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 40);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 2*delta);
 	float sonarValD = getSonar(sn_sonar);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -20);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
 	if (sonarValG>300 && sonarValD>300){
+		printf("movable object");
 		take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	} else {
-		
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+		printf("non movable or fronteer");
+		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -2*delta);
+		sonarValG = getSonar(sn_sonar);
+		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 4*delta);
+		sonarValD = getSonar(sn_sonar);
+		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -2*delta);
+		if (sonarValG>400 && sonarValD>400){
+			printf("unmovable object");
+			backwardTimed(sn_left, sn_right, 2, 100);
+		} else {
+			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
 	}
 }
 
@@ -300,7 +310,7 @@ void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_
 	int i=0;
 	while (i<4) {
 		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
-		isThisABall( sn_left,  sn_right,  sn_pelle,  sn_sonar,  sn_gyro);
+		isThisABall( sn_left,  sn_right,  sn_pelle,  sn_sonar,  sn_gyro, 20);
 		float sonarVal = getSonar(sn_sonar);
 		while (sonarVal<100.0) {
 			backwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
@@ -387,11 +397,11 @@ int main(void) {
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -90);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);
-	sleep(5);
+	/*sleep(5);
 	take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	sleep(5);
 	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
-	sleep(5);
+	sleep(5);*/
 	keepmoving(sn_left, sn_right, sn_sonar, sn_pelle, sn_gyro, 100.0);
 	//forwardTimed(sn_left, sn_right, 2);
 	// ENDS MAIN
