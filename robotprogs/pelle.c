@@ -237,24 +237,7 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 	printf("[TACHO] stopping tachos\n");
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
-}
-
-
-void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float sonarThreshold) {
-	int i=0;
-	while (i<4) {
-		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-		float sonarVal = getSonar(sn_sonar);
-		while (sonarVal<100.0) {
-			backwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-			sonarVal = getSonar(sn_sonar);
-		}
-		i+=1;
-	}
-}
-		
+}		
 
 
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
@@ -299,15 +282,32 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 
 void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn_sonar, uint8_t sn_gyro) {
 	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -45);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -15);
 	float sonarValG = getSonar(sn_sonar);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 30);
 	float sonarValD = getSonar(sn_sonar);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -45);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -15);
 	if (sonarValG>300 && sonarValD>300){
 		take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	} else {
-		backwardSonar(sn_left, sn_right, sn_sonar, 300);
+		
+		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+	}
+}
+
+
+void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float sonarThreshold) {
+	int i=0;
+	while (i<4) {
+		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
+		isThisABall( sn_left,  sn_right,  sn_pelle,  sn_sonar,  sn_gyro);
+		float sonarVal = getSonar(sn_sonar);
+		while (sonarVal<100.0) {
+			backwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
+			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+			sonarVal = getSonar(sn_sonar);
+		}
+		i+=1;
 	}
 }
 
@@ -387,18 +387,9 @@ int main(void) {
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -90);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);
-	/*sleep(5);
+	sleep(5);
 	take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	sleep(5);
-	int i = 0;*/
-	while (1==1){
-		getSonar(sn_sonar);
-		getGyro(sn_gyro);
-		printf("\n");
-		sleep(1);
-	}
-	/*sleep(5);
-	isThisABall(sn_left, sn_right, sn_pelle, sn_sonar, sn_gyro);
 	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
