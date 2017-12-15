@@ -394,7 +394,8 @@ int main(void) {
 	while (1==1){
 		getSonar(sn_sonar);
 		getGyro(sn_gyro);
-		printf(" ");
+		printf("\n");
+		sleep(1);
 	}
 	/*sleep(5);
 	isThisABall(sn_left, sn_right, sn_pelle, sn_sonar, sn_gyro);
