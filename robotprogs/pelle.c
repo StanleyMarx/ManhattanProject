@@ -273,7 +273,7 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 	printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
-	while (abs(gyroVal - gyroValInitial) < angle) {
+	while (abs(gyroVal - gyroValInitial) < abs(angle)) {
 		gyroVal = getGyro(sn_gyro);
 	}
 	printf("[TACHO] stopping tachos\n");
@@ -337,7 +337,7 @@ size_t initializePelle(uint8_t sn_pelle) {
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	printf("[PELLE] opening pelle\n");//--------open pelle
-	set_tacho_speed_sp(sn_pelle, -50);
+	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
@@ -360,7 +360,7 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	halfTurn(sn_left, sn_right, sn_gyro);//-------half turn
 	printf("[PELLE] opening pelle\n");//----------open pelle
-	set_tacho_speed_sp(sn_pelle, -50);
+	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
