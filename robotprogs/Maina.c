@@ -269,7 +269,7 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 	set_tacho_command(sn_right, "stop");
 }
 //detects if movable or else 
-int detectType1(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn_sonar, uint8_t sn_gyro, float delta) {
+int detectType1(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float delta) {
 	int type = 0
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
 	float sonarValG = getSonar(sn_sonar);
@@ -277,7 +277,7 @@ int detectType1(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn_
 	float sonarValD = getSonar(sn_sonar);
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
 	if (sonarValG>300 && sonarValD>300){
-		printf("movable object");
+		printf("[OBSTACLE] movable object\n");
 		type = 1;
 	} 
 	else{
@@ -304,7 +304,7 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 		printf("[OBSTACLE] fronteer\n"); 
 		type2=4;
 	}
-	return type; 
+	return type2; 
 }
 	
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar) {
@@ -411,9 +411,10 @@ int main(void) {
 
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
-	while(true){
+	int j = 0; 
+	while(j<3){
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0)
-		int x = detectType(sn_left, sn_right, sn_gyro, sn_sonar, 150.0);
+		int x = detectType(sn_left, sn_right, sn_sonar, sn_gyro, 20);
 		if(x==1){
 			take_object(sn_pelle, sn_left, sn_right, sn_sonar);
 			TurnDegreeRposLneg(sn_left,sn_right,sn_gyro, 180);
@@ -426,6 +427,7 @@ int main(void) {
 				turnRight(sn_left, sn_right, sn_gyro);
 			}
 		}
+		j = j+1;
 		}
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
