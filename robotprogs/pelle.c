@@ -258,7 +258,7 @@ void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_
 
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
 
-void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float factor) {
+void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar) {
 	forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 	printf("[PELLE] opening pelle\n");//--------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
