@@ -297,15 +297,14 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 
 
 
-void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro) {
+void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn_sonar, uint8_t sn_gyro) {
 	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
-	float sonarVal1 = getSonar(sn_sonar);
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -45);
-	float sonarVal2 = getSonar(sn_sonar);
+	float sonarValG = getSonar(sn_sonar);
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-	float sonarVal3 = getSonar(sn_sonar);
+	float sonarValD = getSonar(sn_sonar);
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -45);
-	if (sonarVal3>300 && sonarVal2>300){
+	if (sonarValG>300 && sonarValD>300){
 		take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	} else {
 		backwardSonar(sn_left, sn_right, sn_sonar, 300);
