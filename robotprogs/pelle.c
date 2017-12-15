@@ -302,6 +302,7 @@ void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn
 			backwardTimed(sn_left, sn_right, 2, 100);
 		} else {
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+		}
 	}
 }
 
