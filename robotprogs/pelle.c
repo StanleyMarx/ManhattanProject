@@ -200,6 +200,41 @@ void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float son
 	set_tacho_command(sn_right, "stop");
 }
 
+
+
+void backwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
+	float sonarVal = getSonar(sn_sonar);
+	set_tacho_speed_sp(sn_right, 500);
+	set_tacho_speed_sp(sn_left, 500);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	while (sonarVal < sonarThreshold) {
+		sonarVal = getSonar(sn_sonar);
+	}
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+}
+
+
+
+void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
+	i=0
+	while (i<4) {
+		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
+		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+		float sonarVal = getSonar(sn_sonar);
+		while (sonarVal<100.0) {
+			backwardSonar(sn_left, sn_right, sn_sonar, 100.0);
+			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+			float sonarVal = getSonar(sn_sonar);
+		}
+		i+=1;
+	}
+		
+	
+
 void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, float angle) {
 	float gyroVal;
     	float gyroValInitial;
@@ -339,6 +374,8 @@ int main(void) {
 	take_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
+	sleep(5);
+	keepmoving(sn_left, sn_right, sn_sonar, 100.0);
 	//forwardTimed(sn_left, sn_right, 2);
 	
 
