@@ -336,18 +336,20 @@ size_t initializePelle(uint8_t sn_pelle) {
 
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
-	set_tacho_speed_sp(sn_pelle, -50);//-------open pelle
+	printf("[PELLE] opening pelle\n");//--------open pelle
+	set_tacho_speed_sp(sn_pelle, -50);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
-	set_tacho_speed_sp(sn_left, 100);//-------moveforward
+	set_tacho_speed_sp(sn_left, 100);//---------moveforward
 	set_tacho_speed_sp(sn_right, 100);
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
-	set_tacho_speed_sp(sn_pelle, 50);//-------close pelle
+	printf("[PELLE] closing pelle\n");//-------close pelle
+	set_tacho_speed_sp(sn_pelle, 50);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
@@ -357,12 +359,14 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 
 void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	halfTurn(sn_left, sn_right, sn_gyro);//-------half turn
-	set_tacho_speed_sp(sn_pelle, -50);//----------open pelle
+	printf("[PELLE] opening pelle\n");//----------open pelle
+	set_tacho_speed_sp(sn_pelle, -50);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
 	halfTurn(sn_left, sn_right, sn_gyro);//-------half turn
-	set_tacho_speed_sp(sn_pelle, 50);//-----------close pelle
+	printf("[PELLE] closing pelle\n");//----------close pelle
+	set_tacho_speed_sp(sn_pelle, 50);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
