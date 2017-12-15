@@ -238,6 +238,51 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	set_tacho_command(sn_right, "stop");
 }
 
+
+
+void halfTurn(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
+	float gyroVal;
+    	float gyroValInitial;
+	gyroValInitial = getGyro(sn_gyro);
+	gyroVal = getGyro(sn_gyro);
+	printf("initial gyro value: %f\n", gyroValInitial);
+	set_tacho_speed_sp(sn_left, -100);
+	set_tacho_speed_sp(sn_right, 100);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	while (abs(gyroVal - gyroValInitial) < 180) {
+		gyroVal = getGyro(sn_gyro);
+	}
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+}
+
+
+
+
+void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, float angle) {
+	float gyroVal;
+    	float gyroValInitial;
+	gyroValInitial = getGyro(sn_gyro);
+	gyroVal = getGyro(sn_gyro);
+	printf("initial gyro value: %f\n", gyroValInitial);
+	set_tacho_speed_sp(sn_left, 100.0*angle/abs(angle));
+	set_tacho_speed_sp(sn_right, -100.0*angle/abs(angle));
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	while (abs(gyroVal - gyroValInitial) < angle) {
+		gyroVal = getGyro(sn_gyro);
+	}
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+}
+
+
+
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
 
 size_t initializePelle(uint8_t sn_pelle) {
@@ -289,27 +334,38 @@ size_t initializePelle(uint8_t sn_pelle) {
 }
 
 
-///////////////////////////////////// MMMMAAAAIIIIINNNNNN ///////////////////////////////////
 
-void movepelle(uint8_t sn_pelle) {
-	set_tacho_speed_sp(sn_pelle, 50);
+void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
+	set_tacho_speed_sp(sn_pelle, -50);//-------open pelle
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
-	sleep(1);
-	set_tacho_speed_sp(sn_left, 100);
+	set_tacho_speed_sp(sn_left, 100);//-------moveforward
 	set_tacho_speed_sp(sn_right, 100);
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
-	sleep(1);
-	set_tacho_speed_sp(sn_pelle, -50);
+	set_tacho_speed_sp(sn_pelle, 50);//-------close pelle
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
-	sleep(1);
+}
+
+
+
+void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
+	halfTurn(sn_left, sn_right, sn_gyro);//-------half turn
+	set_tacho_speed_sp(sn_pelle, -50);//----------open pelle
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_pelle, "stop");
+	halfTurn(sn_left, sn_right, sn_gyro);//-------half turn
+	set_tacho_speed_sp(sn_pelle, 50);//-----------close pelle
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_pelle, "stop");
 }
 
 
@@ -388,7 +444,12 @@ int main(void) {
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);*/
-	movepelle(sn_pelle);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -90);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);
+	take_object(sn_pelle,sn_left, sn_right, sn_gyro);
+	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	/*turnLeft(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
 	*/
