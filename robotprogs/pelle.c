@@ -218,24 +218,6 @@ void backwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float so
 }
 
 
-
-void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float sonarThreshold) {
-	int i=0;
-	while (i<4) {
-		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-		float sonarVal = getSonar(sn_sonar);
-		while (sonarVal<100.0) {
-			backwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-			sonarVal = getSonar(sn_sonar);
-		}
-		i+=1;
-	}
-}
-		
-	
-
 void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, float angle) {
 	float gyroVal;
     	float gyroValInitial;
@@ -256,11 +238,28 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 }
 
 
+void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float sonarThreshold) {
+	int i=0;
+	while (i<4) {
+		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
+		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+		float sonarVal = getSonar(sn_sonar);
+		while (sonarVal<100.0) {
+			backwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
+			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+			sonarVal = getSonar(sn_sonar);
+		}
+		i+=1;
+	}
+}
+		
+	
+
 
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float factor) {
-	forwardSonar(sn_left, sn_right, sn_sonar, factor);
+	forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 	printf("[PELLE] opening pelle\n");//--------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
@@ -373,17 +372,11 @@ int main(void) {
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);
 	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, 200.0);
+	take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, 100.0);
+	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, 50.0);
-	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, 25.0);
-	sleep(5);
-	//drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
-	//sleep(5);
-	//keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
+	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
 	//forwardTimed(sn_left, sn_right, 2);
 	// ENDS MAIN
 	ev3_uninit();
