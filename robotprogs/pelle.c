@@ -200,45 +200,6 @@ void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float son
 	set_tacho_command(sn_right, "stop");
 }
 
-void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
-	float gyroVal;
-    	float gyroValInitial;
-	gyroValInitial = getGyro(sn_gyro);
-	gyroVal = getGyro(sn_gyro);
-	printf("initial gyro value: %f\n", gyroValInitial);
-	set_tacho_speed_sp(sn_left, 100);
-	set_tacho_speed_sp(sn_right, -100);
-	printf("[TACHO] starting tachos\n");
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
-	while (abs(gyroVal - gyroValInitial) < 90) {
-		gyroVal = getGyro(sn_gyro);
-	}
-	printf("[TACHO] stopping tachos\n");
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
-}
-
-void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
-	float gyroVal;
-    	float gyroValInitial;
-	gyroValInitial = getGyro(sn_gyro);
-	gyroVal = getGyro(sn_gyro);
-	printf("initial gyro value: %f\n", gyroValInitial);
-	set_tacho_speed_sp(sn_left, -100);
-	set_tacho_speed_sp(sn_right, 100);
-	printf("[TACHO] starting tachos\n");
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
-	while (abs(gyroVal - gyroValInitial) < 90) {
-		gyroVal = getGyro(sn_gyro);
-	}
-	printf("[TACHO] stopping tachos\n");
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
-}
-
-
 void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, float angle) {
 	float gyroVal;
     	float gyroValInitial;
@@ -261,56 +222,6 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 
 
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
-
-size_t initializePelle(uint8_t sn_pelle) {
-	printf("[PELLE] initializing pelle with sn = %d\n", sn_pelle);
-	set_tacho_position_sp(sn_pelle, 10); // 10 ?
-	int oldPos;
-	get_tacho_position(sn_pelle, &oldPos);
-	printf("[PELLE] initial position of pelle: %d\n", oldPos);
-	int newPos;
-	bool stuck = false;
-	int pos_sp;
-	while (!stuck) {
-		get_tacho_position_sp(sn_pelle, &pos_sp);
-		printf("[PELLE] position_sp: %d\n", pos_sp);
-		set_tacho_command(sn_pelle, "run-to-rel-pos");
-		get_tacho_position(sn_pelle, &newPos);
-		printf("[PELLE] new position of pelle: %d\n", newPos);
-		sleep(2);
-		if (newPos==oldPos) {
-			stuck = true;
-		} else {
-			oldPos = newPos;
-		} 
-	}
-	set_tacho_command(sn_pelle, "stop"); // just in case
-	// PELLE SHOULD BE DOWN RIGHT NOW
-	printf("[PELLE] should be down right now!\n");
-	sleep(2);	
-	set_tacho_position(sn_pelle, 0); // 0 is the down position
-	// GONNA GO UP
-	printf("[PELLE] gonna try to go up!\n");
-	set_tacho_position_sp(sn_pelle, -10); // 10 ?
-	get_tacho_position(sn_pelle, &oldPos); // should be equal to 0
-	printf("[PELLE] initial position of pelle: %d\n", oldPos);
-	stuck = false;
-	while (!stuck) {
-		set_tacho_command(sn_pelle, "run-to-rel-pos");
-		get_tacho_position(sn_pelle, &newPos);
-		printf("[PELLE] new position of pelle: %d\n", newPos);
-		if (newPos==oldPos) {
-			stuck = true;
-		} else {
-			oldPos = newPos;
-		} 
-	}
-	int posUp = oldPos;
-	printf("[PELLE] should be up right now!\n");
-	return posUp;
-}
-
-
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	printf("[PELLE] opening pelle\n");//--------open pelle
@@ -437,10 +348,7 @@ int main(void) {
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
 	//forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
-	//size_t pellePosUp = initializePelle(sn_pelle);
-	/*printf("turning right\n");
-	turnRight(sn_left, sn_right, sn_gyro);
-	forwardTimed(sn_left, sn_right, 2);*/
+	//forwardTimed(sn_left, sn_right, 2);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -90);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
@@ -448,9 +356,8 @@ int main(void) {
 	take_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
-	/*turnLeft(sn_left, sn_right, sn_gyro);
-	forwardTimed(sn_left, sn_right, 2);
-	*/
+	//forwardTimed(sn_left, sn_right, 2);
+	
 
 	// ENDS MAIN
 	ev3_uninit();
