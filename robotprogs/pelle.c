@@ -299,7 +299,7 @@ void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn
 		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -2*delta);
 		if (sonarValG>400 && sonarValD>400){
 			printf("unmovable object");
-			forwardTimed(sn_left, sn_right, 2, -80)
+			forwardTimed(sn_left, sn_right, 2, -80);
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
 		} else {
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
