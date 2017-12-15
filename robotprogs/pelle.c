@@ -392,7 +392,7 @@ int main(void) {
 	sleep(5);
 	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
-	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
+	keepmoving(sn_left, sn_right, sn_sonar, sn_pelle, sn_gyro, 100.0);
 	//forwardTimed(sn_left, sn_right, 2);
 	// ENDS MAIN
 	ev3_uninit();
