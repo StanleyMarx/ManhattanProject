@@ -396,7 +396,7 @@ int main(void) {
 		i+=1;
 	}
 	sleep(5);
-	isThisABall(sn_left, sn_right, sn_sonar, sn_gyro);
+	isThisABall(sn_left, sn_right, sn_pelle, sn_sonar, sn_gyro);
 	/*drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
