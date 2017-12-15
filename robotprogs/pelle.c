@@ -211,7 +211,7 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 	printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
-	while (abs(gyroVal - gyroValInitial) < abs(angle)*0.9) {
+	while (abs(gyroVal - gyroValInitial) < abs(angle)*0.95) {
 		gyroVal = getGyro(sn_gyro);
 	}
 	printf("[TACHO] stopping tachos\n");
@@ -260,7 +260,6 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	//set_tacho_command(sn_pelle, "stop");
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
 	set_tacho_speed_sp(sn_left, -80);//---------movebackward
 	set_tacho_speed_sp(sn_right, -80);
 	set_tacho_command(sn_left, "run-forever");
@@ -268,6 +267,7 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	sleep(1);
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
 	printf("[PELLE] closing pelle\n");//----------close pelle
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
