@@ -220,7 +220,7 @@ void backwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float so
 
 
 void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
-	i=0
+	i=0;
 	while (i<4) {
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
