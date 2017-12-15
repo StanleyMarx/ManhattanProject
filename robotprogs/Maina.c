@@ -281,6 +281,7 @@ int detectType1(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_
 		type = 1;
 	} 
 	else{
+		printf("[OBSTACLE] non movable or fronteer\n");
 		type = 2;
 	}
 	return type; 
@@ -290,11 +291,14 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 	int type2=0;
 	int i = 0
 	//valeur seuil de i à tester
+	printf("detectType2\n");
 	while( getsonar(sn_sonar) < sonarTreshold || i < 3){	
 		turnLeft(sn_left, sn_right, sn_gyro);
 		forwardTimed2(sn_left, sn_right, 500);
 		turnRight(sn_left, sn_right, sn_gyro);
+		printf("i= %d \n", i);
 		i=i+1;
+		
 		}
 	if(i<3){
 		printf("[OBSTACLE] non movable object\n");
