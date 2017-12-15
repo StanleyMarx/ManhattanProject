@@ -291,11 +291,24 @@ size_t initializePelle(uint8_t sn_pelle) {
 
 ///////////////////////////////////// MMMMAAAAIIIIINNNNNN ///////////////////////////////////
 
-void movepell(uint8_t sn_left) {
-	set_tacho_speed_sp(sn_left, 100); 			//speed
-	set_tacho_position(sn_left, -90); 			//angle °	, int angle = ((distance*360)/(2*PI*2.8)); 
-	set_tacho_command( sn_left, "run-to-rel-pos");
+void movepelle(uint8_t sn_pelle) {
+	set_tacho_speed_sp(sn_pelle, 50);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_pelle, "stop");
+	sleep(1);
+	set_tacho_speed_sp(sn_left, 100);
+	set_tacho_speed_sp(sn_right, 100);
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	sleep(2);
 	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+	sleep(1);
+	set_tacho_speed_sp(sn_pelle, -50);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_pelle, "stop");
 	sleep(1);
 }
 
@@ -375,7 +388,7 @@ int main(void) {
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);*/
-	movepell(sn_left);
+	movepelle(sn_pelle);
 	/*turnLeft(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
 	*/
