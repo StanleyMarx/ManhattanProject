@@ -431,6 +431,7 @@ int main(void) {
 				turnRight(sn_left, sn_right, sn_gyro);
 			}
 		}
+		printf("fin de la boucle numero %d",j);
 		j = j+1;
 		}
 	/*printf("turning right\n");
