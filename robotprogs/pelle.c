@@ -296,7 +296,7 @@ void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn
 }
 
 
-void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float sonarThreshold) {
+void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_pelle, uint8_t sn_gyro, float sonarThreshold) {
 	int i=0;
 	while (i<4) {
 		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
@@ -393,7 +393,7 @@ int main(void) {
 	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
-	*///forwardTimed(sn_left, sn_right, 2);
+	//forwardTimed(sn_left, sn_right, 2);
 	// ENDS MAIN
 	ev3_uninit();
 	printf( "*** ( EV3 ) Bye! ***\n" );
