@@ -387,17 +387,16 @@ int main(void) {
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -90);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);
-	sleep(5);
+	/*sleep(5);
 	take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	sleep(5);
-	int i = 0;
-	while (i<500){
+	int i = 0;*/
+	while (1==1){
 		getSonar(sn_sonar);
-		i+=1;
 	}
-	sleep(5);
+	/*sleep(5);
 	isThisABall(sn_left, sn_right, sn_pelle, sn_sonar, sn_gyro);
-	/*drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
+	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
 	*///forwardTimed(sn_left, sn_right, 2);
