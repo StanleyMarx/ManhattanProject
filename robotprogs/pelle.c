@@ -172,9 +172,9 @@ float getSonar(uint8_t sn_sonar) {
 
 //////////////// MOTORS WHEELS /////////////////////
 
-void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
-	set_tacho_speed_sp(sn_right, 500);
-	set_tacho_speed_sp(sn_left, 500);
+void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds, int speed) {
+	set_tacho_speed_sp(sn_right, speed);
+	set_tacho_speed_sp(sn_left, speed);
 	printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
@@ -229,13 +229,7 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	//set_tacho_command(sn_pelle, "stop");
-	set_tacho_speed_sp(sn_left, 100);//---------moveforward
-	set_tacho_speed_sp(sn_right, 100);
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
+	forwardTimed(sn_left, sn_right, 2, 100);//---------moveforward
 	printf("[PELLE] closing pelle\n");//-------close pelle
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
@@ -248,25 +242,13 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 
 void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
-	set_tacho_speed_sp(sn_left, 80);//---------moveforward
-	set_tacho_speed_sp(sn_right, 80);
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
-	sleep(1);
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
+	forwardTimed(sn_left, sn_right, 1, 80);//---------moveforward
 	printf("[PELLE] opening pelle\n");//----------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	//set_tacho_command(sn_pelle, "stop");
-	set_tacho_speed_sp(sn_left, -80);//---------movebackward
-	set_tacho_speed_sp(sn_right, -80);
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
-	sleep(1);
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
+	forwardTimed(sn_left, sn_right, 1, -80);//---------movebackward
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
 	printf("[PELLE] closing pelle\n");//----------close pelle
 	set_tacho_command(sn_pelle, "stop");
@@ -346,9 +328,9 @@ int main(void) {
 	printf("SONAR val: %f\n", sonarVal);
 
 	// TEST MOTORS
-	//forwardTimed(sn_left, sn_right, 2);
+	//forwardTimed(sn_left, sn_right, 2, 500);
 	//forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
-	//forwardTimed(sn_left, sn_right, 2);
+	//forwardTimed(sn_left, sn_right, 2, 500);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -90);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
