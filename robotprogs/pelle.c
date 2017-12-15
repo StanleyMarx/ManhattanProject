@@ -266,7 +266,7 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	//set_tacho_command(sn_pelle, "stop");
-	forwardTimed(sn_left, sn_right, sonarVal/factor, 100);//---------moveforward
+	forwardTimed(sn_left, sn_right, 2, (int) (sonarVal/factor));//---------moveforward
 	printf("[PELLE] closing pelle\n");//-------close pelle
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
@@ -373,13 +373,13 @@ int main(void) {
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
 	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);
 	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 1000);
+	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 100);
 	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 900);
+	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 80);
 	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 800);
+	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 60);
 	sleep(5);
-	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 700);
+	take_object(sn_pelle,sn_left, sn_right, sn_sonar, sn_gyro, 40);
 	sleep(5);
 	//drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	//sleep(5);
