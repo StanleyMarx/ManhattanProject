@@ -374,10 +374,13 @@ int main(void) {
 	sleep(5);
 	take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	sleep(5);
-	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
+	while (1==1){
+		getGyro(sn_gyro);
+	}
+	/*drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
-	//forwardTimed(sn_left, sn_right, 2);
+	*///forwardTimed(sn_left, sn_right, 2);
 	// ENDS MAIN
 	ev3_uninit();
 	printf( "*** ( EV3 ) Bye! ***\n" );
