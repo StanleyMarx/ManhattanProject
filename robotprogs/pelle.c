@@ -187,17 +187,19 @@ void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds, int speed) {
 
 void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
 	float sonarVal = getSonar(sn_sonar);
-	set_tacho_speed_sp(sn_right, 500);
-	set_tacho_speed_sp(sn_left, 500);
-	printf("[TACHO] starting tachos\n");
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
-	while (sonarVal > sonarThreshold) {
-		sonarVal = getSonar(sn_sonar);
+	if (sonarVal > sonarThreshold) {
+		set_tacho_speed_sp(sn_right, 500);
+		set_tacho_speed_sp(sn_left, 500);
+		printf("[TACHO] starting tachos\n");
+		set_tacho_command(sn_left, "run-forever");
+		set_tacho_command(sn_right, "run-forever");
+		while (sonarVal > sonarThreshold) {
+			sonarVal = getSonar(sn_sonar);
+		}
+		printf("[TACHO] stopping tachos\n");
+		set_tacho_command(sn_left, "stop");
+		set_tacho_command(sn_right, "stop");
 	}
-	printf("[TACHO] stopping tachos\n");
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
 }
 
 
@@ -253,6 +255,23 @@ void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_
 	}
 }
 		
+void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro) {
+	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
+	float sonarVal1 = getSonar(sn_sonar);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -45);
+	float sonarVal2 = getSonar(sn_sonar);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+	float sonarVal3 = getSonar(sn_sonar);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -45);
+	if (sonarVal3>300 && sonarVal2>300){
+		take_object(sn_pelle,sn_left, sn_right, sn_sonar);
+	} else {
+		backwardSonar(sn_left, sn_right, sn_sonar, 300);
+	}
+}
+		
+		
+	
 	
 
 
@@ -265,7 +284,7 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	//set_tacho_command(sn_pelle, "stop");
-	forwardTimed(sn_left, sn_right, 2, 125);//---------moveforward
+	forwardTimed(sn_left, sn_right, 2, 100);//---------moveforward
 	printf("[PELLE] closing pelle\n");//-------close pelle
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
@@ -374,9 +393,13 @@ int main(void) {
 	sleep(5);
 	take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	sleep(5);
-	while (1==1){
-		getGyro(sn_gyro);
+	int i = 0;
+	while (i<500){
+		getSonar(sn_sonar);
+		i+=1;
 	}
+	sleep(5);
+	isThisABall(sn_left, sn_right, sn_sonar, sn_gyro);
 	/*drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
 	sleep(5);
 	keepmoving(sn_left, sn_right, sn_sonar, sn_gyro, 100.0);
