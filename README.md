@@ -58,3 +58,6 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 + **creation MAIN.c** : initialisation, recherche sensors & moteurs A TESTER AVEC LE ROBOT
 + **tourner** : turns.c permet de tourner à droite ou à gauche (90°) A TESTER AVEC LE ROBOT
 + **Forward** : aller tout droit (pdt 9s) A TESTER AVEC LE ROBOT
+
+## 16 dec
++ **Communication client/server établie** depuis mon dual boot Ubuntu, j'arrive à lancer `/server/server teams`, puis me SSH sur le robot et y lancer `/client/robotclient`. Le résultat est cohérent avec ce qui est censé se passer, cf le screen envoyé sur la conv fb. *-Nino*
