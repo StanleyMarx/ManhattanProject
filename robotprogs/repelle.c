@@ -290,20 +290,8 @@ void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn
 	if (sonarValG>300 && sonarValD>300){
 		printf("movable object");
 		take_object(sn_pelle,sn_left, sn_right, sn_sonar);
-	} else {
-		printf("non movable or fronteer");
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -2*delta);
-		sonarValG = getSonar(sn_sonar);
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 4*delta);
-		sonarValD = getSonar(sn_sonar);
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -2*delta);
-		if (sonarValG>400 && sonarValD>400){
-			printf("unmovable object");
-			forwardTimed(sn_left, sn_right, 2, -80);
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-		} else {
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-		}
+	}else {
+		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
 	}
 }
 
