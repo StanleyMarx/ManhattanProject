@@ -61,4 +61,3 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 
 ## 16 dec
 + **Communication client/server établie** depuis mon dual boot Ubuntu, j'arrive à lancer `/server/server teams`, puis me SSH sur le robot et y lancer `/client/robotclient`. Le résultat est cohérent avec ce qui est censé se passer, cf le screen envoyé sur la conv fb. *-Nino*
-+ **myOS** sur le répetoire de l'EV3,  le répertoire `OS_Robot_Project_Fall2017` a été copié sur le répertoire `myOS`. Cela permet d'avoir sous la main un répertoire qui marche sous la main, mais `myOS` est celui sur lequel on fera notre vrai code. *-Nino*
