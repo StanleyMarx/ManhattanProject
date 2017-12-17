@@ -226,17 +226,7 @@ void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float son
 	set_tacho_command(sn_right, "stop");
 }
 
-void verifCompass(uint8_t sn_left, uint8_t sn_right, uint8_t sn_compass, uint8_t sn_gyro, float OldVal){
-	float CompassVal = getCompass(sn_compass);
-	float angle = CompassVal - OldVal;
-	if(abs(angle)>5){
-		if (angle) > 0){
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, angle);
-		}else 
-			TurnDegreeRposLneg(sn_left,sn_right,  sn_gyro, -angle);
-		}
-	}
-}
+
 
 void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 	float gyroVal;
@@ -336,6 +326,18 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 		type2=4;
 	}
 	return type2; 
+}
+
+void verifCompass(uint8_t sn_left, uint8_t sn_right, uint8_t sn_compass, uint8_t sn_gyro, float OldVal){
+	float CompassVal = getCompass(sn_compass);
+	float angle = CompassVal - OldVal;
+	if(abs(angle)>5){
+		if(angle > 0){
+			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, angle);
+		}else{
+			TurnDegreeRposLneg(sn_left,sn_right,  sn_gyro, -angle);
+		}
+	}
 }
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right) {
@@ -450,7 +452,7 @@ int main(void) {
 			take_object(sn_pelle, sn_left, sn_right);
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
 			drop_object(sn_pelle, sn_left, sn_right, sn_gyro);
-			verifCompass(sn_left, sn_right, sn_compass, ValComp);
+			verifCompass(sn_left, sn_right, sn_compass, sn_gyro, ValComp);
 		}else{
 			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 150.0);
 			//if fronteer  
