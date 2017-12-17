@@ -274,13 +274,11 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 	printf("initial gyro value: %f\n", gyroValInitial);
 	set_tacho_speed_sp(sn_left, 100.0*angle/abs(angle));
 	set_tacho_speed_sp(sn_right, -100.0*angle/abs(angle));
-	printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
 	while (abs(gyroVal - gyroValInitial) < abs(angle)*0.95) {
 		gyroVal = getGyro(sn_gyro);
 	}
-	printf("[TACHO] stopping tachos\n");
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
 }
@@ -329,6 +327,7 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 }
 
 void verifCompass(uint8_t sn_left, uint8_t sn_right, uint8_t sn_compass, uint8_t sn_gyro, float OldVal){
+	printf("verifcompass begins\n");
 	float CompassVal = getCompass(sn_compass);
 	float angle = CompassVal - OldVal;
 	if(abs(angle)>5){
@@ -338,6 +337,7 @@ void verifCompass(uint8_t sn_left, uint8_t sn_right, uint8_t sn_compass, uint8_t
 			TurnDegreeRposLneg(sn_left,sn_right,  sn_gyro, -angle);
 		}
 	}
+	printf("verifcompass done\n");
 }
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right) {
@@ -449,6 +449,7 @@ int main(void) {
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 30);
 		if (x==1){
 			float ValComp = getCompass(sn_compass); 
+			printf("val comp %f\n", ValComp);
 			take_object(sn_pelle, sn_left, sn_right);
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
 			drop_object(sn_pelle, sn_left, sn_right, sn_gyro);
