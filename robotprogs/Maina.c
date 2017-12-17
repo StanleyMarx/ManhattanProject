@@ -401,11 +401,11 @@ int main(void) {
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
 	int j = 0; 
-	while(j<3){
+	while(j<4){
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
 		if(x==2){
-			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 150.0);
+			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 100.0);
 			//if fronteer  
 			if(x==4){
 				turnRight(sn_left, sn_right, sn_gyro);
