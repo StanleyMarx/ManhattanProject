@@ -438,7 +438,7 @@ int main(void) {
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
 			drop_object(sn_pelle, sn_left, sn_right, sn_gyro);
 		}else{
-			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 100.0);
+			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 150.0);
 			//if fronteer  
 			if(x==4){
 				turnRight(sn_left, sn_right, sn_gyro);
