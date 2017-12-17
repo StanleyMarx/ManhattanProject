@@ -226,14 +226,14 @@ void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float son
 	set_tacho_command(sn_right, "stop");
 }
 
-void verifCompass(uint8_t sn_left, uint8_t sn_right, uint8_t sn_compass, float OldVal){
+void verifCompass(uint8_t sn_left, uint8_t sn_right, uint8_t sn_compass, uint8_t sn_gyro, float OldVal){
 	float CompassVal = getCompass(sn_compass);
-	float angle = CompassVal - OldVal
+	float angle = CompassVal - OldVal;
 	if(abs(angle)>5){
 		if (angle) > 0){
-			TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, float angle);
+			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, angle);
 		}else 
-			TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, float -angle);
+			TurnDegreeRposLneg(sn_left,sn_right,  sn_gyro, -angle);
 		}
 	}
 }
