@@ -270,7 +270,7 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 }
 //detects if movable or else 
 int detectType1(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float delta) {
-	int type = 0
+	int type = 0;
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
 	float sonarValG = getSonar(sn_sonar);
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 2*delta);
@@ -289,17 +289,19 @@ int detectType1(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_
 //detect non movable or fronteer 
 int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_sonar, float sonarTreshold){
 	int type2=0;
-	int i = 0
+	int i = 0;
 	//valeur seuil de i à tester
 	printf("detectType2\n");
-	while( getsonar(sn_sonar) < sonarTreshold || i < 3){	
-		turnLeft(sn_left, sn_right, sn_gyro);
-		forwardTimed2(sn_left, sn_right, 500);
-		turnRight(sn_left, sn_right, sn_gyro);
-		printf("i= %d \n", i);
-		i=i+1;
+	while(i<3){
+		while( getSonar(sn_sonar) < sonarTreshold){	
+			turnLeft(sn_left, sn_right, sn_gyro);
+			forwardTimed2(sn_left, sn_right, 1000);
+			turnRight(sn_left, sn_right, sn_gyro);
+			printf("i= %d \n", i);
+			i=i+1;
 		
 		}
+	}
 	if(i<3){
 		printf("[OBSTACLE] non movable object\n");
 		type2=3;
@@ -311,40 +313,6 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 	return type2; 
 }
 	
-void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar) {
-	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
-	printf("[PELLE] opening pelle\n");//--------open pelle
-	set_tacho_speed_sp(sn_pelle, -80);
-	set_tacho_command(sn_pelle, "run-forever");
-	sleep(2);
-	//set_tacho_command(sn_pelle, "stop");
-	forwardTimed(sn_left, sn_right, 2, 100);//---------moveforward
-	printf("[PELLE] closing pelle\n");//-------close pelle
-	set_tacho_command(sn_pelle, "stop");
-	set_tacho_speed_sp(sn_pelle, 80);
-	set_tacho_command(sn_pelle, "run-forever");
-	sleep(1);
-	set_tacho_command(sn_pelle, "stop");
-}
-
-
-
-void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
-	printf("[PELLE] opening pelle\n");//----------open pelle
-	set_tacho_speed_sp(sn_pelle, -80);
-	set_tacho_command(sn_pelle, "run-forever");
-	sleep(2);
-	//set_tacho_command(sn_pelle, "stop");
-	forwardTimed(sn_left, sn_right, 1, -80);//---------movebackward
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
-	printf("[PELLE] closing pelle\n");//----------close pelle
-	set_tacho_command(sn_pelle, "stop");
-	set_tacho_speed_sp(sn_pelle, 80);
-	set_tacho_command(sn_pelle, "run-forever");
-	sleep(1);
-	set_tacho_command(sn_pelle, "stop");
-}
-
 ///////////////////////////////////// MMMMAAAAIIIIINNNNNN ///////////////////////////////////
 
 int main(void) {
@@ -417,14 +385,9 @@ int main(void) {
 	//forwardTimed(sn_left, sn_right, 2);
 	int j = 0; 
 	while(j<3){
-		forwardSonar(sn_left, sn_right, sn_sonar, 100.0)
-		int x = detectType(sn_left, sn_right, sn_sonar, sn_gyro, 20);
-		if(x==1){
-			take_object(sn_pelle, sn_left, sn_right, sn_sonar);
-			TurnDegreeRposLneg(sn_left,sn_right,sn_gyro, 180);
-			drop_object(sn_pelle, sn_left, sn_right, sn_gyro);	
-		}
-		else{
+		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
+		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
+		if(x==2){
 			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 150.0);
 			//if fronteer  
 			if(x==4){
