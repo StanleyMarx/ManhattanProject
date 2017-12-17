@@ -175,14 +175,14 @@ float getSonar(uint8_t sn_sonar) {
 void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
 	set_tacho_speed_sp(sn_right, 500);
 	set_tacho_speed_sp(sn_left, 500);
-	printf("[TACHO] starting tachos\n");
+	//printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
 	sleep(seconds);
-	printf("[TACHO] stopping tachos\n");
+	//printf("[TACHO] stopping tachos\n");
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
-	printf("[TACHO] function forward is over!\n");
+	//printf("[TACHO] function forward is over!\n");
 }
 
 void forwardTimed2(uint8_t sn_left, uint8_t sn_right, int ms){
@@ -190,24 +190,24 @@ void forwardTimed2(uint8_t sn_left, uint8_t sn_right, int ms){
 	set_tacho_speed_sp(sn_left, 500); 
 	set_tacho_time_sp(sn_left, ms);
 	set_tacho_time_sp(sn_right, ms);
-	printf("[TACHO] starting forwardTimed2");
+	//printf("[TACHO] starting forwardTimed2");
 	set_tacho_command(sn_left, "run-timed");
 	set_tacho_command(sn_right, "run-timed");
-	printf("[TACHPO function forwardTimed2 over");
+	//printf("[TACHPO function forwardTimed2 over");
 }
 
 
 void forwardTimedSpeed(uint8_t sn_left, uint8_t sn_right, int seconds, int vitesse) {
 	set_tacho_speed_sp(sn_right, vitesse);
 	set_tacho_speed_sp(sn_left, vitesse);
-	printf("[TACHO] starting tachos\n");
+	//printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
 	sleep(seconds);
-	printf("[TACHO] stopping tachos\n");
+	//printf("[TACHO] stopping tachos\n");
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
-	printf("[TACHO] function forward is over!\n");
+	//printf("[TACHO] function forward is over!\n");
 }
 
 
@@ -252,7 +252,7 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
     	float gyroValInitial;
 	gyroValInitial = getGyro(sn_gyro);
 	gyroVal = getGyro(sn_gyro);
-	printf("initial gyro value: %f\n", gyroValInitial);
+	//printf("initial gyro value: %f\n", gyroValInitial);
 	set_tacho_speed_sp(sn_left, -100);
 	set_tacho_speed_sp(sn_right, 100);
 	//printf("[TACHO] starting tachos\n");
@@ -271,7 +271,7 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
     	float gyroValInitial;
 	gyroValInitial = getGyro(sn_gyro);
 	gyroVal = getGyro(sn_gyro);
-	printf("initial gyro value: %f\n", gyroValInitial);
+	//printf("initial gyro value: %f\n", gyroValInitial);
 	set_tacho_speed_sp(sn_left, 100.0*angle/abs(angle));
 	set_tacho_speed_sp(sn_right, -100.0*angle/abs(angle));
 	set_tacho_command(sn_left, "run-forever");
@@ -456,7 +456,9 @@ int main(void) {
 			drop_object(sn_pelle, sn_left, sn_right, sn_gyro);
 			verifCompass(sn_left, sn_right, sn_compass, sn_gyro, ValComp);
 		}else{
+			float ValComp = getCompass(sn_compass); 
 			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 150.0);
+			verifCompass(sn_left, sn_right, sn_compass, sn_gyro, ValComp);
 			//if fronteer  
 			if(x==4){
 				turnRight(sn_left, sn_right, sn_gyro);
