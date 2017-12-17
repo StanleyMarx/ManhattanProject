@@ -330,7 +330,7 @@ void verifCompass(uint8_t sn_left, uint8_t sn_right, uint8_t sn_compass, uint8_t
 	printf("verifcompass begins\n");
 	float CompassVal = getCompass(sn_compass);
 	float angle = CompassVal - OldVal;
-	printf("angle %f\n" angle);
+	printf("angle %f\n", angle);
 	if(abs(angle)>1){
 		if(angle > 0){
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, angle);
