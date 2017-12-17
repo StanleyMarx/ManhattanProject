@@ -197,7 +197,7 @@ void forwardTimed2(uint8_t sn_left, uint8_t sn_right, int ms){
 }
 
 
-void forwardTimedSlow(uint8_t sn_left, uint8_t sn_right, int seconds, int vitesse) {
+void forwardTimedSpeed(uint8_t sn_left, uint8_t sn_right, int seconds, int vitesse) {
 	set_tacho_speed_sp(sn_right, vitesse);
 	set_tacho_speed_sp(sn_left, vitesse);
 	printf("[TACHO] starting tachos\n");
@@ -325,7 +325,41 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 	}
 	return type2; 
 }
-	
+
+void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar) {
+	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
+	printf("[PELLE] opening pelle\n");//--------open pelle
+	set_tacho_speed_sp(sn_pelle, -80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	//set_tacho_command(sn_pelle, "stop");
+	forwardTimedSpeed(sn_left, sn_right, 2, 100);//---------moveforward
+	printf("[PELLE] closing pelle\n");//-------close pelle
+	set_tacho_command(sn_pelle, "stop");
+	set_tacho_speed_sp(sn_pelle, 80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(1);
+	set_tacho_command(sn_pelle, "stop");
+}
+
+
+void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
+	forwardTimedSpeed(sn_left, sn_right, 1, 80);//---------moveforward
+	printf("[PELLE] opening pelle\n");//----------open pelle
+	set_tacho_speed_sp(sn_pelle, -80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	//set_tacho_command(sn_pelle, "stop");
+	forwardTimedSpeed(sn_left, sn_right, 1, -80);//---------movebackward
+	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
+	printf("[PELLE] closing pelle\n");//----------close pelle
+	set_tacho_command(sn_pelle, "stop");
+	set_tacho_speed_sp(sn_pelle, 80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(1);
+	set_tacho_command(sn_pelle, "stop");
+}
+
 ///////////////////////////////////// MMMMAAAAIIIIINNNNNN ///////////////////////////////////
 
 int main(void) {
@@ -404,7 +438,12 @@ int main(void) {
 	while(j<4){
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
-		if(x==2){
+		if (x==1){
+			void take_object(sn_pelle, sn_left, sn_right, sn_sonar)
+			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
+			void drop_object(sn_pelle, sn_left, sn_right, sn_gyro)
+		}	
+		else{
 			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 100.0);
 			//if fronteer  
 			if(x==4){
