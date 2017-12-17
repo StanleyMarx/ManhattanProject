@@ -308,7 +308,7 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 	printf("detectType2\n");
 	while( (getSonar(sn_sonar) < sonarTreshold) && (i<3)){	
 		turnLeft(sn_left, sn_right, sn_gyro);
-		forwardTimedSlow(sn_left, sn_right, 1, 300);
+		forwardTimedSpeed(sn_left, sn_right, 1, 300);
 		turnRight(sn_left, sn_right, sn_gyro);
 		printf("i= %d \n", i);
 		i=i+1;
@@ -439,11 +439,10 @@ int main(void) {
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
 		if (x==1){
-			void take_object(sn_pelle, sn_left, sn_right, sn_sonar)
+			void take_object(sn_pelle, sn_left, sn_right, sn_sonar);
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
-			void drop_object(sn_pelle, sn_left, sn_right, sn_gyro)
-		}	
-		else{
+			void drop_object(sn_pelle, sn_left, sn_right, sn_gyro);
+		}else{
 			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 100.0);
 			//if fronteer  
 			if(x==4){
