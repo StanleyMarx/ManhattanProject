@@ -431,7 +431,7 @@ int main(void) {
 	//forwardTimed(sn_left, sn_right, 2);
 	int j = 0; 
 	while(j<4){
-		forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
+		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 30);
 		if (x==1){
 			take_object(sn_pelle, sn_left, sn_right, sn_sonar);
