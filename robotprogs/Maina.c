@@ -428,10 +428,6 @@ int main(void) {
 	}
 	printf("SONAR val: %f\n", sonarVal);
 
-	forwardTimed2(sn_left, sn_right, 500);
-	printf("startinf forwardTimedSlow");
-	forwardTimedSlow(sn_left, sn_right, 1, 200); 
-	printf("ending forwardTiledSlow");
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
 	int j = 0; 
