@@ -306,7 +306,7 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 	int i = 0;
 	//valeur seuil de i à tester
 	printf("detectType2\n");
-	while( getSonar(sn_sonar) < sonarTreshold) && i<3{	
+	while( (getSonar(sn_sonar) < sonarTreshold) && (i<3)){	
 		turnLeft(sn_left, sn_right, sn_gyro);
 		forwardTimedSlow(sn_left, sn_right, 1, 300);
 		turnRight(sn_left, sn_right, sn_gyro);
