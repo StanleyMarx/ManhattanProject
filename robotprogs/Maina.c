@@ -290,7 +290,7 @@ int detectType1(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 2*delta);
 	float sonarValD = getSonar(sn_sonar);
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
-	if (sonarValG>300 && sonarValD>300){
+	if (sonarValG>150 && sonarValD>150){
 		printf("[OBSTACLE] movable object\n");
 		type = 1;
 	} 
