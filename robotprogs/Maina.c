@@ -439,9 +439,9 @@ int main(void) {
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
 		if (x==1){
-			void take_object(sn_pelle, sn_left, sn_right, sn_sonar);
+			take_object(sn_pelle, sn_left, sn_right, sn_sonar);
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
-			void drop_object(sn_pelle, sn_left, sn_right, sn_gyro);
+			drop_object(sn_pelle, sn_left, sn_right, sn_gyro);
 		}else{
 			int x = detectType2(sn_left, sn_right, sn_gyro, sn_sonar, 100.0);
 			//if fronteer  
