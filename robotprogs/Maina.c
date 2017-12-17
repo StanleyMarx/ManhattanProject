@@ -197,6 +197,20 @@ void forwardTimed2(uint8_t sn_left, uint8_t sn_right, int ms){
 }
 
 
+void forwardTimedSlow(uint8_t sn_left, uint8_t sn_right, int seconds) {
+	set_tacho_speed_sp(sn_right, 200);
+	set_tacho_speed_sp(sn_left, 200);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	sleep(seconds);
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+	printf("[TACHO] function forward is over!\n");
+}
+
+
 void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
 	float sonarVal = getSonar(sn_sonar);
 	set_tacho_speed_sp(sn_right, 500);
@@ -381,9 +395,11 @@ int main(void) {
 	}
 	printf("SONAR val: %f\n", sonarVal);
 
+	forwardTimed2(sn_left, sn_right, 500);
+	forwardTimedSlow(sn_left, sn_right, 1); 
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
-	int j = 0; 
+	/*int j = 0; 
 	while(j<3){
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
