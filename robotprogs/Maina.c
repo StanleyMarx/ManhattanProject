@@ -197,9 +197,9 @@ void forwardTimed2(uint8_t sn_left, uint8_t sn_right, int ms){
 }
 
 
-void forwardTimedSlow(uint8_t sn_left, uint8_t sn_right, int seconds) {
-	set_tacho_speed_sp(sn_right, 200);
-	set_tacho_speed_sp(sn_left, 200);
+void forwardTimedSlow(uint8_t sn_left, uint8_t sn_right, int seconds, int vitesse) {
+	set_tacho_speed_sp(sn_right, vitesse);
+	set_tacho_speed_sp(sn_left, vitesse);
 	printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
@@ -396,7 +396,9 @@ int main(void) {
 	printf("SONAR val: %f\n", sonarVal);
 
 	forwardTimed2(sn_left, sn_right, 500);
-	forwardTimedSlow(sn_left, sn_right, 1); 
+	printf("startinf forwardTimedSlow");
+	forwardTimedSlow(sn_left, sn_right, 1, 200); 
+	printf("ending forwardTiledSlow");
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
 	/*int j = 0; 
