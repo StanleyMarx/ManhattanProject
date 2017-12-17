@@ -327,7 +327,6 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 }
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar) {
-	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
 	printf("[PELLE] opening pelle\n");//--------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
@@ -433,7 +432,7 @@ int main(void) {
 	int j = 0; 
 	while(j<4){
 		forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
-		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
+		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 30);
 		if (x==1){
 			take_object(sn_pelle, sn_left, sn_right, sn_sonar);
 			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
