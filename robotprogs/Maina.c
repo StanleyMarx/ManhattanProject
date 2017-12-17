@@ -306,16 +306,15 @@ int detectType2(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, uint8_t sn_s
 	int i = 0;
 	//valeur seuil de i à tester
 	printf("detectType2\n");
-	while(i<3){
-		while( getSonar(sn_sonar) < sonarTreshold){	
-			turnLeft(sn_left, sn_right, sn_gyro);
-			forwardTimed2(sn_left, sn_right, 1000);
-			turnRight(sn_left, sn_right, sn_gyro);
-			printf("i= %d \n", i);
-			i=i+1;
+	while( getSonar(sn_sonar) < sonarTreshold) && i<3{	
+		turnLeft(sn_left, sn_right, sn_gyro);
+		forwardTimedSlow(sn_left, sn_right, 1, 300);
+		turnRight(sn_left, sn_right, sn_gyro);
+		printf("i= %d \n", i);
+		i=i+1;
 		
 		}
-	}
+	
 	if(i<3){
 		printf("[OBSTACLE] non movable object\n");
 		type2=3;
@@ -401,7 +400,7 @@ int main(void) {
 	printf("ending forwardTiledSlow");
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
-	/*int j = 0; 
+	int j = 0; 
 	while(j<3){
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 		int x = detectType1(sn_left, sn_right, sn_sonar, sn_gyro, 20);
@@ -415,7 +414,7 @@ int main(void) {
 		printf("fin de la boucle numero %d",j);
 		j = j+1;
 		}
-	*/
+	
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
