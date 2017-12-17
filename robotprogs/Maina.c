@@ -450,6 +450,7 @@ int main(void) {
 		printf("fin de la boucle numero %d",j);
 		j = j+1;
 		}
+	*/
 	/*printf("turning right\n");
 	turnRight(sn_left, sn_right, sn_gyro);
 	forwardTimed(sn_left, sn_right, 2);
