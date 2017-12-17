@@ -97,3 +97,12 @@ int main(int argc, char **argv) {
   close(s);
   return 0;
 }
+
+
+
+/*
+  by Nino
+  compile with ~/myOS/compile.sh
+  needs robot.h to work
+*/
+  
