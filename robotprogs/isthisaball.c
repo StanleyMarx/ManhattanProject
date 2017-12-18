@@ -133,7 +133,7 @@ float getGyro(uint8_t sn_gyro) {
 		if ( !get_sensor_value0(sn_gyro, &value )) {
 			value = 0;
 		}
-		printf( "\r[DEBUG] reading GYRO: %f \n", value);
+		//printf( "\r[DEBUG] reading GYRO: %f \n", value);
 		return value;
 		fflush( stdout );
     } else {
@@ -148,7 +148,7 @@ float getCompass(uint8_t sn_compass) {
 		if ( !get_sensor_value0(sn_compass, &value )) {
 			value = 0;
 		}
-		printf( "\r[DEBUG] reading COMPASS: %f \n", value);
+		//printf( "\r[DEBUG] reading COMPASS: %f \n", value);
 		return value;
 		fflush( stdout );
     } else {
@@ -163,7 +163,7 @@ float getSonar(uint8_t sn_sonar) {
 		if ( !get_sensor_value0(sn_sonar, &value )) {
 			value = 0;
 		}
-		printf( "\r[DEBUG] reading SONAR: %f \n", value);
+		//printf( "\r[DEBUG] reading SONAR: %f \n", value);
 		return value;
 		fflush( stdout );
     } else {
@@ -298,10 +298,11 @@ void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn
 	float sonarValD = getSonar(sn_sonar);
 	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -delta-5);
 	if (sonarValG>150 && sonarValD>150){
-		printf("movable object");
+		printf("movable object\n");
 		take_object(sn_pelle, sn_left, sn_right, sn_sonar);
 		drop_object( sn_pelle, sn_left, sn_right, sn_sonar, sn_gyro);
 	}else {
+		printf("UNmovable object\n");
 		TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, 90);
 	}
 }
@@ -317,10 +318,10 @@ void whereIsMyMind(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t 
     float gyroValInitial;
 	gyroValInitial = getGyro(sn_gyro);
 	gyroVal = getGyro(sn_gyro);
-	printf("initial gyro value: %f\n", gyroValInitial);
+	//printf("initial gyro value: %f\n", gyroValInitial);
 	set_tacho_speed_sp(sn_left, 30.0);
 	set_tacho_speed_sp(sn_right, -30.0);
-	printf("[TACHO] starting tachos\n");
+	//printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
 	while (abs(gyroVal - gyroValInitial) < abs(2*angle)+10) {
@@ -329,21 +330,21 @@ void whereIsMyMind(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t 
 		if (sonarMin>sonarVal) {
 			sonarMin=sonarVal;
 			gyroMin=gyroVal;
-			printf("sonarMin: %f\n", sonarMin);
-			printf("gyroMin: %f\n", gyroMin);
+			//printf("sonarMin: %f\n", sonarMin);
+			//printf("gyroMin: %f\n", gyroMin);
 		}
 	}
-	printf("[TACHO] stopping tachos\n");
+	//printf("[TACHO] stopping tachos\n");
 	set_tacho_command(sn_left, "stop");
 	set_tacho_command(sn_right, "stop");
 	sleep(0.5);
 
 
-	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 30.0, -gyroVal+gyroMin);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 30.0, 0.95*(-gyroVal+gyroMin));
 	gyroVal = getGyro(sn_gyro);
 	sonarVal = getSonar(sn_sonar);
-	printf("sonarMin: %f\n", sonarMin);
-	printf("gyroMin: %f\n", gyroMin);
+	//printf("sonarMin: %f\n", sonarMin);
+	//printf("gyroMin: %f\n", gyroMin);
 }
 
 
