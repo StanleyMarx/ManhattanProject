@@ -445,9 +445,15 @@ int main(void) {
 	// TEST MOTORS
 	//forwardTimed(sn_left, sn_right, 2);
 	int j = 0; 
+	int side;
 	while(true){
 		forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
-		turnRight(sn_left, sn_right, sn_gyro);
+		side = rand() % 2;
+		if (side==0) {
+			turnRight(sn_left, sn_right, sn_gyro);
+		} else {
+			turnLeft(sn_left, sn_right, sn_gyro);
+		}
 		j = j+1;
 	}
 
