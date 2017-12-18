@@ -8,7 +8,12 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
-#define SERV_ADDR "dc:53:60:ad:61:90"
+// server = 18/12/17
+// #define SERV_ADDR "00:1a:7d:da:71:06"
+
+// server = nino-hp
+#define SERV_ADDR "30:3a:64:ea:bf:0e"
+
 #define TEAM_ID 12
 
 #define MSG_ACK 0
@@ -45,7 +50,7 @@ int read_from_server (int sock, char *buffer, size_t maxSize) {
 
 int main(int argc, char **argv) {
     if (argc!=2){
-        printf("usage: ./client <mode>\n\t<mode=0> tests several message types and sends an imaginary evolution\n\t<mode=1> = performs the task asked for the 18th of december's 'test #2'\n");
+        printf("usage: ./client <mode>\n\t<mode=0> tests several message types and sends an imaginary evolution\n\t<mode=1> = performs the task asked for the 18th of december's 'test #2'\n\t<mode=2> = same but in debug mode");
     }
     
     
@@ -81,6 +86,12 @@ int main(int argc, char **argv) {
             case 1:
                 robot_eval(s,msgId);
                 break;
+            case 2:
+                robot_eval_debug(s,msgId);
+                break;
+            case 3:
+                robot_t2(s,msgId);
+                break;
         }
       
       
@@ -97,12 +108,3 @@ int main(int argc, char **argv) {
   close(s);
   return 0;
 }
-
-
-
-/*
-  by Nino
-  compile with ~/myOS/compile.sh
-  needs robot.h to work
-*/
-  
