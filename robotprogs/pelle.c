@@ -260,7 +260,7 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
 	set_tacho_command(sn_pelle, "run-forever");
-	sleep(1.5);
+	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
 }
 
@@ -280,7 +280,7 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
 	set_tacho_command(sn_pelle, "run-forever");
-	sleep(1.5);
+	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
 }
 
@@ -350,7 +350,7 @@ void whereIsMyMind(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t 
 
 void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_pelle, uint8_t sn_gyro, float sonarThreshold) {
 	int i=0;
-	while (i<6) {
+	while (i<1) {
 		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold, 400);
 		whereIsMyMind(sn_left, sn_right, sn_sonar, sn_gyro, 20);
 		isThisABall( sn_left,  sn_right,  sn_pelle,  sn_sonar,  sn_gyro, 25);
