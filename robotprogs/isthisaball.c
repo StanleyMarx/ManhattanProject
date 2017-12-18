@@ -446,7 +446,10 @@ int main(void) {
 	sleep(5);
 	drop_object(sn_pelle,sn_left, sn_right, sn_right, sn_gyro);
 	sleep(5);*/
-	keepmoving(sn_left, sn_right, sn_sonar, sn_pelle, sn_gyro, 150.0);
+	forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold, 400);
+	whereIsMyMind(sn_left, sn_right, sn_sonar, sn_gyro, 20);
+	isThisABall( sn_left,  sn_right,  sn_pelle,  sn_sonar,  sn_gyro, 25);
+	//keepmoving(sn_left, sn_right, sn_sonar, sn_pelle, sn_gyro, 150.0);
 	//forwardTimed(sn_left, sn_right, 2);
 	// ENDS MAIN
 	ev3_uninit();
