@@ -364,7 +364,7 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	//set_tacho_command(sn_pelle, "stop");
-	forwardTimedSpeed(sn_left, sn_right, 1, -80);//---------movebackward
+	forwardTimedSpeed(sn_left, sn_right, 2, -80);//---------movebackward
 	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
 	printf("[PELLE] closing pelle\n");//----------close pelle
 	set_tacho_command(sn_pelle, "stop");
