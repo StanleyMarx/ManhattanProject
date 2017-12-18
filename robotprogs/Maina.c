@@ -352,7 +352,7 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right) {
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
 	set_tacho_command(sn_pelle, "run-forever");
-	sleep(1);
+	sleep(1.5);
 	set_tacho_command(sn_pelle, "stop");
 }
 
@@ -370,7 +370,7 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
 	set_tacho_command(sn_pelle, "run-forever");
-	sleep(1);
+	sleep(1.5);
 	set_tacho_command(sn_pelle, "stop");
 }
 
