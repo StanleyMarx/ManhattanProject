@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "ev3.h"
@@ -185,11 +186,11 @@ void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds, int speed) {
 	printf("[TACHO] function forward is over!\n");
 }
 
-void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
+void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold, int speed) {
 	float sonarVal = getSonar(sn_sonar);
-	if (sonarVal > sonarThreshold) {
-		set_tacho_speed_sp(sn_right, 500);
-		set_tacho_speed_sp(sn_left, 500);
+	if (sonarVal > sonarThreshold+10) {
+		set_tacho_speed_sp(sn_right, speed);
+		set_tacho_speed_sp(sn_left, speed);
 		printf("[TACHO] starting tachos\n");
 		set_tacho_command(sn_left, "run-forever");
 		set_tacho_command(sn_right, "run-forever");
@@ -206,33 +207,38 @@ void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float son
 
 void backwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
 	float sonarVal = getSonar(sn_sonar);
-	set_tacho_speed_sp(sn_right, 500);
-	set_tacho_speed_sp(sn_left, 500);
-	printf("[TACHO] starting tachos\n");
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
-	while (sonarVal < sonarThreshold) {
-		sonarVal = getSonar(sn_sonar);
+	if (sonarVal < sonarThreshold-10) {
+		set_tacho_speed_sp(sn_right, 500);
+		set_tacho_speed_sp(sn_left, 500);
+		printf("[TACHO] starting tachos\n");
+		set_tacho_command(sn_left, "run-forever");
+		set_tacho_command(sn_right, "run-forever");
+		while (sonarVal < sonarThreshold) {
+			sonarVal = getSonar(sn_sonar);
+		}
+		printf("[TACHO] stopping tachos\n");
+		set_tacho_command(sn_left, "stop");
+		set_tacho_command(sn_right, "stop");
 	}
-	printf("[TACHO] stopping tachos\n");
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
 }
 
 
-void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, float angle) {
+void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, float speed, float angle) {
 	float gyroVal;
-    	float gyroValInitial;
+    float gyroValInitial;
+	float sonarVal = getSonar(sn_sonar);
 	gyroValInitial = getGyro(sn_gyro);
 	gyroVal = getGyro(sn_gyro);
 	printf("initial gyro value: %f\n", gyroValInitial);
-	set_tacho_speed_sp(sn_left, 100.0*angle/abs(angle));
-	set_tacho_speed_sp(sn_right, -100.0*angle/abs(angle));
+	set_tacho_speed_sp(sn_left, speed*angle/abs(angle));
+	set_tacho_speed_sp(sn_right, -speed*angle/abs(angle));
 	printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_left, "run-forever");
 	set_tacho_command(sn_right, "run-forever");
-	while (abs(gyroVal - gyroValInitial) < abs(angle)*0.95) {
+	while (abs(gyroVal - gyroValInitial) < abs(angle)) {
 		gyroVal = getGyro(sn_gyro);
+		sonarVal = getSonar(sn_sonar);
+		printf("\n");
 	}
 	printf("[TACHO] stopping tachos\n");
 	set_tacho_command(sn_left, "stop");
@@ -243,7 +249,7 @@ void TurnDegreeRposLneg(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro, floa
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
 
 void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar) {
-	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
+	forwardSonar(sn_left, sn_right, sn_sonar, 80.0, 100);
 	printf("[PELLE] opening pelle\n");//--------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
@@ -260,16 +266,16 @@ void take_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 
 
 
-void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
-	forwardTimed(sn_left, sn_right, 1, 80);//---------moveforward
+void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro) {
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -170);//-------half turn
+	forwardTimed(sn_left, sn_right, 2, 80);//---------moveforward
 	printf("[PELLE] opening pelle\n");//----------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	//set_tacho_command(sn_pelle, "stop");
-	forwardTimed(sn_left, sn_right, 1, -80);//---------movebackward
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);//-------half turn
+	forwardTimed(sn_left, sn_right, 2, -80);//---------movebackward
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -180);//-------half turn
 	printf("[PELLE] closing pelle\n");//----------close pelle
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
@@ -281,44 +287,80 @@ void drop_object(uint8_t sn_pelle, uint8_t sn_left, uint8_t sn_right, uint8_t sn
 
 
 void isThisABall(uint8_t sn_left, uint8_t sn_right, uint8_t sn_pelle, uint8_t sn_sonar, uint8_t sn_gyro, float delta) {
-	forwardSonar(sn_left, sn_right, sn_sonar, 150.0);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
+	forwardSonar(sn_left, sn_right, sn_sonar, 50.0, 100);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -delta);
+	sleep(0.5);
 	float sonarValG = getSonar(sn_sonar);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 2*delta);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, delta+5);
+	sleep(0.5);
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, delta+5);
+	sleep(0.5);
 	float sonarValD = getSonar(sn_sonar);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -delta);
-	if (sonarValG>300 && sonarValD>300){
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -delta-5);
+	if (sonarValG>150 && sonarValD>150){
 		printf("movable object");
-		take_object(sn_pelle,sn_left, sn_right, sn_sonar);
-	} else {
-		printf("non movable or fronteer");
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -2*delta);
-		sonarValG = getSonar(sn_sonar);
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 4*delta);
-		sonarValD = getSonar(sn_sonar);
-		TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -2*delta);
-		if (sonarValG>400 && sonarValD>400){
-			printf("unmovable object");
-			forwardTimed(sn_left, sn_right, 2, -80);
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-		} else {
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-		}
+		take_object(sn_pelle, sn_left, sn_right, sn_sonar);
+		drop_object( sn_pelle, sn_left, sn_right, sn_sonar, sn_gyro);
+	}else {
+		TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, 90);
 	}
 }
 
 
+void whereIsMyMind(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_gyro, int angle) {
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -angle);
+	float sonarMin = getSonar(sn_sonar);
+	float gyroMin = getGyro(sn_gyro);
+	float sonarVal = getSonar(sn_sonar);
+
+	float gyroVal;
+    float gyroValInitial;
+	gyroValInitial = getGyro(sn_gyro);
+	gyroVal = getGyro(sn_gyro);
+	printf("initial gyro value: %f\n", gyroValInitial);
+	set_tacho_speed_sp(sn_left, 30.0);
+	set_tacho_speed_sp(sn_right, -30.0);
+	printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_left, "run-forever");
+	set_tacho_command(sn_right, "run-forever");
+	while (abs(gyroVal - gyroValInitial) < abs(2*angle)+10) {
+		gyroVal = getGyro(sn_gyro);
+		sonarVal = getSonar(sn_sonar);
+		if (sonarMin>sonarVal) {
+			sonarMin=sonarVal;
+			gyroMin=gyroVal;
+			printf("sonarMin: %f\n", sonarMin);
+			printf("gyroMin: %f\n", gyroMin);
+		}
+	}
+	printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_left, "stop");
+	set_tacho_command(sn_right, "stop");
+	sleep(0.5);
+
+
+	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 30.0, -gyroVal+gyroMin);
+	gyroVal = getGyro(sn_gyro);
+	sonarVal = getSonar(sn_sonar);
+	printf("sonarMin: %f\n", sonarMin);
+	printf("gyroMin: %f\n", gyroMin);
+}
+
+
+
 void keepmoving(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, uint8_t sn_pelle, uint8_t sn_gyro, float sonarThreshold) {
 	int i=0;
-	while (i<4) {
-		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
-		isThisABall( sn_left,  sn_right,  sn_pelle,  sn_sonar,  sn_gyro, 20);
+	while (i<6) {
+		forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold, 400);
+		whereIsMyMind(sn_left, sn_right, sn_sonar, sn_gyro, 20);
+		isThisABall( sn_left,  sn_right,  sn_pelle,  sn_sonar,  sn_gyro, 25);
 		float sonarVal = getSonar(sn_sonar);
 		while (sonarVal<100.0) {
 			backwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold);
-			TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
+			TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, 90);
 			sonarVal = getSonar(sn_sonar);
 		}
+		sleep(3);
 		i+=1;
 	}
 }
@@ -395,16 +437,16 @@ int main(void) {
 	//forwardTimed(sn_left, sn_right, 2, 500);
 	//forwardSonar(sn_left, sn_right, sn_sonar, 100.0);
 	//forwardTimed(sn_left, sn_right, 2, 500);
-	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 90);
-	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -90);
-	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, 180);
-	//TurnDegreeRposLneg(sn_left, sn_right, sn_gyro, -180);
+	//TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, 90);
+	//TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -90);
+	//TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, 180);
+	//TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, -180);
 	/*sleep(5);
 	take_object(sn_pelle,sn_left, sn_right, sn_sonar);
 	sleep(5);
-	drop_object(sn_pelle,sn_left, sn_right, sn_gyro);
+	drop_object(sn_pelle,sn_left, sn_right, sn_right, sn_gyro);
 	sleep(5);*/
-	keepmoving(sn_left, sn_right, sn_sonar, sn_pelle, sn_gyro, 100.0);
+	keepmoving(sn_left, sn_right, sn_sonar, sn_pelle, sn_gyro, 150.0);
 	//forwardTimed(sn_left, sn_right, 2);
 	// ENDS MAIN
 	ev3_uninit();
