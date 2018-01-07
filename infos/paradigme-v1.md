@@ -2,7 +2,7 @@
 
 Le paradigme v1.0 est le schéma d'organisation du code de la première - et sans doute finale - version du code de Fred.
 
-Il est composé de 3 fichiers:
+Il est composé de 3 fichiers, disponibles dans /v1:
 
 + main.c
 + myev3.h
