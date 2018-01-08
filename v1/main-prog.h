@@ -25,7 +25,7 @@ int pi=3.14159265;
 int Xdef=0,Ydef=0;
 int speedMotorL, speedMotorR, positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
 float thetaCompas;
-float lambda=1/21.21;
+float lambda=21.21;
 int ThreadDisplay=0;
 pthread_mutex_t lock;
 
@@ -39,7 +39,7 @@ void* Update_position(){
 
                 get_tacho_position(sn_lwheel, &positionMotorL1);
                 get_tacho_position(sn_rwheel, &positionMotorR1);
-                sleep(0.2);
+                sleep(0.3);
                 get_tacho_speed(sn_lwheel, &speedMotorL);
                 get_tacho_speed(sn_rwheel, &speedMotorR);
                 get_tacho_position(sn_lwheel, &positionMotorL2);
@@ -49,6 +49,9 @@ void* Update_position(){
                 if ((speedMotorR != 0) && (speedMotorL != 0)) {
 			if (speedMotorL/speedMotorR > 0) {
 				printf("\nrobot is moving");
+				printf("\nsin(thetaCompas)",sin(thetaCompas));
+				printf("\ndiffPosition",positionMotorR2-positionMotorR1);
+				printf("\nlambda",lambda);
 				Xdef=Xdef-sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 			} else {
