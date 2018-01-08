@@ -1,6 +1,3 @@
-///////////////////////////////////// CASE_0 ///////////////////////////////////
-
-
 void* display_entry(){
     int c,lval,rval;
     printf("[THREAD] displaying the position value every second\n");
@@ -23,12 +20,6 @@ int test_update_pos(){
     pthread_join(display,NULL);
     return 0;
 }
-
-int X=0,Y=0;
-
-
-
-///////////////////////////////////// CASE_1 ///////////////////////////////////
 
 void* Update_position(){
         /* affiche la position toutes les secondes */
@@ -65,7 +56,6 @@ void* Update_position(){
         /* fin SC1 */
         return NULL;
 }
-
 int test_Update_position(){
     int pi=3.14159265;
     int Xdef=0,Ydef=0;
@@ -104,10 +94,15 @@ int test_Update_position(){
     return NULL;
 }
 
+void test_cs(){
+    send_position(1,2);
+    send_position(-1,-2);
+    send_obstacle(1,2,3);
+    send_obstacle(0,4,5);
+    send_position_pos(1,2);
+}
 
-
-
-///////////////////////////////////// ROBOT ///////////////////////////////////
+int X=0,Y=0;
 
 int robot(int sw){
     switch (sw){
@@ -117,6 +112,9 @@ int robot(int sw){
         case 1:
             test_Update_position();
             break;
+        case 2:
+            test_cs();
+            break;
     }
 }
 
@@ -125,4 +123,6 @@ int robot(int sw){
         test sur l'update des positions
     1
         test sur l'update des positions en cm en continue
+    2
+        test sur la com client/serveur
 */
