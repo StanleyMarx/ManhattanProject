@@ -482,23 +482,4 @@ int main(void) {
 }
 //import time
 
-DetectTimed(){
-	clock_t previous, current;
-	previous = 
-	current = clock();
-	if ((current - previous)/CLOCKS_PER_SECS > 1000) { //1000 : 1sec
-		move_forever(0,0);
-		turn_exact_rel(-delta,2);
-		if (get_sonar() < sonarTreshold){
-			break;
-			
-		}
-		else {
-			turn_exact_rel(2*delta, 2);
-			if (get_sonar() < sonarTreshold){
-				break;
-			}
-		}
-		previous = current;
-	}
-}
+
