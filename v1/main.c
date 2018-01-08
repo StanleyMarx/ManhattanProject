@@ -8,6 +8,7 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 #include <math.h>
+#include <pthread.h>
 
 #define SERV_ADDR "30:3a:64:ea:bf:0e" // server = nino-hp
 
@@ -94,7 +95,7 @@ int main(int argc, char **argv) {
     }
       
         /* ROBOT */
-      robot();
+      robot(atoi(argv[1]));
       
       
     close (s);
