@@ -141,6 +141,7 @@ void move_real(int r,int l,int speed){
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_TO_REL_POS);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_TO_REL_POS);
 }
+
 void open_shovel(){
     set_tacho_stop_action_inx(sn_shovel,TACHO_COAST);
     set_tacho_speed_sp(sn_shovel,200);
@@ -208,6 +209,68 @@ void turn_exact_abs(float anglDest,float prec){
     }
 }
 
+void forwardSonar(int rcycle, int lcycle, float sonarThreshold) {
+	// moves forward until it is close enough to an object 
+    float sonarVal = getSonar();
+	if (sonarVal > sonarThreshold) {
+        moveforever(rcycle, lcycle);
+		while (sonarVal > sonarThreshold) {
+			sonarVal = getSonar();
+		}
+		moveforever(0,0);
+	}
+}
+
+void detectBall(delta){
+    // detect if movable or non movable object
+    turn_exact_rel(-delta,2);
+	sleep(0.5);
+	float sonarValG = getSonar(sn_sonar);
+    turn_exact_rel(delta+5,2);
+	sleep(0.5);
+    turn_exact_rel(delta+5,2);
+	sleep(0.5);
+	float sonarValD = getSonar(sn_sonar);
+    turn_exact_rel(-delta-5,2);
+	if (sonarValG>150 && sonarValD>150){
+		printf("movable object\n");
+	}else {
+		printf("non movable object\n");
+        turn_exact_rel(90,2);
+	}
+}
+
+void take_object(){
+    forwardSonar(50, 50, 80.0);
+	printf("[PELLE] opening pelle\n");//--------open pelle
+	set_tacho_speed_sp(sn_pelle, -80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+    move_real(8*22.447,8*22.447,400);
+	printf("[PELLE] closing pelle\n");//-------close pelle
+	set_tacho_command(sn_pelle, "stop");
+	set_tacho_speed_sp(sn_pelle, 80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_pelle, "stop");
+}
+
+void drop_object() {
+	turn_exact_rel(-180,2);-------half turn
+    move_real(8*22.447,8*22.447,400);
+	printf("[PELLE] opening pelle\n");//----------open pelle
+	set_tacho_speed_sp(sn_pelle, -80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	move_real(8*22.447,8*22.447,-400);//---------movebackward
+    turn_exact_rel(90,2); //-------half turn
+	printf("[PELLE] closing pelle\n");//----------close pelle
+	set_tacho_command(sn_pelle, "stop");
+	set_tacho_speed_sp(sn_pelle, 80);
+	set_tacho_command(sn_pelle, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_pelle, "stop");
+}
 /* à tester */
 float width_object(){
     /*
