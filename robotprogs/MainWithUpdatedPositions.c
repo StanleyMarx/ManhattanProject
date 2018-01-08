@@ -224,6 +224,8 @@ pthread_mutex_t lock;
 
 void* display_entry(){
         /* affiche la position toutes les secondes */
+	/* debut SC1 */
+        pthread_mutex_lock(&lock);
         while(ThreadDisplay == 0){
                 pthread_mutex_unlock(&lock);
                 /* fin SC1 */
