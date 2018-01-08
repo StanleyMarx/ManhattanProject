@@ -253,6 +253,8 @@ void* display_entry(){
                 /* debut SC1 */
                 pthread_mutex_lock(&lock);
         }
+        pthread_mutex_unlock(&lock);
+        /* fin SC1 */
         return NULL;
 }
 
