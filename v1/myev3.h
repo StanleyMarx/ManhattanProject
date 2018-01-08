@@ -271,6 +271,31 @@ void drop_object() {
 	sleep(2);
 	set_tacho_command(sn_pelle, "stop");
 }
+// à tester !! sera à utiliser en thread 
+void Detect_timed(delta, msec){
+	/*if the robot hasn't detected any obstacles in the time msec, 
+	it stops and looks around  with an angle delta*/
+	clock_t previous, current;
+	previous = clock();
+	sleep(1);
+	current = clock();
+	if ((current - previous)/CLOCKS_PER_SECS > sec) {
+		move_forever(0,0);
+		turn_exact_rel(-delta,2);
+		if (get_sonar() < sonarTreshold){
+			break;
+			
+		}
+		else {
+			turn_exact_rel(2*delta, 2);
+			if (get_sonar() < sonarTreshold){
+				break;
+			}
+		}
+		previous = current;
+	}
+}
+
 /* à tester */
 float width_object(){
     /*
