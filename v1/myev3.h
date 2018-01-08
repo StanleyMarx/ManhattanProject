@@ -213,25 +213,25 @@ void forwardSonar(int rcycle, int lcycle, float sonarThreshold) {
 	// moves forward until it is close enough to an object 
     float sonarVal = getSonar();
 	if (sonarVal > sonarThreshold) {
-        moveforever(rcycle, lcycle);
+        move_forever(rcycle, lcycle);
 		while (sonarVal > sonarThreshold) {
 			sonarVal = getSonar();
 		}
-		moveforever(0,0);
+		move_forever(0,0);
 	}
 }
 
 void detectBall(delta){
     // detect if movable or non movable object
-    turn_exact_rel(-delta,2);
+	turn_exact_rel(-delta,2);
 	sleep(0.5);
 	float sonarValG = getSonar();
-    turn_exact_rel(delta+5,2);
+    	turn_exact_rel(delta+5,2);
 	sleep(0.5);
-    turn_exact_rel(delta+5,2);
+    	turn_exact_rel(delta+5,2);
 	sleep(0.5);
 	float sonarValD = getSonar();
-    turn_exact_rel(-delta-5,2);
+    	turn_exact_rel(-delta-5,2);
 	if (sonarValG>150 && sonarValD>150){
 		printf("movable object\n");
 	}else {
@@ -241,12 +241,12 @@ void detectBall(delta){
 }
 
 void take_object(){
-    forwardSonar(50, 50, 80.0);
+    	forwardSonar(50, 50, 80.0);
 	printf("[PELLE] opening pelle\n");//--------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
-    move_real(8*22.447,8*22.447,400);
+    	move_real(8*22.447,8*22.447,400);
 	printf("[PELLE] closing pelle\n");//-------close pelle
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
@@ -257,13 +257,13 @@ void take_object(){
 
 void drop_object() {
 	turn_exact_rel(-180,2);-------half turn
-    move_real(8*22.447,8*22.447,400);
+    	move_real(8*22.447,8*22.447,400);
 	printf("[PELLE] opening pelle\n");//----------open pelle
 	set_tacho_speed_sp(sn_pelle, -80);
 	set_tacho_command(sn_pelle, "run-forever");
 	sleep(2);
 	move_real(8*22.447,8*22.447,-400);//---------movebackward
-    turn_exact_rel(90,2); //-------half turn
+    	turn_exact_rel(90,2); //-------half turn
 	printf("[PELLE] closing pelle\n");//----------close pelle
 	set_tacho_command(sn_pelle, "stop");
 	set_tacho_speed_sp(sn_pelle, 80);
