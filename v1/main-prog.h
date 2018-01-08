@@ -62,13 +62,12 @@ void* Update_position(){
         }
         pthread_mutex_unlock(&lock);
         /* fin SC1 */
-        return NULL;
 }
 int test_Update_position(){
     
     
     pthread_t display;
-    pthread_create(&display,NULL,display_entry,NULL);
+    pthread_create(&display,NULL,Update_position,NULL);
 
     //THE END OF THE INITIALISATION____________________________________________
     //THE MOVEMENT FUNCTIONS___________________________________________________
@@ -90,7 +89,7 @@ int test_Update_position(){
 
     pthread_join(display,NULL);
     pthread_mutex_destroy(&lock);
-    return NULL;
+    return 0;
 }
 
 void test_cs(){
