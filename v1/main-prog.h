@@ -21,6 +21,13 @@ int test_update_pos(){
     return 0;
 }
 
+int pi=3.14159265;
+int Xdef=0,Ydef=0;
+int speedMotorL, speedMotorR, positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
+float thetaCompas;
+float lambda=1/21.21;
+int ThreadDisplay=0;
+pthread_mutex_t lock;
 void* Update_position(){
         /* affiche la position toutes les secondes */
 	/* debut SC1 */
@@ -57,13 +64,6 @@ void* Update_position(){
         return NULL;
 }
 int test_Update_position(){
-    int pi=3.14159265;
-    int Xdef=0,Ydef=0;
-    int speedMotorL, speedMotorR, positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
-    float thetaCompas;
-    float lambda=1/21.21;
-    int ThreadDisplay=0;
-    pthread_mutex_t lock;
     
     
     pthread_t display;
