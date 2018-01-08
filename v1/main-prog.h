@@ -73,11 +73,9 @@ int test_Update_position(){
 	//THE MOVEMENT FUNCTIONS___________________________________________________
 
 	
-	forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold, 200);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, 90);
-	forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold, 200);
-	TurnDegreeRposLneg(sn_left, sn_right, sn_sonar, sn_gyro, 100.0, 90);
-	forwardSonar(sn_left, sn_right, sn_sonar, sonarThreshold, 200);
+	forward_sonar(200,200,200);
+	turn_exact_rel(90,3);
+	forward_sonar(200,200,200);
 	
 
 	//THE END OF THE INITIALISATION____________________________________________
