@@ -10,3 +10,6 @@
 * x is the **x coordinate of the pixel in multiple of 5cm**. This field is a **signed 16-bit little-endian integer**.
 * y is the **y coordinate of the pixel in multiple of 5cm**. This field is a **signed 16-bit little-endian integer**.
 * 'R', 'G', and 'B' are the red, green, blue values of the pixel respectively, valued from 0 to 255. 
+
+[Color Sensor](http://docs.ev3dev.org/projects/lego-linux-drivers/en/ev3dev-jessie/sensor_data.html#lego-ev3-color-modes)
+
