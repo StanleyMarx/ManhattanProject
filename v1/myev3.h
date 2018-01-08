@@ -225,12 +225,12 @@ void detectBall(delta){
     // detect if movable or non movable object
     turn_exact_rel(-delta,2);
 	sleep(0.5);
-	float sonarValG = getSonar(sn_sonar);
+	float sonarValG = getSonar();
     turn_exact_rel(delta+5,2);
 	sleep(0.5);
     turn_exact_rel(delta+5,2);
 	sleep(0.5);
-	float sonarValD = getSonar(sn_sonar);
+	float sonarValD = getSonar();
     turn_exact_rel(-delta-5,2);
 	if (sonarValG>150 && sonarValD>150){
 		printf("movable object\n");
