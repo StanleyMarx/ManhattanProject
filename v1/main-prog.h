@@ -29,24 +29,24 @@ void* Update_position(){
                 pthread_mutex_unlock(&lock);
                 /* fin SC1 */
 
-        		get_tacho_position_sp(sn_left, &positionMotorL1);
-        		get_tacho_position_sp(sn_rigth, &positionMotorR1);
-        		spleep(0.2);
-        		get_tacho_speed_sp(sn_left, &speedMotorL);
-        		get_tacho_speed_sp(sn_rigth, &speedMotorR);
-        		get_tacho_position_sp(sn_left, &positionMotorL2);
-        		get_tacho_position_sp(sn_rigth, &positionMotorR2);
-        		get_sensor_value0(sn_compass, &thetaCompas);
+                get_tacho_position_sp(sn_lwheel, &positionMotorL1);
+                get_tacho_position_sp(sn_rwheel, &positionMotorR1);
+                spleep(0.2);
+                get_tacho_speed_sp(sn_lwheel, &speedMotorL);
+                get_tacho_speed_sp(sn_rwheel, &speedMotorR);
+                get_tacho_position_sp(sn_lwheel, &positionMotorL2);
+                get_tacho_position_sp(sn_rwheel, &positionMotorR2);
+                get_sensor_value0(sn_compass, &thetaCompas);
 
-        		if (speedMotorR != 0) and (speedMotorL != 0) {
-        			if (speedMotorL/speedMotorR > 0) {
-        				printf("\nrobot is moving");
-        				Xdef=Xdef-sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
-        				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
-        			} else {
-        				printf("\nrobot is turning");
-        			}
-        		}
+                if ((speedMotorR != 0) && (speedMotorL != 0)) {
+			if (speedMotorL/speedMotorR > 0) {
+				printf("\nrobot is moving");
+				Xdef=Xdef-sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+			} else {
+				printf("\nrobot is turning");
+			}
+		}
                 printf("x,y = %d,%d\n",Xdef,Ydef);
 
                 /* debut SC1 */
@@ -69,19 +69,19 @@ int test_Update_position(){
     pthread_t display;
     pthread_create(&display,NULL,display_entry,NULL);
 
-	//THE END OF THE INITIALISATION____________________________________________
-	//THE MOVEMENT FUNCTIONS___________________________________________________
+    //THE END OF THE INITIALISATION____________________________________________
+    //THE MOVEMENT FUNCTIONS___________________________________________________
 
 	
-	forward_sonar(200,200,200);
-	turn_exact_rel(90,3);
-	forward_sonar(200,200,200);
+    forward_sonar(200,200,200);
+    turn_exact_rel(90,3);
+    forward_sonar(200,200,200);
 	
 
-	//THE END OF THE INITIALISATION____________________________________________
-	//THE MOVEMENT FUNCTIONS___________________________________________________
+    //THE END OF THE INITIALISATION____________________________________________
+    //THE MOVEMENT FUNCTIONS___________________________________________________
 
-	/* debut SC2 */
+    /* debut SC2 */
     pthread_mutex_lock(&lock);
     ThreadDisplay = 1;
     pthread_mutex_unlock(&lock);
