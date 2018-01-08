@@ -28,6 +28,7 @@ float thetaCompas;
 float lambda=1/21.21;
 int ThreadDisplay=0;
 pthread_mutex_t lock;
+
 void* Update_position(){
         /* affiche la position toutes les secondes */
 	/* debut SC1 */
@@ -36,13 +37,13 @@ void* Update_position(){
                 pthread_mutex_unlock(&lock);
                 /* fin SC1 */
 
-                get_tacho_position_sp(sn_lwheel, &positionMotorL1);
-                get_tacho_position_sp(sn_rwheel, &positionMotorR1);
-                spleep(0.2);
-                get_tacho_speed_sp(sn_lwheel, &speedMotorL);
-                get_tacho_speed_sp(sn_rwheel, &speedMotorR);
-                get_tacho_position_sp(sn_lwheel, &positionMotorL2);
-                get_tacho_position_sp(sn_rwheel, &positionMotorR2);
+                get_tacho_position(sn_lwheel, &positionMotorL1);
+                get_tacho_position(sn_rwheel, &positionMotorR1);
+                sleep(0.2);
+                get_tacho_speed(sn_lwheel, &speedMotorL);
+                get_tacho_speed(sn_rwheel, &speedMotorR);
+                get_tacho_position(sn_lwheel, &positionMotorL2);
+                get_tacho_position(sn_rwheel, &positionMotorR2);
                 get_sensor_value0(sn_compass, &thetaCompas);
 
                 if ((speedMotorR != 0) && (speedMotorL != 0)) {
