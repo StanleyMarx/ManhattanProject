@@ -8,6 +8,7 @@ uint8_t sn_sonar;
 uint8_t sn_rwheel;
 uint8_t sn_lwheel;
 uint8_t sn_shovel;
+uint8_t sn_color;
 int max_speed;
 
 void test_tachos_verbose(){
@@ -74,7 +75,7 @@ void test_sensors_verbose(){
     }
     if (ev3_search_sensor(LEGO_EV3_COLOR,&sn_color,0)){
         printf("[ OK  ]color sensor is found at %d\n",sn_color);
-        set_sensor_mode(sn_color, COL-COLOR);
+        set_sensor_mode(sn_color, "COL-COLOR");
     }
     else {
         printf("[ERROR] color sensor is not found\n");
@@ -247,7 +248,7 @@ void detectBall(int delta){
 	}
 }
 
-void take_object(sn_shovel){
+void take_object(){
     	forward_sonar(50, 50, 80.0);
 	printf("[PELLE] opening pelle\n");//--------open pelle
 	set_tacho_speed_sp(sn_shovel, -80);
@@ -262,7 +263,7 @@ void take_object(sn_shovel){
 	set_tacho_command(sn_shovel, "stop");
 }
 
-void drop_object(uint8_t sn_shovel) {
+void drop_object() {
 	turn_exact_rel(-180,2);
     	move_real(8*22.447,8*22.447,400);
 	printf("[PELLE] opening pelle\n");//----------open pelle
@@ -286,7 +287,7 @@ void Detect_timed(int delta, int msec, int sonarTreshold){
 	previous = clock();
 	sleep(1);
 	current = clock();
-	if ((current - previous)/CLOCKS_PER_SECS > msec) {
+	if ((current - previous) > msec) { // ()/CLOCKS_PER_SECS 
 		move_forever(0,0);
 		turn_exact_rel(-delta,2);
 		if (get_sonar() < sonarTreshold){
