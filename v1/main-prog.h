@@ -122,8 +122,8 @@ int robot(int sw){
             break;
         case 3: // test sensor JB
         	while (true) {
-        		float colorVal = get_color();
-        		printf("My color: %f", colorVal);
+        		char * myColor = get_color();
+        		printf("My color: %s", myColor);
         	}
         	
     }

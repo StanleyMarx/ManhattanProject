@@ -10,6 +10,7 @@ uint8_t sn_lwheel;
 uint8_t sn_shovel;
 uint8_t sn_color;
 int max_speed;
+const char const *colors[] = { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
 
 void test_tachos_verbose(){
     /*
@@ -177,10 +178,10 @@ float get_sonar(){
     return ret;
 }
 
-float get_color(){
+char * get_color(){
 	float ret;
 	get_sensor_value0(sn_color, &ret);
-	return ret;
+	return colors[ (int) ret];
 }
 
 void turn_exact_rel(float delta,float prec){
