@@ -62,6 +62,7 @@ int main( void )
 	}
 	for ( ; ; ){
 		if (ev3_search_sensor(LEGO_EV3_COLOR, &sn_color,0)){
+			set_sensor_mode(sn_color, 'COL-COLOR');
 			printf("COLOR sensor found, reading color...\n");
 			if ( !get_sensor_value0(sn_color, &value )) {
 				value = 0;
