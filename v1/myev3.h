@@ -74,6 +74,7 @@ void test_sensors_verbose(){
     }
     if (ev3_search_sensor(LEGO_EV3_COLOR,&sn_color,0)){
         printf("[ OK  ]color sensor is found at %d\n",sn_color);
+        set_sensor_mode(sn_color, COL-COLOR);
     }
     else {
         printf("[ERROR] color sensor is not found\n");
@@ -173,6 +174,12 @@ float get_sonar(){
     float ret;
     get_sensor_value0(sn_sonar,&ret);
     return ret;
+}
+
+float get_color(){
+	float ret;
+	get_sensor_value0(sn_color, &ret);
+	return ret;
 }
 
 void turn_exact_rel(float delta,float prec){
