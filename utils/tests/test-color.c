@@ -68,8 +68,8 @@ int main( void )
 				value = 0;
 			}
 			printf("0:none, 1:black, 2:blue, 3:green, 4:yellow, 5:red, 6:white, 7:brown\n");
-			printf( "\f(%d) \n", value);
-			printf( "\r(%s) \n", color[ value ]);
+			printf( "\f(%d) \n", (int) value);
+			printf( "\r(%s) \n", color[ (int) value ]);
 			fflush( stdout );
 			sleep(3);
 	    	}
