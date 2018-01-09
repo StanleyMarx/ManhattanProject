@@ -284,13 +284,13 @@ void drop_object() {
 void Detect_timed(int delta, int msec, int sonarTreshold){
 	/*if the robot hasn't detected any obstacles in the time msec, 
 	it stops and looks around  with an angle delta*/
-	double CLOCKS_PER_SEC;
-	CLOCKS_PER_SEC = 1000000;
+	double C_PER_SECS;
+	C_PER_SECS = 1000000.0;
 	clock_t previous, current;
 	previous = clock();
 	sleep(1);
 	current = clock();
-	if ((current - previous)/CLOCKS_PER_SECS > msec) { 
+	if ((current - previous)/C_PER_SECS > msec) { 
 		move_forever(0,0);
 		turn_exact_rel(-delta,2);
 		if (get_sonar() < sonarTreshold){
