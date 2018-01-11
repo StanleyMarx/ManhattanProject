@@ -121,12 +121,16 @@ int robot(int sw){
             test_cs();
             break;
         case 3: // test sensor JB
-        	while (true) {
-        		int myColor = get_color();
-        		printf("My color: %d", myColor);
-        	}
+        	forward_sonar(50, 50, 80.0, 1000, 20);
+		if (detect_movable() == 1){
+			printf("movable");
+		}
+		else{
+			printf("non movable");
+		}
         	
     }
+	
 }
 
 /*
