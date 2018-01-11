@@ -191,7 +191,7 @@ void turn_exact_rel(float delta,float prec){
     float anglCurr=get_compass();
     float anglDest=fmod(anglCurr+delta,360);
     while(abs(delta)>prec){
-        printf("delta = %f\n");
+        //printf("delta = %f\n");
         move_real(-ratio*delta,ratio*delta,max_speed/5);
         sleep(1);
         anglCurr=get_compass();
@@ -206,7 +206,7 @@ void turn_exact_abs(float anglDest,float prec){
     delta=fmod(delta,360);
     if (delta>180){delta=delta-360;}
     while(abs(delta)>prec){
-        printf("delta = %f - ",delta);
+        //printf("delta = %f - ",delta);
         move_real(-ratio*delta,ratio*delta,max_speed/5);
         sleep(1);
         anglCurr=get_compass();
