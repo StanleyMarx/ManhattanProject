@@ -237,7 +237,7 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 					if (get_sonar() < sonarThreshold){
 						return 0;
 					}
-				else {
+				} else {
 					turn_exact_rel(2*delta, 2);
 					if (get_sonar() < sonarThreshold){
 						return 0;
