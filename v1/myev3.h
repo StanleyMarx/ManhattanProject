@@ -243,6 +243,7 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 							return 0;
 						}
 					}
+					turn_exact_rel(-delta, 2);
 				}
 				previous = current;
 			
