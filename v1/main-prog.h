@@ -63,7 +63,7 @@ void* Update_position(){
 				printf("\nrobot is turning");
 			}
 		}
-                printf("\n Xdef,Ydef = %d,%d\n",Xdef,Ydef);
+                printf("\n Xdef,Ydef = %f,%f\n",Xdef,Ydef);
 		
 
                 /* debut SC1 */
