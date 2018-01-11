@@ -129,13 +129,15 @@ int robot(int sw){
             break;
         case 3: // test sensor JB
         	forward_sonar(50, 50, 80.0, 8000, 20);
-		if (detect_movable() == 1){
-			printf("movable");
-		}
-		else{
-			printf("non movable");
-		}
-        	
+        	int color = detect_movable();
+        	printf("got color %d", color);
+			if (color == 1){
+				printf("movable");
+			}
+			else{
+				printf("non movable");
+			}
+			break;        	
     }
 	
 }
