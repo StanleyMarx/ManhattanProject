@@ -269,10 +269,11 @@ int detect_movable() {
 
 int detect_type(int sonarThreshold){
 	// boucle while tant que different de la position init ou aue super eloigne 
+	float sonarVal;
 	sonarVal = get_sonar();
 	while (sonarVal < sonarThreshold) {
 		turn_exact_rel(90,2);
-		spnarVal = get_sonar();
+		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
 			move_real(10*22.447,10*22.447,400);
 			turn_exact_rel(-90,2);
