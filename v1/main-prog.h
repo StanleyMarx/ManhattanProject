@@ -25,7 +25,8 @@ int test_update_pos(){
 //--------------------------- CASE_1 ---------------------------
 int pi=3.14159265;
 float Xdef=0.0,Ydef=0.0;
-int speedMotorL, speedMotorR, positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
+int speedMotorL, speedMotorR;
+float positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
 float thetaCompas;
 float lambda=1/21.21;
 int ThreadDisplay=0;
@@ -53,9 +54,9 @@ void* Update_position(){
 		if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
 			if ((speedMotorR > 0) && (speedMotorL > 0)) {
 				printf("\nrobot is moving");
-				//printf("\nsin(thetaCompas) %f",sin(thetaCompas));
-				//printf("\ndiffPosition %d",positionMotorR2-positionMotorR1);
-				//printf("\nlambda %f",lambda);
+				printf("\nsin(thetaCompas) %f",sin(thetaCompas));
+				printf("             diffPosition %f",positionMotorR2-positionMotorR1);
+				printf("             lambda %f",lambda);
 				Xdef=Xdef-sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 			} else {
@@ -128,7 +129,7 @@ int robot(int sw){
             test_cs();
             break;
         case 3: // test sensor JB
-        	forward_sonar(50, 50, 40.0, 1000, 20); // forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
+        	forward_sonar(50, 50, 40.0, 8000, 20);
         	int color = detect_movable();
         	printf("got color info: %d\n", color);
 			if (color == 1){
