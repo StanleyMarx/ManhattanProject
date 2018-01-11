@@ -151,7 +151,11 @@ int robot(int sw){
 			else{
 				printf("non movable\n");
 			}
-			break;        	
+			break;  
+	case 4:
+		char* z = xy_to_string(1, 12);
+		printf("conv %s \n", z);
+		break;
     }
 	
 }
