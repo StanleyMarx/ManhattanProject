@@ -123,11 +123,12 @@ int robot(int sw){
         case 3: // test sensor JB
         	forward_sonar(50, 50, 80.0, 8000, 20);
 		if (detect_movable() == 1){
-			printf("movable");
+			printf("movable\n");
 		}
 		else{
-			printf("non movable");
+			printf("non movable\n");
 		}
+		forward_sonar(50, 50, 80.0, 2000, 20);
         	
     }
 	
