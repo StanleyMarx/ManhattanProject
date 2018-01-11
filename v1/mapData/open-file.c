@@ -9,6 +9,10 @@ int maxY = 0;
 FILE* posFile = NULL;
 
 void find_corners() {
+	/* 
+		by JB
+		recovers all of the past coordinates of the robots from the Position text file and deduce the possible corners of a rectangular map.
+	*/
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
@@ -41,6 +45,11 @@ void find_corners() {
 }
 
 int create_map() {
+	/*
+		by JB
+		Given the map corners and all of the robot's past coordinates, this script creates a map of where the robot went and where it did not.
+		We need to add the send_map_data_message function in here so that it sends the right map messages to the server.
+	*/
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
@@ -87,6 +96,10 @@ int create_map() {
 }
 
 int append_pos_file(int x, int y) {
+	/*
+		by JB and Alix
+		When the robot is at (x,y), this script writes the coordinates in the Position text file that will be used to build the map at the end of the exploration.
+	*/
    	posFile = fopen("pos.txt", "a");
     if (posFile != NULL){
     	fprintf(posFile, "%d,%d\n",x,y);
@@ -96,6 +109,10 @@ int append_pos_file(int x, int y) {
 }
 
 int main() {
+	/*
+		by JB
+		Just a main to test the different functions that interact with the Position text file.
+	*/
 	posFile = fopen("pos.txt", "w");
 	fclose(posFile);
 	

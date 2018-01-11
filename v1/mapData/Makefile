@@ -1,3 +1,5 @@
+# "make run" to compile and run the openFile script - JB
+
 all : openFile
 
 openFile : open-file.o
