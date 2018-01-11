@@ -230,6 +230,7 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 	if (sonarVal > sonarThreshold) {
         	move_forever(rcycle, lcycle);
 		while (sonarVal > sonarThreshold) {
+			current = clock();
 			sonarVal = get_sonar();
 				if ((current - previous)/C_PER_SECS > msec) { 
 					move_forever(0,0);
