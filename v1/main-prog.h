@@ -48,21 +48,21 @@ void* Update_position(){
                 get_tacho_position(sn_rwheel, &positionMotorR2);
                 get_sensor_value0(sn_compass, &thetaCompas);
 		
-                printf("\n speedMotorL,speedMotorR = %d,%d",speedMotorL,speedMotorR);
+                //printf("\n speedMotorL,speedMotorR = %d,%d",speedMotorL,speedMotorR);
                 
 		if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
 			if ((speedMotorR > 0) && (speedMotorL > 0)) {
 				printf("\nrobot is moving");
-				//printf("\nsin(thetaCompas) %F",sin(thetaCompas));
-				//printf("\ndiffPosition %d",positionMotorR2-positionMotorR1);
-				//printf("\nlambda %F",lambda);
+				printf("\nsin(thetaCompas) %f",sin(thetaCompas));
+				printf("\ndiffPosition %d",positionMotorR2-positionMotorR1);
+				printf("\nlambda %f",lambda);
 				Xdef=Xdef-sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 			} else {
 				printf("\nrobot is turning");
 			}
 		}
-                printf("\n x,y = %d,%d\n",Xdef,Ydef);
+                printf("\n Xdef,Ydef = %d,%d\n",Xdef,Ydef);
 		
 
                 /* debut SC1 */
