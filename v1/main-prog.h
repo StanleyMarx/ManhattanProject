@@ -140,7 +140,6 @@ int robot(int sw){
             test_cs();
             break;
         case 3: // test sensor JB
-		add_pos_fic(13, 1);
         	forward_sonar(50, 50, 40.0, 8000, 20);
         	int color = detect_movable();
         	printf("got color info: %d\n", color);
