@@ -149,7 +149,12 @@ int robot(int sw){
 			else{
 				printf("non movable\n");
 			}
-			break;  
+			break; 
+	case 4:
+		    char buffer[20];
+		    itoa (12, buffer, 10);
+		    printf("Decimal value = %s\n", buffer);
+		    
 	
     }
 	
