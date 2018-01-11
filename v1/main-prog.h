@@ -121,7 +121,7 @@ int robot(int sw){
             test_cs();
             break;
         case 3: // test sensor JB
-        	forward_sonar(50, 50, 80.0, 1000, 20);
+        	forward_sonar(50, 50, 80.0, 8000, 20);
 		if (detect_movable() == 1){
 			printf("movable");
 		}
