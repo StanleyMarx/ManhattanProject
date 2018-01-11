@@ -267,6 +267,22 @@ int detect_movable() {
 	}
 }
 
+int detect_type(int sonarThreshold){
+	// boucle while tant que different de la position init ou aue super eloigne 
+	sonarVal = get_sonar();
+	while (sonarVal < sonarThreshold) {
+		turn_exact_rel(90,2);
+		spnarVal = get_sonar();
+		if (sonarVal > sonarThreshold){
+			move_real(10*22.447,10*22.447,400);
+			turn_exact_rel(-90,2);
+		}
+		sonarVal = get_sonar();
+	}
+	turn_exact_rel(-90,2);
+	return 0; //return 1 si obstacle, 2 si frontiere
+
+}
 void detectBall(int delta){
     // detect if movable or non movable object
 	turn_exact_rel(-delta,2);
