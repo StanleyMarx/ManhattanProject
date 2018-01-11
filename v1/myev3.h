@@ -182,7 +182,9 @@ int get_color(){
 	float ret;
 	set_sensor_mode(sn_color, "COL-COLOR");
 	get_sensor_value0(sn_color, &ret);
-	printf("reading color %d", (int) ret);
+	printf("sn_color = %d\n", (int) sn_color);
+	printf("ret %f\n", ret); 
+	printf("reading color %d\n", (int) ret);
 	return (int) ret; // { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
 }
 
