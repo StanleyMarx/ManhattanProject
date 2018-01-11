@@ -340,7 +340,7 @@ void drop_object() {
 	set_tacho_command(sn_shovel, "stop");
 }
 
-char* xy_to_string(){
+/*char* xy_to_string(){
 	char z[8];
 	z[7] = '\0';
 	z[3] = ' ';
@@ -390,7 +390,7 @@ int add_pos_fic(int x, int y){
 
     return 0;
 }
-
+*/
 
 
 // à tester !! sera à utiliser en thread 
