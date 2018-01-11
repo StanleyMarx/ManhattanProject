@@ -237,11 +237,11 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 					turn_exact_rel(-delta,2);
 					if (get_sonar() < sonarThreshold){
 						return 0;
-					}
-				} else {
-					turn_exact_rel(2*delta, 2);
-					if (get_sonar() < sonarThreshold){
-						return 0;
+					} else {
+						turn_exact_rel(2*delta, 2);
+						if (get_sonar() < sonarThreshold){
+							return 0;
+						}
 					}
 				}
 				previous = current;
