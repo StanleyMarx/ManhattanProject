@@ -26,7 +26,7 @@ int test_update_pos(){
 int pi=3.14159265;
 float Xdef=0.0,Ydef=0.0;
 int speedMotorL, speedMotorR;
-float positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
+int positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
 float thetaCompas;
 float lambda=1/21.21;
 int ThreadDisplay=0;
@@ -55,7 +55,7 @@ void* Update_position(){
 			if ((speedMotorR > 0) && (speedMotorL > 0)) {
 				printf("\nrobot is moving");
 				printf("\nsin(thetaCompas) %f",sin(thetaCompas));
-				printf("             diffPosition %f",positionMotorR2-positionMotorR1);
+				printf("             diffPosition %d",positionMotorR2-positionMotorR1);
 				printf("             lambda %f",lambda);
 				Xdef=Xdef-sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
