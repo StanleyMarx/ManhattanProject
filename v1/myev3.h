@@ -340,7 +340,7 @@ void drop_object() {
 	set_tacho_command(sn_shovel, "stop");
 }
 
-int add_pos_fic(int x, int y){
+char* xy_to_string(){
 	char z[8];
 	z[7] = '\0';
 	z[3] = ' ';
@@ -376,6 +376,11 @@ int add_pos_fic(int x, int y){
 		z[5] = newy[1];
 		z[6] = newy[2];
 	}
+	return z;
+}
+
+int add_pos_fic(int x, int y){
+	z = xy_to_string(x,y);
 	FILE* fichier = NULL;
     	fichier = fopen("test.txt", "a");
     	if (fichier != NULL){
