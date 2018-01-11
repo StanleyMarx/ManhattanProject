@@ -27,12 +27,12 @@ float pi=3.14159265;
 float Xdef=0.0,Ydef=0.0;
 int speedMotorL, speedMotorR;
 int positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
-float thetaCompas;
+float thetaCompas, thetaCompasInit;
 float lambda=1/21.21*86/35;
 int ThreadDisplay=0;
 pthread_mutex_t lock;
-get_sensor_value0(sn_compass, &thetaCompas);
-float thetaCompasInit=thetaCompas*pi/180;
+get_sensor_value0(sn_compass, &thetaCompasInit);
+thetaCompasInit=thetaCompasInit*pi/180;
 
 void* Update_position(){
         /* affiche la position toutes les secondes */
@@ -50,7 +50,7 @@ void* Update_position(){
                 get_tacho_position(sn_lwheel, &positionMotorL2);
                 get_tacho_position(sn_rwheel, &positionMotorR2);
                 get_sensor_value0(sn_compass, &thetaCompas);
-		thetaCompas = thetaCompas*pi/180 - thetaCompasInit;
+		thetaCompas = thetaCompas*pi/180-thetaCompasInit;
                 //printf("\n speedMotorL,speedMotorR = %d,%d",speedMotorL,speedMotorR);
                 
 		if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
