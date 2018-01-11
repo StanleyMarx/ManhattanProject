@@ -86,6 +86,12 @@ int test_Update_position(){
     turn_exact_rel(90,3);
     forward_sonar(200,200,200);*/
     
+    
+    turn_exact_abs(0,3);
+    move_forever(50,50);
+    sleep(5);
+    move_forever(0,0);
+    turn_exact_abs(90,3);
     move_forever(50,50);
     sleep(5);
     move_forever(0,0);
