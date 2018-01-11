@@ -59,7 +59,7 @@ void* Update_position(){
 				printf("\nsin(thetaCompas) %f",sin(thetaCompas));
 				printf("             diffPosition %d",positionMotorR2-positionMotorR1);
 				printf("             lambda %f",lambda);
-				Xdef=Xdef-sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+				Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
 			} else {
 				printf("\nrobot is turning");
@@ -93,10 +93,12 @@ int test_Update_position(){
     move_forever(50,50);
     sleep(5);
     move_forever(0,0);
-    /*turn_exact_rel(90,3);
+    sleep(5);
+    turn_exact_rel(90,3);
+    sleep(5);
     move_forever(50,50);
     sleep(5);
-    move_forever(0,0);*/
+    move_forever(0,0);
 	
 
     //THE END OF THE INITIALISATION____________________________________________
