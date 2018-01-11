@@ -62,10 +62,8 @@ void* Update_position(){
                 printf("             lambda %f",lambda);
                 Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
                 Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
-                Xpos=(int)Xdef;
-                Ypos=(int)Ydef;
-                Xpos=Xpos/5;
-                Ypos=Ypos/5;
+                Xpos=(int) round(Xdef/5);
+                Ypos=(int) round(Ydef/5);
             } else {
                 printf("\nrobot is turning");
             }
