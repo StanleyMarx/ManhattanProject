@@ -218,13 +218,32 @@ void turn_exact_abs(float anglDest,float prec){
     }
 }
 
-void forward_sonar(int rcycle, int lcycle, float sonarThreshold) {
+void forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec) {
 	// moves forward until it is close enough to an object 
     	float sonarVal = get_sonar();
+	double C_PER_SECS;
+	C_PER_SECS = 1000000.0;
+	clock_t previous, current;
+	previous = clock();
+	sleep(1);
+	current = clock();
 	if (sonarVal > sonarThreshold) {
         	move_forever(rcycle, lcycle);
 		while (sonarVal > sonarThreshold) {
 			sonarVal = get_sonar();
+				if ((current - previous)/C_PER_SECS > msec) { 
+					move_forever(0,0);
+					turn_exact_rel(-delta,2);
+					if (get_sonar() < sonarTreshold){
+						return 0;
+					}
+				else {
+					turn_exact_rel(2*delta, 2);
+					if (get_sonar() < sonarTreshold){
+						return 0;
+					}
+				previous = current;
+				
 		}
 		move_forever(0,0);
 	}
