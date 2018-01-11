@@ -168,8 +168,8 @@ float get_compass(){
     return ret;
 }
 float get_compass_slow(){
-    move_forever(0,0);
     sleep(1);
+    move_forever(0,0);
     return get_compass();
 }
 float get_sonar(){
