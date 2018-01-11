@@ -4,6 +4,7 @@
 
 uint8_t sn;
 uint8_t sn_compass;
+uint8_t sn_gyro;
 uint8_t sn_sonar;
 uint8_t sn_rwheel;
 uint8_t sn_lwheel;
@@ -177,7 +178,11 @@ float get_sonar(){
     get_sensor_value0(sn_sonar,&ret);
     return ret;
 }
-
+float get_gyro() {
+	float value;
+	get_sensor_value0(sn_gyro, &value);
+	return value;
+}
 int get_color(){
 	float ret;
 	

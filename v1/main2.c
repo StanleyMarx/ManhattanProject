@@ -63,6 +63,7 @@ int main(int argc, char **argv) {
     while(ev3_tacho_init()<1) Sleep( 1000 );
     ev3_sensor_init();
     ev3_search_sensor(HT_NXT_COMPASS,&sn_compass,0);
+    ev3_search_sensor(LEGO_EV3_GYRO, &sn_gyro,0);
     ev3_search_sensor(LEGO_EV3_US,&sn_sonar,0);
     //ev3_search_sensor(LEGO_EV3_TOUCH,&sn_touch,0);
  	ev3_search_sensor(LEGO_EV3_COLOR,&sn_color,0);
