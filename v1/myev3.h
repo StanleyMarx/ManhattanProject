@@ -385,9 +385,9 @@ void drop_object() {
 
 int add_pos_fic(int x, int y){
 	FILE* fichier = NULL;
-    	fichier = fopen("test.txt", "a");
+    	fichier = fopen("test.txt", "w");
     	if (fichier != NULL){
-        fputs("%d",x,fichier);
+        fprintf(fichier, "%d %d\n",x,y);
         fclose(fichier);
     	}
 
