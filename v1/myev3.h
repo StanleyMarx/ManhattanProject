@@ -178,10 +178,10 @@ float get_sonar(){
     return ret;
 }
 
-char * get_color(){
+int get_color(){
 	float ret;
 	get_sensor_value0(sn_color, &ret);
-	return colors[ (int) ret];
+	return (int) ret; // { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
 }
 
 void turn_exact_rel(float delta,float prec){
@@ -247,6 +247,15 @@ void forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec) {
 		}
 		move_forever(0,0);
 	}
+}
+
+int detect_movable() {
+	// returns 1 if obect is movable (ie color = red) and 0 otherwise
+	int color = get_color();
+	if (color==5) {
+		return 1;
+	} else {
+		return 0;
 }
 
 void detectBall(int delta){
