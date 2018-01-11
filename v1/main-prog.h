@@ -132,10 +132,10 @@ int robot(int sw){
         	int color = detect_movable();
         	printf("got color %d\n", color);
 			if (color == 1){
-				printf("movable");
+				printf("movable\n");
 			}
 			else{
-				printf("non movable");
+				printf("non movable\n");
 			}
 			break;        	
     }
