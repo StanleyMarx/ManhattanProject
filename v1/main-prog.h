@@ -23,7 +23,7 @@ int test_update_pos(){
 }
 
 //--------------------------- CASE_1 ---------------------------
-int pi=3.14159265;
+float pi=3.14159265;
 float Xdef=0.0,Ydef=0.0;
 int speedMotorL, speedMotorR;
 int positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
@@ -48,7 +48,7 @@ void* Update_position(){
                 get_tacho_position(sn_lwheel, &positionMotorL2);
                 get_tacho_position(sn_rwheel, &positionMotorR2);
                 get_sensor_value0(sn_compass, &thetaCompas);
-		
+		thetaCompas = thetaCompas*pi/180;
                 //printf("\n speedMotorL,speedMotorR = %d,%d",speedMotorL,speedMotorR);
                 
 		if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
