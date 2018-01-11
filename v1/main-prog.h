@@ -28,7 +28,7 @@ float Xdef=0.0,Ydef=0.0;
 int speedMotorL, speedMotorR;
 int positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
 float thetaCompas;
-float lambda=1/21.21;
+float lambda=1/21.21*86/35;
 int ThreadDisplay=0;
 pthread_mutex_t lock;
 
