@@ -566,3 +566,24 @@ void send_obstacle_pos(int act,uint16_t x,uint16_t y){
 	write(s,str,10);
 	Sleep(1000);
 }
+
+int get_X_position() {
+    int X1;
+    /* debut SC2 */
+    X1=Xdef;
+    pthread_mutex_unlock(&lock);
+    /* fin SC2 */
+    return X1;
+}
+
+
+int get_Y_position() {
+    int Y1;
+    /* debut SC2 */
+    Y1=Ydef;
+    pthread_mutex_unlock(&lock);
+    /* fin SC2 */
+    return Y1;
+}
+
+
