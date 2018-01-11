@@ -93,10 +93,10 @@ int test_Update_position(){
     move_forever(50,50);
     sleep(5);
     move_forever(0,0);
-    turn_exact_rel(90,3);
+    /*turn_exact_rel(90,3);
     move_forever(50,50);
     sleep(5);
-    move_forever(0,0);
+    move_forever(0,0);*/
 	
 
     //THE END OF THE INITIALISATION____________________________________________
