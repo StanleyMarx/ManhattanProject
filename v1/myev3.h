@@ -339,6 +339,19 @@ void drop_object() {
 	sleep(2);
 	set_tacho_command(sn_shovel, "stop");
 }
+
+int create_fic_pos(){
+	FILE* fichier = NULL;
+	fichier = fopen("pos.txt", "ar");
+	return 0;
+}
+
+int add_pos_fic(int x, int y){
+	fputc(x, fichier);
+	fputc(y, fichier);
+	return 0;
+}
+
 // à tester !! sera à utiliser en thread 
 void Detect_timed(int delta, int msec, int sonarTreshold){
 	/*if the robot hasn't detected any obstacles in the time msec, 
