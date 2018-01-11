@@ -180,6 +180,7 @@ float get_sonar(){
 
 int get_color(){
 	float ret;
+	set_sensor_mode(sn_color, "COL-COLOR");
 	get_sensor_value0(sn_color, &ret);
 	printf("reading color %d", (int) ret);
 	return (int) ret; // { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
