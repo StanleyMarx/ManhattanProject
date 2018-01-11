@@ -25,6 +25,7 @@ int test_update_pos(){
 //--------------------------- CASE_1 ---------------------------
 float pi=3.14159265;
 float Xdef=0.0,Ydef=0.0;
+int Xpos=0,Ypos=0;
 int speedMotorL, speedMotorR;
 int positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
 float thetaCompas, thetaCompasInit;
@@ -34,10 +35,10 @@ pthread_mutex_t lock;
 
 void* Update_position(){
         /* affiche la position toutes les secondes */
-	/* debut SC1 */
+    /* debut SC1 */
         pthread_mutex_lock(&lock);
-	
-	get_sensor_value0(sn_gyro, &thetaCompasInit);
+    
+    get_sensor_value0(sn_gyro, &thetaCompasInit);
         while(ThreadDisplay == 0){
                 pthread_mutex_unlock(&lock);
                 /* fin SC1 */
@@ -50,23 +51,27 @@ void* Update_position(){
                 get_tacho_position(sn_lwheel, &positionMotorL2);
                 get_tacho_position(sn_rwheel, &positionMotorR2);
                 get_sensor_value0(sn_gyro, &thetaCompas);
-		thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
+        thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
                 //printf("\n speedMotorL,speedMotorR = %d,%d",speedMotorL,speedMotorR);
                 
-		if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
-			if ((speedMotorR > 0) && (speedMotorL > 0)) {
-				printf("\nrobot is moving");
-				printf("\nsin(thetaCompas) %f",sin(thetaCompas));
-				printf("             diffPosition %d",positionMotorR2-positionMotorR1);
-				printf("             lambda %f",lambda);
-				Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
-				Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
-			} else {
-				printf("\nrobot is turning");
-			}
-		}
-                printf("\n Xdef,Ydef = %f,%f\n",Xdef,Ydef);
-		
+        if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
+            if ((speedMotorR > 0) && (speedMotorL > 0)) {
+                printf("\nrobot is moving");
+                printf("\nsin(thetaCompas) %f",sin(thetaCompas));
+                printf("             diffPosition %d",positionMotorR2-positionMotorR1);
+                printf("             lambda %f",lambda);
+                Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+                Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+                Xpos=(int)Xdef;
+                Ypos=(int)Ydef;
+                Xpos=Xpos/5;
+                Ypos=Ypos/5;
+            } else {
+                printf("\nrobot is turning");
+            }
+        }
+                printf("\n Xdef,Ydef = %f,%f       X,T = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+        
 
                 /* debut SC1 */
                 pthread_mutex_lock(&lock);
@@ -83,7 +88,7 @@ int test_Update_position(){
     //THE END OF THE INITIALISATION____________________________________________
     //THE MOVEMENT FUNCTIONS___________________________________________________
 
-	
+    
     /*forward_sonar(200,200,200);
     turn_exact_rel(90,3);
     forward_sonar(200,200,200);*/
@@ -93,13 +98,11 @@ int test_Update_position(){
     move_forever(50,50);
     sleep(5);
     move_forever(0,0);
-    sleep(5);
-    turn_exact_rel(90,3);
-    sleep(5);
+    /*turn_exact_rel(90,3);
     move_forever(50,50);
     sleep(5);
-    move_forever(0,0);
-	
+    move_forever(0,0);*/
+    
 
     //THE END OF THE INITIALISATION____________________________________________
     //THE MOVEMENT FUNCTIONS___________________________________________________
