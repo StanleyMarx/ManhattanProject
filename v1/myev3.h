@@ -340,17 +340,53 @@ void drop_object() {
 	set_tacho_command(sn_shovel, "stop");
 }
 
-int create_fic_pos(){
+int add_pos_fic(int x, int y){
+	char z[8];
+	z[7] = '\0';
+	z[3] = ' ';
+	char newx = (char) x;
+	char newy = (char) y ;
+	if (srlen(newx) == 1){
+		z[0] = '0';
+		z[1] = '0';
+		z[2] = newx;	
+	}
+	else if (srlen(newx) == 2){
+		z[0] = '0';
+		z[1] = newx[0];
+		z[2] = newx[1];
+	}
+	else{
+		z[0] = newx[0];
+		z[1] = newx[1];
+		z[2] = newx[2];
+	}
+	if (srlen(newy) == 1){
+		z[4] = '0';
+		z[5] = '0';
+		z[6] = newy;	
+	}
+	else if (srlen(newy) == 2){
+		z[4] = '0';
+		z[5] = newy[0];
+		z[6] = newy[1];
+	}
+	else{
+		z[4] = newy[0];
+		z[5] = newy[1];
+		z[6] = newy[2];
+	}
 	FILE* fichier = NULL;
-	fichier = fopen("pos.txt", "ar");
-	return 0;
+    	fichier = fopen("test.txt", "a");
+    	if (fichier != NULL){
+        fputs(z,fichier);
+        fclose(fichier);
+    	}
+
+    return 0;
 }
 
-int add_pos_fic(int x, int y){
-	fputc(x, fichier);
-	fputc(y, fichier);
-	return 0;
-}
+
 
 // à tester !! sera à utiliser en thread 
 void Detect_timed(int delta, int msec, int sonarTreshold){
