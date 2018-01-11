@@ -218,7 +218,7 @@ void turn_exact_abs(float anglDest,float prec){
     }
 }
 
-void forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec) {
+int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
 	// moves forward until it is close enough to an object 
     	float sonarVal = get_sonar();
 	double C_PER_SECS;
@@ -234,12 +234,12 @@ void forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec) {
 				if ((current - previous)/C_PER_SECS > msec) { 
 					move_forever(0,0);
 					turn_exact_rel(-delta,2);
-					if (get_sonar() < sonarTreshold){
+					if (get_sonar() < sonarThreshold){
 						return 0;
 					}
 				else {
 					turn_exact_rel(2*delta, 2);
-					if (get_sonar() < sonarTreshold){
+					if (get_sonar() < sonarThreshold){
 						return 0;
 					}
 				previous = current;
@@ -256,6 +256,7 @@ int detect_movable() {
 		return 1;
 	} else {
 		return 0;
+	}
 }
 
 void detectBall(int delta){
@@ -278,7 +279,7 @@ void detectBall(int delta){
 }
 
 void take_object(){
-    	forward_sonar(50, 50, 80.0);
+    	forward_sonar(50, 50, 80.0, 1000, 20);
 	printf("[PELLE] opening pelle\n");//--------open pelle
 	set_tacho_speed_sp(sn_shovel, -80);
 	set_tacho_command(sn_shovel, "run-forever");
