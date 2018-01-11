@@ -344,8 +344,11 @@ void drop_object() {
 	char z[8];
 	z[7] = '\0';
 	z[3] = ' ';
-	char newx = (char) x;
-	char newy = (char) y ;
+	char str[4]
+	
+	sprintf(str, 
+	FAUXchar newx = (char) x;
+	FAUXchar newy = (char) y ;
 	if (srlen(newx) == 1){
 		z[0] = '0';
 		z[1] = '0';
@@ -378,19 +381,18 @@ void drop_object() {
 	}
 	return z;
 }
+*/
 
 int add_pos_fic(int x, int y){
-	z = xy_to_string(x,y);
 	FILE* fichier = NULL;
     	fichier = fopen("test.txt", "a");
     	if (fichier != NULL){
-        fputs(z,fichier);
+        fputs("%d",x,fichier);
         fclose(fichier);
     	}
 
     return 0;
 }
-*/
 
 
 // à tester !! sera à utiliser en thread 
