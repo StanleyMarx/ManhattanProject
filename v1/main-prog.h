@@ -32,7 +32,7 @@ float lambda=1/21.21*86/35;
 int ThreadDisplay=0;
 pthread_mutex_t lock;
 get_sensor_value0(sn_compass, &thetaCompas);
-thetaCompasInit = thetaCompas*pi/180;
+float thetaCompasInit=thetaCompas*pi/180;
 
 void* Update_position(){
         /* affiche la position toutes les secondes */
