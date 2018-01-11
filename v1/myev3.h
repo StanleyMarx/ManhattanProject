@@ -242,7 +242,9 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 					if (get_sonar() < sonarThreshold){
 						return 0;
 					}
+				}
 				previous = current;
+			
 				
 		}
 		move_forever(0,0);
