@@ -128,7 +128,7 @@ int robot(int sw){
             test_cs();
             break;
         case 3: // test sensor JB
-        	forward_sonar(50, 50, 40.0, 8000, 20);
+        	forward_sonar(50, 50, 40.0, 1000, 20); // forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
         	int color = detect_movable();
         	printf("got color info: %d\n", color);
 			if (color == 1){

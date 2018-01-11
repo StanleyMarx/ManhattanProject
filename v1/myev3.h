@@ -224,7 +224,7 @@ void turn_exact_abs(float anglDest,float prec){
 
 int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
 	// moves forward until it is close enough to an object 
-    	float sonarVal = get_sonar();
+    float sonarVal = get_sonar();
 	double C_PER_SECS;
 	C_PER_SECS = 1000000.0;
 	clock_t previous, current;
