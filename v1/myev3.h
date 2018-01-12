@@ -345,17 +345,6 @@ void drop_object() {
 	set_tacho_command(sn_shovel, "stop");
 }
 
-int add_pos_fic(int x, int y){
-	FILE* fichier = NULL;
-    	fichier = fopen("pos.txt", "a");
-    	if (fichier != NULL){
-        fprintf(fichier, "%d, %d\n",x,y);
-        fclose(fichier);
-    	}
-
-    return 0;
-}
-
 
 // à tester !! sera à utiliser en thread 
 void Detect_timed(int delta, int msec, int sonarTreshold){
