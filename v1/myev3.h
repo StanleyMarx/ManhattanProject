@@ -198,21 +198,6 @@ int get_color(){
 	return (int) ret; // { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
 }
 
-void turn_exact_rel(float delta,float prec){
-    float ratio=2.3;
-    delta=fmod(delta,360);
-    if (delta>180){delta=delta-360;}
-    float anglCurr=get_compass();
-    float anglDest=fmod(anglCurr+delta,360);
-    while(abs(delta)>prec){
-        //printf("delta = %f\n");
-        move_real(-ratio*delta,ratio*delta,max_speed/5);
-        sleep(1);
-        anglCurr=get_compass();
-        delta=fmod(anglDest-anglCurr,360);
-        if (delta>180){delta=delta-360;}
-    }
-}
 void turn_exact_abs(float anglDest,float prec){
     float ratio=2.3;
     float anglCurr=get_compass();
@@ -230,6 +215,11 @@ void turn_exact_abs(float anglDest,float prec){
         if (delta<-180){delta=delta+180;}
         printf("delta = %f\n",delta);
     }
+}
+void turn_exact_rel(float delta,float prec){
+    float t0=get_compass();
+    float ratio=2.3;
+    turn_exact_abs(fmod(t0+delta,360),prec);
 }
 
 int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
