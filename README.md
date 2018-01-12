@@ -65,10 +65,10 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 
 ## 12 Jan
 ### to-do list
-+ stopper le robot à une frontière non détectable pas le sonar
++ Stopper le robot à une frontière non détectable pas le sonar
 + Connection serveur, envoyer messages
-+ Décider stratégie exploration
-+ retester que tous les programmes marchent bien
++ Décider d'une stratégie d'exploration
++ Re-tester que tous les programmes marchent bien
 
 
 ### done list
