@@ -199,26 +199,22 @@ int get_color(){
 }
 
 void turn_exact_abs(float anglDest,float prec){
-    float ratio=2.3;
+    float ratio=2.5;
     float anglCurr=get_compass();
     float delta=anglDest-anglCurr;
     delta=fmod(delta,360);
     if (delta>180){delta=delta-360;}
     while(abs(delta)>prec){
-        //printf("delta = %f - ",delta);
         move_real(-ratio*delta,ratio*delta,max_speed/5);
         sleep(1);
         anglCurr=get_compass();
         delta=fmod(anglDest-anglCurr,360);
-        printf("delta = %f - ",delta);
         if (delta>180){delta=delta-360;}
         if (delta<-180){delta=delta+180;}
-        printf("delta = %f\n",delta);
     }
 }
 void turn_exact_rel(float delta,float prec){
     float t0=get_compass();
-    float ratio=2.3;
     turn_exact_abs(fmod(t0+delta,360),prec);
 }
 

@@ -133,13 +133,21 @@ int X=0,Y=0;
 
 //--------------------------- CASE_3 ---------------------------
 void test_turn(){
+    printf("current angle = %f\n",get_compass());
+    printf("turning to %f...\n",get_compass()+90);
     turn_exact_rel(90,1);
     sleep(2);
+    printf("current angle = %f\n",get_compass());
+    printf("turning to %f...\n",get_compass()-90);
     turn_exact_rel(-90,1);
     sleep(2);
     float t0=get_compass();
+    printf("current angle = %f\n",get_compass());
+    printf("turning to %f...\n",0);
     turn_exact_abs(0,1);
     sleep(2);
+    printf("current angle = %f\n",get_compass());
+    printf("turning to %f...\n",t0);
     turn_exact_abs(t0,1);
     sleep(2);
 }
