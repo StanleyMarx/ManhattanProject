@@ -97,7 +97,7 @@ int test_Update_position(){
     sleep(5);
     move_forever(0,0);
     turn_exact_rel(90,1);
-    move_forever(20,20);/*
+    move_forever(20,20);
     sleep(5);
     move_forever(0,0);*/
     
