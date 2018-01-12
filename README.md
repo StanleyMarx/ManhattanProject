@@ -61,3 +61,22 @@ Voici une liste de différents paliers à atteindre pour progresser sur le proje
 
 ## 16 dec
 + **Communication client/server établie** depuis mon dual boot Ubuntu, j'arrive à lancer `/server/server teams`, puis me SSH sur le robot et y lancer `/client/robotclient`. Le résultat est cohérent avec ce qui est censé se passer, cf le screen envoyé sur la conv fb. *-Nino*
+
+
+## 12 Jan
+### to-do list
++ stopper le robot à une frontière non détectable pas le sonar
++ Connection serveur, envoyer messages
++ Décider stratégie exploration
++ retester que tous les programmes marchent bien
+
+
+### done list
++ Obtenir la position en temps réel
++ Optention de la Map du terrain à partir des positions visitées
++ Mettre en place le capteur couleur pour une meilleure distinction movable_object/unmovable_object
+
+
+
+
+
