@@ -126,6 +126,20 @@ void test_cs(){
 
 int X=0,Y=0;
 
+//--------------------------- CASE_3 ---------------------------
+void test_turn(){
+    turn_exact_rel(90,1);
+    sleep(2);
+    turn_exact_rel(-90,1);
+    sleep(2);
+    float t0=get_compass();
+    turn_exact_abs(0,1);
+    sleep(2);
+    turn_exact_abs(t0,1);
+    sleep(2);
+}
+
+
 //--------------------------- ROBOT ---------------------------
 int robot(int sw){
     switch (sw){
@@ -144,16 +158,17 @@ int robot(int sw){
             break;
         case 2:
             test_cs();
-            break;	
+            break;
+        case 3:
+            test_turn();
+            break;
     }
 	
 }
 
 /*
-    0
-        test sur l'update des positions
-    1
-        test sur l'update des positions en cm en continue
-    2
-        test sur la com client/serveur
+    0   test sur l'update des positions
+    1   test sur l'update des positions en cm en continue
+    2   test sur la com client/serveur
+    3   test virage
 */
