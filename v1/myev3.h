@@ -571,16 +571,16 @@ void send_obstacle_pos(int act,uint16_t x,uint16_t y){
 /*
 int get_X_position() {
     int X1;
-    pthread_mutex_lock(&lock);
-    X1=Xdef;
-    pthread_mutex_unlock(&lock);
+    pthread_mutex_lock(&mutex);
+    X1=Xpos;
+    pthread_mutex_unlock(&mutex);
     return X1;
 }
 int get_Y_position() {
     int Y1;
-    pthread_mutex_lock(&lock);
-    Y1=Ydef;
-    pthread_mutex_unlock(&lock);
+    pthread_mutex_lock(&mutex);
+    Y1=Ypos;
+    pthread_mutex_unlock(&mutex);
     return Y1;
 }
 */
