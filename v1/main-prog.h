@@ -70,7 +70,8 @@ void* Update_position(){
                 //printf("\nrobot is turning");
             }
         }
-                //printf("\n Xdef,Ydef = %f,%f       X,T = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+                printf("\n Xdef,Ydef = %f,%f       X,T = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+		append_pos_file(Xpos, Ypos);
   
         }
         pthread_mutex_unlock(&lock);
@@ -92,11 +93,11 @@ int test_Update_position(){
     
     
     
-    move_forever(50,50);
+    move_forever(20,20);
     sleep(5);
     move_forever(0,0);
-    /*turn_exact_rel(90,3);
-    move_forever(50,50);
+    turn_exact_rel(90,1);
+    move_forever(20,20);/*
     sleep(5);
     move_forever(0,0);*/
     
@@ -134,6 +135,7 @@ int robot(int sw){
             break;
         case 1:
             test_Update_position();
+	    create_map();
             break;
         case 2:
             test_cs();
