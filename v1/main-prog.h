@@ -132,29 +132,25 @@ void test_cs(){
 int X=0,Y=0;
 
 //--------------------------- CASE_3 ---------------------------
-void test_turn(){
-    printf("current angle = %f\n",get_compass());
-    printf("turning to %f...\n",get_compass()+90);
-    turn_exact_rel(90,1);
-    sleep(2);
-    printf("current angle = %f\n",get_compass());
-    printf("turning to %f...\n",get_compass()-90);
-    turn_exact_rel(-90,1);
-    sleep(2);
-    float t0=get_compass();
-    printf("current angle = %f\n",get_compass());
-    printf("turning to %f...\n",0);
-    turn_exact_abs(0,1);
-    sleep(2);
-    printf("current angle = %f\n",get_compass());
-    printf("turning to %f...\n",t0);
-    turn_exact_abs(t0,1);
-    sleep(2);
+void test_turn(int rat){
+    printf("- testing the move_real_debug function -\n");
+    move_real_debug(500,500);
+    move_real_debug(500,-500);
+    move_real_debug(-500,500);
+    move_real_debug(-500,-500);
+    printf("done\n");
+    sleep(20);
+    
+    printf("- testing the turn_exact_gyro -\n");
+    printf("current angle = %f",get_gyro());
+    printf("turning to %f...\n",get_gyro()+180);
+    turn_exact_gyro(180,1);
+    printf("turned to %f.\n",get_gyro());
 }
 
 
 //--------------------------- ROBOT ---------------------------
-int robot(int sw){
+int robot(int sw,int arg1){
     switch (sw){
         case 0:
             test_update_pos();
@@ -167,7 +163,7 @@ int robot(int sw){
             test_cs();
             break;
         case 3:
-            test_turn();
+            test_turn(arg1);
             break;
     }
 	

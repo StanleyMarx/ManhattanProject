@@ -66,7 +66,8 @@ int main(int argc, char **argv) {
     ev3_search_sensor(HT_NXT_COMPASS,&sn_compass,0);
     ev3_search_sensor(LEGO_EV3_US,&sn_sonar,0);
     ev3_search_sensor(LEGO_EV3_COLOR,&sn_color,0);
-   	set_sensor_mode(sn_color, "COL-COLOR");
+    ev3_search_sensor(LEGO_EV3_GYRO,&sn_gyro,0);
+   	set_sensor_mode(sn_color,"COL-COLOR");
     ev3_search_tacho_plugged_in(PORT_RIGHTWHEEL,0,&sn_rwheel,0);
     ev3_search_tacho_plugged_in(PORT_SHOVEL,0,&sn_shovel,0);
     ev3_search_tacho_plugged_in(PORT_LEFTWHEEL,0,&sn_lwheel,0);
@@ -101,7 +102,13 @@ int main(int argc, char **argv) {
     }
       
         /* ROBOT */
-      robot(atoi(argv[1]));
+      int arg1;
+      if (argc<3){
+          arg1=0;
+      } else {
+          arg1=atoi(argv[2]);
+      }
+      robot(atoi(argv[1]),arg1);
       
       
     close (s);

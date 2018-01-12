@@ -150,6 +150,15 @@ void move_real(int r,int l,int speed){
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_TO_REL_POS);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_TO_REL_POS);
 }
+void move_real_debug(int r,int l){
+    /*
+        same, but with some sleep at the end to prevent the bugs.
+        speed time calibrated on speed=100 so no need to specify the speed - it will always go at speed=100
+    */
+    int time_ratio=4500;
+    move_real(r,l,100);
+    usleep(time_ratio*(abs(r)+abs(l)));
+}
 
 void open_shovel(){
     set_tacho_stop_action_inx(sn_shovel,TACHO_COAST);
@@ -168,6 +177,11 @@ void close_shovel(){
     set_tacho_command_inx(sn_shovel,TACHO_RUN_TO_REL_POS);
 }
 
+float get_gyro(){
+    float ret;
+    get_sensor_value0(sn_gyro,&ret);
+    return ret;
+}
 float get_compass(){
     float ret;
     get_sensor_value0(sn_compass,&ret);
@@ -183,11 +197,6 @@ float get_sonar(){
     get_sensor_value0(sn_sonar,&ret);
     return ret;
 }
-float get_gyro() {
-	float value;
-	get_sensor_value0(sn_gyro, &value);
-	return value;
-}
 int get_color(){
 	float ret;
 	
@@ -198,6 +207,10 @@ int get_color(){
 	return (int) ret; // { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
 }
 
+void turn_approx(float angle){
+    float ratio=2.66;
+    move_real_debug(ratio*angle,-ratio*angle);
+}
 void turn_exact_abs(float anglDest,float prec){
     float ratio=2.5;
     float anglCurr=get_compass();
@@ -216,6 +229,15 @@ void turn_exact_abs(float anglDest,float prec){
 void turn_exact_rel(float delta,float prec){
     float t0=get_compass();
     turn_exact_abs(fmod(t0+delta,360),prec);
+}
+void turn_exact_gyro(float delta,float prec){
+    float anglCurr=-get_gyro();
+    float anglDest=anglCurr+delta;
+    while (abs(delta)>prec){
+        turn_approx(delta);
+        anglCurr=-get_gyro();
+        delta=anglDest-anglCurr;
+    }
 }
 
 int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
