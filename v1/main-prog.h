@@ -77,7 +77,7 @@ void* Update_position(){
         pthread_mutex_unlock(&lock);
         /* fin SC1 */
 }
-int test_Update_position(){
+void* test_Update_position(){
     
     
     pthread_t display;
@@ -113,7 +113,6 @@ int test_Update_position(){
 
     pthread_join(display,NULL);
     pthread_mutex_destroy(&lock);
-    return 0;
 }
 
 //--------------------------- CASE_2 ---------------------------
