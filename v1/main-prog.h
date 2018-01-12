@@ -54,7 +54,7 @@ void* Update_position(){
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
                 //printf("\n speedMotorL,speedMotorR = %d,%d",speedMotorL,speedMotorR);
                 
-        if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
+        if ((abs(speedMotorR) > 5) && (abs(speedMotorL) > 5)) {
             if ((speedMotorR > 0) && (speedMotorL > 0)) {
                 /*printf("\nrobot is moving");
                 printf("\nsin(thetaCompas) %f",sin(thetaCompas));
@@ -70,7 +70,7 @@ void* Update_position(){
                 //printf("\nrobot is turning");
             }
         }
-                printf("\n Xdef,Ydef = %f,%f       X,T = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+                printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
 		append_pos_file(Xpos, Ypos);
   
         }
