@@ -26,6 +26,7 @@ int test_update_pos(){
 float pi=3.14159265;
 float Xdef=0.0,Ydef=0.0;
 int Xpos=0,Ypos=0;
+int XposOld=0,YposOld=0;
 int speedMotorL, speedMotorR;
 int positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
 float thetaCompas, thetaCompasInit;
@@ -71,7 +72,11 @@ void* Update_position(){
             }
         }
                 printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
-		append_pos_file(Xpos, Ypos);
+                if ((Xpos != XposOld) && (Ypos != YposOld)) {
+                    XposOld = Xpos;
+                    YposOld = Ypos;
+                    append_pos_file(Xpos, Ypos);
+                }
   
         }
         pthread_mutex_unlock(&lock);
