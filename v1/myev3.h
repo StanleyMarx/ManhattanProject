@@ -614,6 +614,11 @@ void find_corners() {
     }
     fclose(posFile);
     if (line) free(line);
+	printf("Bottom left : %d, %d\n", minX, minY);
+	printf("Bottom right: %d, %d\n", maxX, minY);
+	printf("Top left    : %d, %d\n", minX, maxY);
+	printf("Top right   : %d, %d\n", maxX, maxY);
+	printf("\n");
 }
 
 int create_map() {
@@ -630,7 +635,7 @@ int create_map() {
 	int found = 0;
 	char *token;
 	//char map[maxY-minY][maxX-minX];
-	
+	find_corners();
   	posFile = fopen("pos.txt", "r");
     if (posFile == NULL) exit(1);
     for (y=maxY; y>minY-1; y--) {
