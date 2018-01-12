@@ -99,7 +99,7 @@ int test_Update_position(){
     turn_exact_rel(90,1);
     move_forever(20,20);
     sleep(5);
-    move_forever(0,0);*/
+    move_forever(0,0);
     
 
     //THE END OF THE INITIALISATION____________________________________________
