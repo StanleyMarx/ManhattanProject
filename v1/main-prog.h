@@ -30,8 +30,8 @@ int speedMotorL, speedMotorR;
 int positionMotorR1, positionMotorR2;
 float thetaCompas, thetaCompasInit;
 float lambda=1/21.21*86/35;
-pthread_mutex_t lock;
-int ThreadDisplay=0;
+pthread_mutex_t mutex;
+int ThreadSituation=0;
 
 
 
@@ -42,9 +42,9 @@ void* Update_position(){
     get_tacho_position(sn_rwheel, &positionMotorR2);
 
     /* debut SC1 */
-    pthread_mutex_lock(&lock);
-    while(ThreadDisplay == 0){
-        pthread_mutex_unlock(&lock);
+    pthread_mutex_lock(&mutex);
+    while(ThreadSituation == 0){
+        pthread_mutex_unlock(&mutex);
         /* fin SC1 */
 
         sleep(0.3);
@@ -56,7 +56,7 @@ void* Update_position(){
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
         
         /* debut SC1 */
-        pthread_mutex_lock(&lock);
+        pthread_mutex_lock(&mutex);
         if ((abs(speedMotorR) > 5) && (abs(speedMotorL) > 5)) {
             if (speedMotorR/speedMotorL > 0) {
                 /*printf("\nrobot is moving");*/
@@ -75,16 +75,17 @@ void* Update_position(){
             append_pos_file(Xpos, Ypos);
         }
     }
-    pthread_mutex_unlock(&lock);
+    pthread_mutex_unlock(&mutex);
     /* fin SC1 */
+    pthread_exit(NULL);
 }
 
 
 
 void* test_Update_position(){
     /* get the position while moving */
-    pthread_t display;
-    pthread_create(&display,NULL,Update_position,NULL);
+    pthread_t myUpdate_position;
+    pthread_create(&myUpdate_position,NULL,Update_position,NULL);
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
     move_forever(20,20);
@@ -97,13 +98,13 @@ void* test_Update_position(){
     //THE END OF THE INITIALISATION____________________________________________
 
     /* debut SC2 */
-    pthread_mutex_lock(&lock);
-    ThreadDisplay = 1;
-    pthread_mutex_unlock(&lock);
+    pthread_mutex_lock(&mutex);
+    ThreadSituation = 1;
+    pthread_mutex_unlock(&mutex);
     /* fin SC2 */
 
-    pthread_join(display,NULL);
-    pthread_mutex_destroy(&lock);
+    pthread_join(myUpdate_position,NULL);
+    pthread_mutex_destroy(&mutex);
 }
 
 //--------------------------- CASE_2 ---------------------------
