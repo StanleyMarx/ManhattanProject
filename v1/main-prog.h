@@ -135,7 +135,13 @@ int robot(int sw){
             break;
         case 1:
             test_Update_position();
-	    create_map();
+            find_corners();
+			printf("Bottom left : %d, %d\n", minX, minY);
+		    printf("Bottom right: %d, %d\n", maxX, minY);
+		    printf("Top left    : %d, %d\n", minX, maxY);
+		    printf("Top right   : %d, %d\n", maxX, maxY);
+		    printf("\n");
+	    	create_map();
             break;
         case 2:
             test_cs();
