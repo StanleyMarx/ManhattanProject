@@ -464,7 +464,7 @@ void scan_object(){
     float aobjr=al+(ar-al)*ipmax/prec;    
 }
 
-/* communicatio client/serveur */
+/* communication client/serveur */
 void send_position(int16_t x,int16_t y){
     char str[58];
 	*((uint16_t*)str)=msgId++;
@@ -516,7 +516,6 @@ void send_obstacle(int act,uint16_t x,uint16_t y){
 	write(s,str,10);
 	Sleep(1000);
 }
-
 void send_position_pos(int16_t x,int16_t y){
     char str[58];
 	*((uint16_t*)str)=msgId++;
@@ -561,25 +560,22 @@ void send_obstacle_pos(int act,uint16_t x,uint16_t y){
 	Sleep(1000);
 }
 
+/*
 int get_X_position() {
     int X1;
-    /* debut SC2 */
+    pthread_mutex_lock(&lock);
     X1=Xdef;
     pthread_mutex_unlock(&lock);
-    /* fin SC2 */
     return X1;
 }
-
-
 int get_Y_position() {
     int Y1;
-    /* debut SC2 */
+    pthread_mutex_lock(&lock);
     Y1=Ydef;
     pthread_mutex_unlock(&lock);
-    /* fin SC2 */
     return Y1;
 }
-
+*/
 void find_corners() {
 	/* 
 		by JB
