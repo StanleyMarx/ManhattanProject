@@ -73,6 +73,10 @@ int main(int argc, char **argv) {
     ev3_search_tacho_plugged_in(PORT_SHOVEL,0,&sn_shovel,0);
     ev3_search_tacho_plugged_in(PORT_LEFTWHEEL,0,&sn_lwheel,0);
     get_tacho_max_speed(sn_rwheel,&max_speed);
+    
+    // empty the Position pos.txt file where we'll store all of our coordinates
+    posFile = fopen("pos.txt", "w");
+	fclose(posFile);
 
 	robot(atoi(argv[1]));
 	
