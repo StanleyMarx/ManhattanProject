@@ -56,23 +56,22 @@ void* Update_position(){
                 
         if ((abs(speedMotorR) > 20) && (abs(speedMotorL) > 20)) {
             if ((speedMotorR > 0) && (speedMotorL > 0)) {
-                printf("\nrobot is moving");
+                /*printf("\nrobot is moving");
                 printf("\nsin(thetaCompas) %f",sin(thetaCompas));
                 printf("             diffPosition %d",positionMotorR2-positionMotorR1);
-                printf("             lambda %f",lambda);
+                printf("             lambda %f",lambda);*/
+		/* debut SC1 */
+        	pthread_mutex_lock(&lock);
                 Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
                 Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
                 Xpos=(int) round(Xdef/5);
                 Ypos=(int) round(Ydef/5);
             } else {
-                printf("\nrobot is turning");
+                //printf("\nrobot is turning");
             }
         }
-                printf("\n Xdef,Ydef = %f,%f       X,T = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
-        
-
-                /* debut SC1 */
-                pthread_mutex_lock(&lock);
+                //printf("\n Xdef,Ydef = %f,%f       X,T = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+  
         }
         pthread_mutex_unlock(&lock);
         /* fin SC1 */
