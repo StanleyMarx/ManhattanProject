@@ -751,6 +751,7 @@ int detect_type(int sonarThreshold){
 	// boucle while tant que different de la position init ou aue super eloigne
 	int x = get_X_position();
 	int y = get_Y_position();
+	printf("%d %d \n", x, y);
 	float sonarVal;
 	turn_approx(90);
 		sonarVal = get_sonar();
@@ -759,6 +760,9 @@ int detect_type(int sonarThreshold){
 			turn_approx(-90);
 		}
 	sonarVal = get_sonar();
+	a = get_X_position();
+	b = get_Y_position();
+	printf("%d %d \n", a, b);
 	while ((x != get_X_position() || y !=get_Y_position()) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40)){ 
 		printf("in");
 		while (sonarVal < sonarThreshold) {
