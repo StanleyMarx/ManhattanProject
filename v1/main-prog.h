@@ -69,6 +69,7 @@ void debug_sensors(){
 
 //--------------------------- ROBOT ---------------------------
 int robot(int sw,int arg1,int arg2){
+    printf("case no: %d", sw);
     switch (sw){
         case 0:
             test_update_pos();
