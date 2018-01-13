@@ -77,12 +77,15 @@ int robot(int sw,int arg1,int arg2){
         case 1:
 	    printf("1");
 	    move_real(50,50,400);
+            sleep(1);
 	    printf("2");
 	    move_real(100,100,400);
+            sleep(1);
             printf("3");
             move_real(200,200, 400);
+            sleep(1);
             printf("4");
-	    move_real(300,300,400);
+	    move_real(21*22.447,21*22.447,400);
     
         case 2:
             test_cs();
@@ -98,7 +101,7 @@ int robot(int sw,int arg1,int arg2){
 	    printf("\nX,Y = %d,%d\n",x,y);
             break;
         case 5:
-	    forward_Sonar2(50, 50, 500, 2000, 20);
+	    forward_Sonar2(50, 50, 50, 2000, 20);
 	    break;
     
     }
