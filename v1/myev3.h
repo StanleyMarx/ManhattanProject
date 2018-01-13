@@ -545,22 +545,6 @@ void send_obstacle_pos(int act,uint16_t x,uint16_t y){
 	Sleep(1000);
 }
 
-/*
-int get_X_position() {
-    int X1;
-    pthread_mutex_lock(&mutex);
-    X1=Xpos;
-    pthread_mutex_unlock(&mutex);
-    return X1;
-}
-int get_Y_position() {
-    int Y1;
-    pthread_mutex_lock(&mutex);
-    Y1=Ypos;
-    pthread_mutex_unlock(&mutex);
-    return Y1;
-}
-*/
 void find_corners() {
 	/* 
 		by JB
@@ -601,7 +585,6 @@ void find_corners() {
 	printf("Top right   : %d, %d\n", maxX, maxY);
 	printf("\n");
 }
-
 int create_map() {
 	/*
 		by JB
@@ -618,7 +601,10 @@ int create_map() {
 	//char map[maxY-minY][maxX-minX];
 	find_corners();
   	posFile = fopen("pos.txt", "r");
-    if (posFile == NULL) exit(1);
+    if (posFile == NULL){
+        printf("[ERROR] create_map(): couldn't open pos.txt");
+        exit(1);
+    }
     for (y=maxY; y>minY-1; y--) {
     	for (x=minX; x<maxX+1; x++) { 
     		found = 0;
@@ -652,7 +638,6 @@ int create_map() {
 	printf("\n");
     return 0;
 }
-
 int append_pos_file(int x, int y) {
 	/*
 		by JB and Alix
