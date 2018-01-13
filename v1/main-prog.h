@@ -75,9 +75,7 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-	    forwardTimed(1,400);
-            sleep(5);
-	    forwardTimed(1,200);
+	    detect_type(50);
          
 		    
 	
