@@ -509,7 +509,7 @@ void send_map_from_file(){
     // DEBUG
     printf("xmin,xmax,ymin,ymax = %d,%d,%d,%d\n",xmin,xmax,ymin,ymax);
     
-    printf("map:\n")
+    printf("map:\n");
     for (int y=ymin; y<=ymax; y++){
         for (int x=xmin; x<=xmax; x++){
             if (pos_exists(x,y,x_list,y_list,i_x)){
