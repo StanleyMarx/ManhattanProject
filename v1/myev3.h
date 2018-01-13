@@ -226,16 +226,16 @@ void turn_exact_gyro(float delta,float prec){
     }
 }
 
-void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
-	set_tacho_speed_sp(sn_right, 400);
-	set_tacho_speed_sp(sn_left, 400);
+void forwardTimed(int seconds) {
+	set_tacho_speed_sp(sn_rwheel, 400);
+	set_tacho_speed_sp(sn_lwheel, 400);
 	//printf("[TACHO] starting tachos\n");
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
 	sleep(seconds);
 	//printf("[TACHO] stopping tachos\n");
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
 	//printf("[TACHO] function forward is over!\n");
 }
 
