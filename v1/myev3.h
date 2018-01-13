@@ -778,6 +778,7 @@ int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int d
         while (sonarVal > sonarThreshold) {
             sonarVal = get_sonar();
             if (i>msec) {
+		i=0;
                 move_forever(0,0);
                 turn_approx(90);
                 sonarVal = get_sonar();
