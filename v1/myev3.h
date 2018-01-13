@@ -672,16 +672,16 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 			sonarVal = get_sonar();
 				if ((current - previous)/C_PER_SECS > msec) {
 					move_forever(0,0);
-					turn_approx(-delta,2);
+					turn_approx(-delta);
 					if (get_sonar() < sonarThreshold){
 						return 0;
 					} else {
-						turn_approx(2*delta, 2);
+						turn_approx(2*delta);
 						if (get_sonar() < sonarThreshold){
 							return 0;
 						}
 					}
-					turn_approx(-delta, 2);
+					turn_approx(-delta);
 				}
 				previous = current;
 
@@ -747,7 +747,7 @@ int detect_type(int sonarThreshold){
 	sonarVal = get_sonar();
 	while ((x != get_X_position() || y !=get_Y_position()) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40)){ 
 		while (sonarVal < sonarThreshold) {
-			turn_aprox(90);
+			turn_approx(90);
 			sonarVal = get_sonar();
 			if (sonarVal > sonarThreshold){
 				move_real(5*22.447,5*22.447,400);
