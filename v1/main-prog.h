@@ -75,6 +75,8 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
+	    Update_position2();
+	    forward_sonar(50, 50, 50, 10000, 20);
 	    detect_type(50);
          
 		    
