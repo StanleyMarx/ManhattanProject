@@ -272,8 +272,8 @@ int detect_movable() {
 }
 int detect_type(int sonarThreshold){
 	// boucle while tant que different de la position init ou aue super eloigne
-	x = get_X_position();
-	y = get_Y_position();
+	int x = get_X_position();
+	int y = get_Y_position();
 	float sonarVal;
 	turn_exact_rel(90,2);
 		sonarVal = get_sonar();
@@ -282,11 +282,7 @@ int detect_type(int sonarThreshold){
 			turn_exact_rel(-90,2);
 		}
 	sonarVal = get_sonar();
-<<<<<<< HEAD
-	while ((x != get_X_position() or y !=get_Y_position) and ( abs(x - get_X_position())<40 and abs(y-get_Y_position())<40){
-=======
 	while ((x != get_X_position() || y !=get_Y_position) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40){ 
->>>>>>> 1a792c1233a36958f1d2384ab1a93cf691ef3014
 		while (sonarVal < sonarThreshold) {
 			turn_exact_rel(90,2);
 			sonarVal = get_sonar();
