@@ -227,86 +227,6 @@ void turn_exact_gyro(float delta,float prec){
 }
 
 
-
-void detectBall(int delta){
-    // detect if movable or non movable object
-	turn_exact_rel(-delta,2);
-	sleep(0.5);
-	float sonarValG = get_sonar();
-    	turn_exact_rel(delta+5,2);
-	sleep(0.5);
-    	turn_exact_rel(delta+5,2);
-	sleep(0.5);
-	float sonarValD = get_sonar();
-    	turn_exact_rel(-delta-5,2);
-	if (sonarValG>150 && sonarValD>150){
-		printf("movable object\n");
-	}else {
-		printf("non movable object\n");
-        turn_exact_rel(90,2);
-	}
-}
-
-void take_object(){
-    	forward_sonar(50, 50, 80.0, 1000, 20);
-	printf("[PELLE] opening pelle\n");//--------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] closing pelle\n");//-------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
-}
-
-void drop_object() {
-	turn_exact_rel(-180,2);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] opening pelle\n");//----------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	move_real(8*22.447,8*22.447,-400);//---------movebackward
-    	turn_exact_rel(90,2); //-------half turn
-	printf("[PELLE] closing pelle\n");//----------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
-}
-
-
-// à tester !! sera à utiliser en thread
-void Detect_timed(int delta, int msec, int sonarTreshold){
-	/*if the robot hasn't detected any obstacles in the time msec,
-	it stops and looks around  with an angle delta*/
-	double C_PER_SECS;
-	C_PER_SECS = 1000000.0;
-	clock_t previous, current;
-	previous = clock();
-	sleep(1);
-	current = clock();
-	if ((current - previous)/C_PER_SECS > msec) {
-		move_forever(0,0);
-		turn_exact_rel(-delta,2);
-		if (get_sonar() < sonarTreshold){
-			// revenir au main
-
-		}
-		else {
-			turn_exact_rel(2*delta, 2);
-			if (get_sonar() < sonarTreshold){
-				// revenir au main
-			}
-		}
-		previous = current;
-	}
-}
-
 /* à tester */
 float width_object(){
     /*
@@ -768,6 +688,38 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 		}
 		move_forever(0,0);
 	}
+}
+
+void take_object(){
+    	forward_sonar(50, 50, 80.0, 1000, 20);
+	printf("[PELLE] opening pelle\n");//--------open pelle
+	set_tacho_speed_sp(sn_shovel, -80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+    	move_real(8*22.447,8*22.447,400);
+	printf("[PELLE] closing pelle\n");//-------close pelle
+	set_tacho_command(sn_shovel, "stop");
+	set_tacho_speed_sp(sn_shovel, 80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_shovel, "stop");
+}
+
+void drop_object() {
+	turn_exact_rel(-180,2);
+    	move_real(8*22.447,8*22.447,400);
+	printf("[PELLE] opening pelle\n");//----------open pelle
+	set_tacho_speed_sp(sn_shovel, -80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+	move_real(8*22.447,8*22.447,-400);//---------movebackward
+    	turn_exact_rel(90,2); //-------half turn
+	printf("[PELLE] closing pelle\n");//----------close pelle
+	set_tacho_command(sn_shovel, "stop");
+	set_tacho_speed_sp(sn_shovel, 80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_shovel, "stop");
 }
 
 int detect_movable() {
