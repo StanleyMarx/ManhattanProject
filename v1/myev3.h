@@ -606,8 +606,8 @@ int create_map() {
     		found = 0;
     		posFile = fopen("pos.txt", "r");
 			while (!found && ((read = getline(&line, &len, posFile)) != -1)) {
-				xFile = -1000;
-				yFile = -1000;
+				xFile = -1000; // value that should never be reached
+				yFile = -1000; // value that should never be reached
 				token = strtok(line, ",");
 				while(token) {
 					if (xFile==-1000) {
