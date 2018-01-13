@@ -282,7 +282,7 @@ int detect_type(int sonarThreshold){
 			turn_exact_rel(-90,2);
 		}
 	sonarVal = get_sonar();
-	while ((x != get_X_position() or y !=get_Y_position) and ( abs(x - get_X_position())<40 or abs(y-get_Y_position())<40){ 
+	while ((x != get_X_position() || y !=get_Y_position) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40){ 
 		while (sonarVal < sonarThreshold) {
 			turn_exact_rel(90,2);
 			sonarVal = get_sonar();
@@ -294,9 +294,11 @@ int detect_type(int sonarThreshold){
 		}
 		turn_exact_rel(-90,2);
 	}
-	if (x == get_X_position() and y ==get_Y_position){
+	if (x == get_X_position() && y ==get_Y_position){
 		return 1;
+		printf("object \n");
 	}
+	printf("fronteer \n");
 	return 0; //return 1 si obstacle, 2 si frontiere
 
 }
