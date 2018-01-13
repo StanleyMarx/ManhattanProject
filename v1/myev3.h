@@ -271,7 +271,7 @@ int detect_movable() {
 	}
 }
 int detect_type(int sonarThreshold){
-	// boucle while tant que different de la position init ou aue super eloigne 
+	// boucle while tant que different de la position init ou aue super eloigne
 	x = get_X_position();
 	y = get_Y_position();
 	float sonarVal;
@@ -282,7 +282,7 @@ int detect_type(int sonarThreshold){
 			turn_approx(-90);
 		}
 	sonarVal = get_sonar();
-	while ((x != get_X_position() or y !=get_Y_position) and ( abs(x - get_X_position())<40 and abs(y-get_Y_position())<40){ 
+	while ((x != get_X_position() or y !=get_Y_position) and ( abs(x - get_X_position())<40 and abs(y-get_Y_position())<40){
 		while (sonarVal < sonarThreshold) {
 			turn_approx(90);
 			sonarVal = get_sonar();
@@ -567,41 +567,6 @@ void send_obstacle_pos(int act,uint16_t x,uint16_t y){
 	Sleep(1000);
 }
 
-int known_point(int checkX, int checkY) {
-	/*
-		by JB
-		checks if the robot already went through this (x, y) coordinates.
-		returns 1 if coordinates in file already, 0 otherwise.
-	*/
-    char * line = NULL;
-    size_t len = 0;
-    ssize_t read;
-    int x; int y;
-    char *token;
-    int count=0;
-
-  	posFile = fopen("pos.txt", "r");
-    if (posFile == NULL) exit(1);
-
-    while ((read = getline(&line, &len, posFile)) != -1) {
-  		x = -1000;
-  		y = -1000;
-  		token = strtok(line, ",");
-    	while(token) {
-        	if (x==-1000) {
-        		x = atoi(token);
-        	} else if (y==-1000) {
-        		y = atoi(token);
-        	}
-        	token = strtok(NULL, ",");
-   		}
-      if (x==checkX && y==checkY && count>0) return 1;
-      if (x==checkX && y==checkY) count++;
-    }
-    fclose(posFile);
-    if (line) free(line);
-  	return 0;
-}
 void find_corners() {
 	/*
 		by JB
