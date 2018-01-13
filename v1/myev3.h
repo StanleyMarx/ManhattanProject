@@ -655,3 +655,23 @@ int append_pos_file(int x, int y) {
 }
 
 
+int get_X_position() {
+	int X;
+	/* debut SC1 */
+    	pthread_mutex_lock(&mutex);
+    	X=Xpos;
+        pthread_mutex_unlock(&mutex);
+        /* fin SC1 */
+	return X;
+}
+
+
+int get_Y_position() {
+	int Y;
+	/* debut SC1 */
+    	pthread_mutex_lock(&mutex);
+    	Y=Ypos;
+        pthread_mutex_unlock(&mutex);
+        /* fin SC1 */
+	return Y;
+}
