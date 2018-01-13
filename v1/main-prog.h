@@ -221,6 +221,17 @@ void* test_Update_position2(){
     pthread_mutex_destroy(&mutex);
 }
 
+//--------------------------- CASE_5 ---------------------------
+
+void debug_sensors(){
+    while (1){
+        printf("compass %f\n",get_compass());
+        printf("gyro    %f\n",get_gyro());
+        printf("color   %d\n\n",get_color());
+        sleep(2);
+    }
+}
+
 //--------------------------- ROBOT ---------------------------
 int robot(int sw,int arg1,int arg2){
     switch (sw){
@@ -247,7 +258,9 @@ int robot(int sw,int arg1,int arg2){
 
 /*
     0   test sur l'update des positions
-    1   test sur l'update des positions en cm en continue
+    1   test sur l'update des positions en cm en continu
     2   test sur la com client/serveur
     3   test virage
+    4   test l'update des positions sur un parcours en L
+    5   affiche la valeur des capteurs toutes les 2 secs
 */
