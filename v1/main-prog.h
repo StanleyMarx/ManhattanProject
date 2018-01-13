@@ -27,8 +27,8 @@ int test_update_pos(){
 int testDetectType():{
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
-      forward_sonar(50, 50, 50, 3000, 20);
-      detect_type(50);
+      forward_sonar(50, 50, 50, 5, 20);
+   //   detect_type(50);
       pthread_mutex_lock(&mutex);
       ThreadSituation = 1;
       pthread_mutex_unlock(&mutex);
