@@ -275,28 +275,34 @@ int detect_type(int sonarThreshold){
 	x = get_X_position();
 	y = get_Y_position();
 	float sonarVal;
-	turn_approx(90);
+	turn_exact_rel(90,2);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
-			move_real(5*22.447,5*22.447,400);
-			turn_approx(-90);
+			move_real(10*22.447,10*22.447,400);
+			turn_exact_rel(-90,2);
 		}
 	sonarVal = get_sonar();
+<<<<<<< HEAD
 	while ((x != get_X_position() or y !=get_Y_position) and ( abs(x - get_X_position())<40 and abs(y-get_Y_position())<40){
+=======
+	while ((x != get_X_position() || y !=get_Y_position) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40){ 
+>>>>>>> 1a792c1233a36958f1d2384ab1a93cf691ef3014
 		while (sonarVal < sonarThreshold) {
-			turn_approx(90);
+			turn_exact_rel(90,2);
 			sonarVal = get_sonar();
 			if (sonarVal > sonarThreshold){
 				move_real(5*22.447,5*22.447,400);
-				turn_approx(-90);
+				turn_exact_rel(-90,2);
 			}
 			sonarVal = get_sonar();
 		}
-		turn_approx(-90);
+		turn_exact_rel(-90,2);
 	}
-	if (x == get_X_position() and y ==get_Y_position){
+	if (x == get_X_position() && y ==get_Y_position){
 		return 1;
+		printf("object \n");
 	}
+	printf("fronteer \n");
 	return 0; //return 1 si obstacle, 2 si frontiere
 
 }
@@ -732,7 +738,7 @@ void* Update_position2(){
         get_tacho_position(sn_rwheel, &positionMotorR2);
         get_sensor_value0(sn_gyro, &thetaCompas);
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
-	printf("\n           thetaCompas = %f",thetaCompas/pi*180);
+	//printf("\n           thetaCompas = %f",thetaCompas/pi*180);
 
         /* debut SC1 */
         pthread_mutex_lock(&mutex);
@@ -744,7 +750,7 @@ void* Update_position2(){
                 Xpos=(int) round(Xdef/5);
                 Ypos=(int) round(Ydef/5);
             } else {
-                printf("           robot is turning");
+                //printf("           robot is turning");
             }
         }
         //printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
@@ -773,8 +779,6 @@ void* test_Update_position2(){
     move_forever(0,0);
     printf("\turning\n");
     turn_approx(90);
-    printf("\nsleeping\n");
-    sleep(5);
     move_forever(40,40);
     printf("\nmoving\n");
     sleep(5);
