@@ -453,7 +453,7 @@ void send_map_from_file(){
     int x_list[100];
     int y_list[100];
     
-    FILE* pos_file=fopen("test_pos.txt","r");
+    FILE* pos_file=fopen("pos.txt","r");
     if (!pos_file){
         printf("[ERROR] print_map(): couldn't open pos.txt in read mode\n");
     }
@@ -523,6 +523,7 @@ void send_map_from_file(){
         }
         printf("\n");
     }
+    send_mapdone();
     
     printf("map sent to the server\n");    
 }
