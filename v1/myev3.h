@@ -769,7 +769,7 @@ int get_Y_position() {
 	return Y;
 }
 
-int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
+int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
 	// moves forward until it is close enough to an object
 	printf("in forward sonar \n");
     	float sonarVal = get_sonar();
@@ -782,9 +782,11 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 	if (sonarVal > sonarThreshold) {
         	move_forever(rcycle, lcycle);
 		while (sonarVal > sonarThreshold) {
+			printf("in1");
 			current = clock();
 			sonarVal = get_sonar();
 				if ((current - previous)/C_PER_SECS > msec) {
+					printf("in2");
 					move_forever(0,0);
 					turn_approx(-delta);
 					if (get_sonar() < sonarThreshold){
@@ -804,8 +806,8 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 		}
 		move_forever(0,0);
 	}
+	return 0
 }
-
 void take_object(){
     	forward_sonar(50, 50, 80.0, 1000, 20);
 	printf("[PELLE] opening pelle\n");//--------open pelle
