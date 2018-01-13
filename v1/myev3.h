@@ -757,7 +757,6 @@ int detect_type(int sonarThreshold){
 	turn_approx(90);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
-			
 			forwardTimed(1,200);
 			turn_approx(-90);
 		}
@@ -765,18 +764,22 @@ int detect_type(int sonarThreshold){
 	int a = get_X_position();
 	int b = get_Y_position();
 	printf(" pos %d %d \n", a, b);
-	while ((x != get_X_position() || y !=get_Y_position()) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40)){ 
-		printf("in");
+	while ((x != a || y !=b) && ( abs(x - a)<40 || abs(y-b)<40)){ 
+		printf("in1");
 		while (sonarVal < sonarThreshold) {
-			turn_approx(90);
+			printf("in2");
+			turn_approx(-90);
 			sonarVal = get_sonar();
 			if (sonarVal > sonarThreshold){
+				printf("etape2\n");
 				forwardTimed(1,100);
-				turn_approx(-90);
+				turn_approx(90);
 			}
 			sonarVal = get_sonar();
 		}
-		turn_approx(-90);
+		turn_approx(90);
+		a = get_X_position();
+		b = get_Y_position();
 	}
 	if (x == get_X_position() && y ==get_Y_position()){
 		return 1;
