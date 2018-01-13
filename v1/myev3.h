@@ -176,11 +176,7 @@ float get_sonar(){
 }
 int get_color(){
 	float ret;
-	
 	get_sensor_value0(sn_color, &ret);
-	printf("sn_color = %d\n", (int) sn_color);
-	printf("ret %f\n", ret); 
-	printf("reading color %d\n", (int) ret);
 	return (int) ret; // { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
 }
 
@@ -602,7 +598,7 @@ int create_map() {
 	find_corners();
   	posFile = fopen("pos.txt", "r");
     if (posFile == NULL){
-        printf("[ERROR] create_map(): couldn't open pos.txt");
+        printf("[ERROR] create_map(): couldn't open pos.txt\n");
         exit(1);
     }
     for (y=maxY; y>minY-1; y--) {
@@ -654,7 +650,6 @@ int append_pos_file(int x, int y) {
     return 0;
 }
 
-
 int get_X_position() {
 	int X;
 	/* debut SC1 */
@@ -664,8 +659,6 @@ int get_X_position() {
         /* fin SC1 */
 	return X;
 }
-
-
 int get_Y_position() {
 	int Y;
 	/* debut SC1 */
@@ -675,3 +668,16 @@ int get_Y_position() {
         /* fin SC1 */
 	return Y;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
