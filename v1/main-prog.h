@@ -93,7 +93,7 @@ void* test_Update_position(){
     move_forever(0,0);
     printf("\turning\n");
     turn_approx(90);
-    printf("\sleeping\n");
+    printf("\nsleeping\n");
     sleep(5);
     move_forever(40,40);
     printf("\nmoving\n");
@@ -203,7 +203,7 @@ void* test_Update_position2(){
     move_forever(0,0);
     printf("\turning\n");
     turn_approx(90);
-    printf("\sleeping\n");
+    printf("\nsleeping\n");
     sleep(5);
     move_forever(40,40);
     printf("\nmoving\n");
