@@ -20,7 +20,7 @@ int is_in_list(int elt, int* list, int len){
     return 0;
 }
 
-int send_map_from_file(){    
+int print_map(){    
     int x_list[100];
     int y_list[100];
     
@@ -81,9 +81,12 @@ int send_map_from_file(){
     for (int x=xmin; x<=xmax; x++){
         for (int y=ymin; y<=ymax; y++){
             if (is_in_list(x,x_list,i_x)&&is_in_list(y,y_list,i_y)){
-                
+                printf("");
+            }
+            else {
             }
         }
+        printf("\n");
     }
     
     
