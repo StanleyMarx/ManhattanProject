@@ -76,7 +76,6 @@ int robot(int sw,int arg1,int arg2){
             break;
         case 1:
 	    printf("starting");
-            forward_sonar(50, 50, 500, 2000, 20);
 	    detect_type(500);
 	    break;
     
