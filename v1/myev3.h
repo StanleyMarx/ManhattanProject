@@ -227,6 +227,7 @@ void turn_exact_gyro(float delta,float prec){
 }
 
 void forwardTimed(int seconds, int speed) {
+	/* forwardTimed(1,200) : 10cm */
 	set_tacho_speed_sp(sn_rwheel, speed);
 	set_tacho_speed_sp(sn_lwheel, speed);
 	//printf("[TACHO] starting tachos\n");
@@ -754,7 +755,7 @@ int detect_type(int sonarThreshold){
 	turn_approx(90);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
-			move_real(50*22.447,50*22.447,400);
+			forwardTimed(1,100);
 			turn_approx(-90);
 		}
 	sonarVal = get_sonar();
@@ -763,7 +764,7 @@ int detect_type(int sonarThreshold){
 			turn_approx(90);
 			sonarVal = get_sonar();
 			if (sonarVal > sonarThreshold){
-				move_real(5*22.447,5*22.447,400);
+				forwardTimed(1,100);
 				turn_approx(-90);
 			}
 			sonarVal = get_sonar();
