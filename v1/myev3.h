@@ -12,7 +12,7 @@ uint8_t sn_shovel;
 uint8_t sn_color;
 int max_speed;
 const char const *colors[] = { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
-int minX = 0; 
+int minX = 0;
 int minY = 0;
 int maxX = 0;
 int maxY = 0;
@@ -35,7 +35,7 @@ void test_tachos_verbose(){
     int8_t sn;
     int allPlugged=1;
     int i;
-    
+
     if (ev3_search_tacho_plugged_in(PORT_RIGHTWHEEL,0,&sn,0)){
         printf("[ OK  ] right wheel tacho found at default port (B), sn=%d\n",sn);
     }
@@ -75,7 +75,7 @@ void test_sensors_verbose(){
     uint8_t sn_mag;
     uint8_t sn_gyro;
     float value;
-    
+
     ev3_sensor_init();
     if (ev3_search_sensor(LEGO_EV3_TOUCH,&sn_touch,0)){
         printf("[ OK  ] touch sensor is found at %d\n",sn_touch);
@@ -121,7 +121,7 @@ void test_sensors_verbose(){
     }
     else {
         printf("[ERROR] gyro is not found\n");
-    }    
+    }
 }
 
 void move_forever(int rcycle,int lcycle){
@@ -226,146 +226,20 @@ void turn_exact_gyro(float delta,float prec){
     }
 }
 
-int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
-	// moves forward until it is close enough to an object 
-    float sonarVal = get_sonar();
-	double C_PER_SECS;
-	C_PER_SECS = 1000000.0;
-	clock_t previous, current;
-	previous = clock();
-	sleep(1);
-	current = clock();
-	if (sonarVal > sonarThreshold) {
-        	move_forever(rcycle, lcycle);
-		while (sonarVal > sonarThreshold) {
-			current = clock();
-			sonarVal = get_sonar();
-				if ((current - previous)/C_PER_SECS > msec) { 
-					move_forever(0,0);
-					turn_exact_rel(-delta,2);
-					if (get_sonar() < sonarThreshold){
-						return 0;
-					} else {
-						turn_exact_rel(2*delta, 2);
-						if (get_sonar() < sonarThreshold){
-							return 0;
-						}
-					}
-					turn_exact_rel(-delta, 2);
-				}
-				previous = current;
-			
-				
-		}
-		move_forever(0,0);
-	}
+void forwardTimed(int seconds, int speed) {
+	/* forwardTimed(1,200) : 10cm */
+	set_tacho_speed_sp(sn_rwheel, speed);
+	set_tacho_speed_sp(sn_lwheel, speed);
+	//printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
+	sleep(seconds);
+	//printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
+	//printf("[TACHO] function forward is over!\n");
 }
 
-int detect_movable() {
-	// returns 1 if obect is movable (ie color = red) and 0 otherwise
-	int color = get_color();
-	if (color==5) {
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
-int detect_type(int sonarThreshold){
-	// boucle while tant que different de la position init ou aue super eloigne 
-	float sonarVal;
-	sonarVal = get_sonar();
-	while (sonarVal < sonarThreshold) {
-		turn_exact_rel(90,2);
-		sonarVal = get_sonar();
-		if (sonarVal > sonarThreshold){
-			move_real(10*22.447,10*22.447,400);
-			turn_exact_rel(-90,2);
-		}
-		sonarVal = get_sonar();
-	}
-	turn_exact_rel(-90,2);
-	return 0; //return 1 si obstacle, 2 si frontiere
-
-}
-void detectBall(int delta){
-    // detect if movable or non movable object
-	turn_exact_rel(-delta,2);
-	sleep(0.5);
-	float sonarValG = get_sonar();
-    	turn_exact_rel(delta+5,2);
-	sleep(0.5);
-    	turn_exact_rel(delta+5,2);
-	sleep(0.5);
-	float sonarValD = get_sonar();
-    	turn_exact_rel(-delta-5,2);
-	if (sonarValG>150 && sonarValD>150){
-		printf("movable object\n");
-	}else {
-		printf("non movable object\n");
-        turn_exact_rel(90,2);
-	}
-}
-
-void take_object(){
-    	forward_sonar(50, 50, 80.0, 1000, 20);
-	printf("[PELLE] opening pelle\n");//--------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] closing pelle\n");//-------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
-}
-
-void drop_object() {
-	turn_exact_rel(-180,2);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] opening pelle\n");//----------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	move_real(8*22.447,8*22.447,-400);//---------movebackward
-    	turn_exact_rel(90,2); //-------half turn
-	printf("[PELLE] closing pelle\n");//----------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
-}
-
-
-// à tester !! sera à utiliser en thread 
-void Detect_timed(int delta, int msec, int sonarTreshold){
-	/*if the robot hasn't detected any obstacles in the time msec, 
-	it stops and looks around  with an angle delta*/
-	double C_PER_SECS;
-	C_PER_SECS = 1000000.0;
-	clock_t previous, current;
-	previous = clock();
-	sleep(1);
-	current = clock();
-	if ((current - previous)/C_PER_SECS > msec) { 
-		move_forever(0,0);
-		turn_exact_rel(-delta,2);
-		if (get_sonar() < sonarTreshold){
-			// revenir au main
-			
-		}
-		else {
-			turn_exact_rel(2*delta, 2);
-			if (get_sonar() < sonarTreshold){
-				// revenir au main
-			}
-		}
-		previous = current;
-	}
-}
 
 /* à tester */
 float width_object(){
@@ -376,7 +250,7 @@ float width_object(){
     int speed_scan=20;
     float treshold=200;
     float al,ar;
-    
+
     move_forever(speed_scan,-speed_scan);
     while(get_sonar()<treshold);
     move_forever(0,0);
@@ -394,7 +268,7 @@ float width_object2(){
     float treshold_drop=50;
     float d0=get_sonar(),d1=d0;
     float al,ar;
-    
+
     move_forever(speed_scan,-speed_scan);
     while(abs(d1-d0)<treshold_drop){
         d0=d1;
@@ -407,7 +281,7 @@ float width_object2(){
         d1=get_sonar();
     }
     ar=get_compass_slow();
-    
+
     return al-ar;
 }
 void scan_object(){
@@ -417,7 +291,7 @@ void scan_object(){
     int scan[prec];
     float ar,al;
     int i;
-    
+
     move_forever(speed_scan,-speed_scan);
     while(get_sonar()<treshold);
     move_forever(0,0);
@@ -430,7 +304,7 @@ void scan_object(){
     move_forever(0,0);
     sleep(1);
     get_compass();
-    
+
     // max
     int imax=0;
     for (i=0; i<prec; i++){
@@ -439,7 +313,7 @@ void scan_object(){
         }
     }
     float aobjmax=al+(ar-al)*imax/prec;
-    
+
     // boundaries via scan'
     float scanp,scanpmin=scan[1]-scan[0],scanpmax=scanpmin;
     int ipmin,ipmax;
@@ -452,10 +326,10 @@ void scan_object(){
         if (scanpmax<scanp){
             scanpmax=scanp;
             ipmax=i;
-        } 
+        }
     }
     float aobjl=al+(ar-al)*ipmin/prec;
-    float aobjr=al+(ar-al)*ipmax/prec;    
+    float aobjr=al+(ar-al)*ipmax/prec;
 }
 
 /* communication client/serveur */
@@ -471,9 +345,9 @@ void send_position(int16_t x,int16_t y){
     str[7]=0xff;
 	write(s,str,9);
 	Sleep(1000);
-    
+
     /*debug*/
-    
+
 }
 void send_mapdata(int16_t x,int16_t y,char r,char g,char b){
     char str[58];
@@ -481,7 +355,7 @@ void send_mapdata(int16_t x,int16_t y,char r,char g,char b){
 	str[2]=TEAM_ID;
 	str[3]=0xff;
 	str[4]=5;
-	*((int16_t*)&str[5])=x;	
+	*((int16_t*)&str[5])=x;
 	*((int16_t*)&str[7])=y;
 	str[9]=r;
 	str[10]=g;
@@ -505,7 +379,7 @@ void send_obstacle(int act,uint16_t x,uint16_t y){
 	str[3]=0xff;
 	str[4]=7;
     str[5]=act;
-	*((int16_t*)&str[6])=x;	
+	*((int16_t*)&str[6])=x;
 	*((int16_t*)&str[8])=y;
 	write(s,str,10);
 	Sleep(1000);
@@ -555,7 +429,7 @@ void send_obstacle_pos(int act,uint16_t x,uint16_t y){
 }
 
 void find_corners() {
-	/* 
+	/*
 		by JB
 		recovers all of the past coordinates of the robots from the Position text file and deduce the possible corners of a rectangular map.
 	*/
@@ -570,13 +444,13 @@ void find_corners() {
         exit(1);
 
     while ((read = getline(&line, &len, posFile)) != -1) {
-		x = -1;
-		y = -1;
+		x = -1000;
+		y = -1000;
 		token = strtok(line, ",");
     	while(token) {
-        	if (x==-1) {
+        	if (x==-1000) {
         		x = atoi(token);
-        	} else if (y==-1) {
+        	} else if (y==-1000) {
         		y = atoi(token);
         	}
         	token = strtok(NULL, ",");
@@ -584,7 +458,7 @@ void find_corners() {
    		if (x<minX) minX=x;
 		if (x>maxX) maxX=x;
 		if (y<minY) minY=y;
-		if (y>maxY) maxY=y;	
+		if (y>maxY) maxY=y;
     }
     fclose(posFile);
     if (line) free(line);
@@ -615,7 +489,7 @@ int create_map() {
         exit(1);
     }
     for (y=maxY; y>minY-1; y--) {
-    	for (x=minX; x<maxX+1; x++) { 
+    	for (x=minX; x<maxX+1; x++) {
     		found = 0;
     		posFile = fopen("pos.txt", "r");
 			while (!found && ((read = getline(&line, &len, posFile)) != -1)) {
@@ -662,6 +536,41 @@ int append_pos_file(int x, int y) {
     }
     return 0;
 }
+int known_point(int checkX, int checkY) {
+	/*
+		by JB
+		checks if the robot already went through this (x, y) coordinates.
+		returns 1 if coordinates in file already, 0 otherwise.
+	*/
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+    int x; int y;
+    char *token;
+    int count=0;
+
+  	posFile = fopen("pos.txt", "r");
+    if (posFile == NULL) exit(1);
+
+    while ((read = getline(&line, &len, posFile)) != -1) {
+  		x = -1000;
+  		y = -1000;
+  		token = strtok(line, ",");
+    	while(token) {
+        	if (x==-1000) {
+        		x = atoi(token);
+        	} else if (y==-1000) {
+        		y = atoi(token);
+        	}
+        	token = strtok(NULL, ",");
+   		}
+      if (x==checkX && y==checkY && count>0) return 1;
+      if (x==checkX && y==checkY) count++;
+    }
+    fclose(posFile);
+    if (line) free(line);
+  	return 0;
+}
 
 void* Update_position2(){
     /* get the position every secondes */
@@ -684,8 +593,8 @@ void* Update_position2(){
         get_tacho_position(sn_rwheel, &positionMotorR2);
         get_sensor_value0(sn_gyro, &thetaCompas);
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
-	printf("\n           thetaCompas = %f",thetaCompas/pi*180);
-        
+	//printf("\n           thetaCompas = %f",thetaCompas/pi*180);
+
         /* debut SC1 */
         pthread_mutex_lock(&mutex);
         if ((abs(speedMotorR) > 5) && (abs(speedMotorL) > 5)) {
@@ -696,7 +605,7 @@ void* Update_position2(){
                 Xpos=(int) round(Xdef/5);
                 Ypos=(int) round(Ydef/5);
             } else {
-                printf("           robot is turning");
+                //printf("           robot is turning");
             }
         }
         //printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
@@ -725,8 +634,6 @@ void* test_Update_position2(){
     move_forever(0,0);
     printf("\turning\n");
     turn_approx(90);
-    printf("\nsleeping\n");
-    sleep(5);
     move_forever(40,40);
     printf("\nmoving\n");
     sleep(5);
@@ -758,19 +665,157 @@ int get_Y_position() {
     	pthread_mutex_lock(&mutex);
     	Y=Ypos;
         pthread_mutex_unlock(&mutex);
-        // fin SC1 
+        // fin SC1
 	return Y;
+}
+
+int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
+	// moves forward until it is close enough to an object
+	printf("in forward sonar \n");
+    	float sonarVal = get_sonar();
+	double C_PER_SECS;
+	C_PER_SECS = 1000000.0;
+	clock_t previous, current;
+	previous = clock();
+	sleep(1);
+	current = clock();
+	if (sonarVal > sonarThreshold) {
+        	move_forever(rcycle, lcycle);
+		while (sonarVal > sonarThreshold) {
+			current = clock();
+			sonarVal = get_sonar();
+				if ((current - previous)/C_PER_SECS > msec) {
+					move_forever(0,0);
+					turn_approx(-delta);
+					if (get_sonar() < sonarThreshold){
+						return 0;
+					} else {
+						turn_approx(2*delta);
+						if (get_sonar() < sonarThreshold){
+							return 0;
+						}
+					}
+					turn_approx(-delta);
+				}
+				move_forever(rcycle, lcycle);
+				previous = current;
+
+
+		}
+		move_forever(0,0);
+	}
+}
+
+void take_object(){
+    	forward_sonar(50, 50, 80.0, 1000, 20);
+	printf("[PELLE] opening pelle\n");//--------open pelle
+	set_tacho_speed_sp(sn_shovel, -80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+    	move_real(8*22.447,8*22.447,400);
+	printf("[PELLE] closing pelle\n");//-------close pelle
+	set_tacho_command(sn_shovel, "stop");
+	set_tacho_speed_sp(sn_shovel, 80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_shovel, "stop");
+}
+
+void drop_object() {
+	turn_approx(-180);
+    	move_real(8*22.447,8*22.447,400);
+	printf("[PELLE] opening pelle\n");//----------open pelle
+	set_tacho_speed_sp(sn_shovel, -80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+	move_real(8*22.447,8*22.447,-400);//---------movebackward
+    	turn_approx(90); //-------half turn
+	printf("[PELLE] closing pelle\n");//----------close pelle
+	set_tacho_command(sn_shovel, "stop");
+	set_tacho_speed_sp(sn_shovel, 80);
+	set_tacho_command(sn_shovel, "run-forever");
+	sleep(2);
+	set_tacho_command(sn_shovel, "stop");
+}
+
+int detect_movable() {
+	// returns 1 if obect is movable (ie color = red) and 0 otherwise
+	int color = get_color();
+	if (color==5) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+int detect_type(int sonarThreshold){
+	// boucle while tant que different de la position init ou aue super eloigne
+	int x = get_X_position();
+	int y = get_Y_position();
+	printf(" init pos %d %d \n", x, y);
+	float sonarVal;
+	turn_approx(90);
+		sonarVal = get_sonar();
+		if (sonarVal > sonarThreshold){
+			
+			forwardTimed(1,200);
+			turn_approx(-90);
+		}
+	sonarVal = get_sonar();
+	int a = get_X_position();
+	int b = get_Y_position();
+	printf(" pos %d %d \n", a, b);
+	while ((x != get_X_position() || y !=get_Y_position()) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40)){ 
+		printf("in");
+		while (sonarVal < sonarThreshold) {
+			turn_approx(90);
+			sonarVal = get_sonar();
+			if (sonarVal > sonarThreshold){
+				forwardTimed(1,100);
+				turn_approx(-90);
+			}
+			sonarVal = get_sonar();
+		}
+		turn_approx(-90);
+	}
+	if (x == get_X_position() && y ==get_Y_position()){
+		return 1;
+		printf("object \n");
+	}
+	printf("fronteer \n");
+	return 0; //return 1 si obstacle, 2 si frontiere
+
 }
 
 
 
+int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
+    // moves forward until it is close enough to an object
+    int i=0;
 
-
-
-
-
-
-
-
-
-
+    float sonarVal = get_sonar();
+    if (sonarVal > sonarThreshold) {
+        move_forever(rcycle, lcycle);
+        while (sonarVal > sonarThreshold) {
+            sonarVal = get_sonar();
+            if (i>msec) {
+		i=0;
+                move_forever(0,0);
+                turn_approx(90);
+                sonarVal = get_sonar();
+                if (sonarVal < sonarThreshold){
+                    return 0;
+                } else {
+                    turn_approx(-180);
+                    sonarVal = get_sonar();
+                    if (sonarVal < sonarThreshold){
+                        return 0;
+                    }
+                }
+                move_forever(rcycle, lcycle);
+            }
+            i+=20;
+        }
+        move_forever(0,0);
+    }
+}

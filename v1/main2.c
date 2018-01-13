@@ -60,25 +60,70 @@ int read_from_server (int sock, char *buffer, size_t maxSize) {
 #include "main-prog.h"
 
 int main(int argc, char **argv) {
-    
+
     while(ev3_tacho_init()<1) Sleep( 1000 );
     ev3_sensor_init();
     ev3_search_sensor(HT_NXT_COMPASS,&sn_compass,0);
-    ev3_search_sensor(LEGO_EV3_GYRO, &sn_gyro,0);
     ev3_search_sensor(LEGO_EV3_US,&sn_sonar,0);
-    //ev3_search_sensor(LEGO_EV3_TOUCH,&sn_touch,0);
- 	ev3_search_sensor(LEGO_EV3_COLOR,&sn_color,0);
-   	set_sensor_mode(sn_color, "COL-COLOR");
+    ev3_search_sensor(LEGO_EV3_COLOR,&sn_color,0);
+    ev3_search_sensor(LEGO_EV3_GYRO,&sn_gyro,0);
+   	set_sensor_mode(sn_color,"COL-COLOR");
     ev3_search_tacho_plugged_in(PORT_RIGHTWHEEL,0,&sn_rwheel,0);
     ev3_search_tacho_plugged_in(PORT_SHOVEL,0,&sn_shovel,0);
     ev3_search_tacho_plugged_in(PORT_LEFTWHEEL,0,&sn_lwheel,0);
     get_tacho_max_speed(sn_rwheel,&max_speed);
-    
+
     // empty the Position pos.txt file where we'll store all of our coordinates
     posFile = fopen("pos.txt", "w");
 	fclose(posFile);
 
-	robot(atoi(argv[1]));
-	
-	return 0;
+  struct sockaddr_rc addr = { 0 };
+  int status;
+
+  /* allocate a socket */
+  s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+
+  /* set the connection parameters (who to connect to) */
+  addr.rc_family = AF_BLUETOOTH;
+  addr.rc_channel = (uint8_t) 1;
+  str2ba (SERV_ADDR, &addr.rc_bdaddr);
+
+  /* connect to server */
+  status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
+  status=0;
+  /* if connected */
+  if( status == 0 ) {
+    char string[58];
+
+    /* Wait for START message */
+    read_from_server (s, string, 9);
+    if (string[4] == MSG_START) {
+      printf ("Received start message!\n");
+    }
+
+        /* ROBOT - BEGIN*/
+        int arg1=0;
+        if (argc>2){
+          arg1=atoi(argv[2]);
+        }
+        int arg2=0;
+        if (argc>3){
+          arg2=atoi(argv[3]);
+        }
+        robot(atoi(argv[1]),arg1,arg2);
+        /* ROBOT - END */
+
+
+    //close (s);
+
+    sleep (5);
+
+  } else {
+    fprintf (stderr, "Failed to connect to server...\n");
+    sleep (2);
+    exit (EXIT_FAILURE);
+  }
+
+  //close(s);
+  return 0;
 }
