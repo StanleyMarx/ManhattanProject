@@ -765,3 +765,35 @@ int detect_type(int sonarThreshold){
 	return 0; //return 1 si obstacle, 2 si frontiere
 
 }
+
+
+
+int forward_Sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
+    // moves forward until it is close enough to an object
+    int iter=0;
+
+    float sonarVal = get_sonar();
+    if (sonarVal > sonarThreshold) {
+        move_forever(rcycle, lcycle);
+        while (sonarVal > sonarThreshold) {
+            sonarVal = get_sonar();
+            if (i>msec) {
+                move_forever(0,0);
+                turn_approx(90);
+                sonarVal = get_sonar();
+                if (sonarVal < sonarThreshold){
+                    return 0;
+                } else {
+                    turn_approx(-180);
+                    sonarVal = get_sonar();
+                    if (sonarVal < sonarThreshold){
+                        return 0;
+                    }
+                }
+                move_forever(rcycle, lcycle);
+            }
+            i+=20;
+        }
+        move_forever(0,0);
+    }
+}
