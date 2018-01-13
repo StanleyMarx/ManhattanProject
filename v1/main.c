@@ -108,7 +108,13 @@ int main(int argc, char **argv) {
       } else {
           arg1=atoi(argv[2]);
       }
-      robot(atoi(argv[1]),arg1);
+      int arg2;
+      if (argc<4){
+          arg2=0;
+      } else {
+          arg2=atoi(argv[3]);
+      }
+      robot(atoi(argv[1]),arg1,arg2);
       
       
     close (s);

@@ -137,7 +137,7 @@ void test_turn(int rat){
 
 
 //--------------------------- ROBOT ---------------------------
-int robot(int sw,int arg1){
+int robot(int sw,int arg1,int arg2){
     switch (sw){
         case 0:
             test_update_pos();
