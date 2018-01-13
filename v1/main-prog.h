@@ -24,6 +24,18 @@ int test_update_pos(){
 
 //--------------------------- CASE_1 ---------------------------
 //dans myev3.h
+int testDetectType():{
+      pthread_t myUpdate_position;
+      pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+      forward_sonar(50, 50, 50, 3000, 20);
+      detect_type(50);
+      pthread_mutex_lock(&mutex);
+      ThreadSituation = 1;
+      pthread_mutex_unlock(&mutex);
+            /* fin SC2 */
+      pthread_join(myUpdate_position,NULL);
+      pthread_mutex_destroy(&mutex);
+}
 //--------------------------- CASE_2 ---------------------------
 void test_cs(){
     send_position(1,2);
@@ -75,16 +87,7 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-            pthread_t myUpdate_position;
-            pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
-            forward_sonar(50, 50, 50, 3000, 20);
-            detect_type(50);
-            pthread_mutex_lock(&mutex);
-    	    ThreadSituation = 1;
-            pthread_mutex_unlock(&mutex);
-            /* fin SC2 */
-    	    pthread_join(myUpdate_position,NULL);
-            pthread_mutex_destroy(&mutex);
+	    testDetectType();
         case 2:
             test_cs();
             break;
