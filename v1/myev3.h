@@ -226,82 +226,7 @@ void turn_exact_gyro(float delta,float prec){
     }
 }
 
-int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
-	// moves forward until it is close enough to an object
-    float sonarVal = get_sonar();
-	double C_PER_SECS;
-	C_PER_SECS = 1000000.0;
-	clock_t previous, current;
-	previous = clock();
-	sleep(1);
-	current = clock();
-	if (sonarVal > sonarThreshold) {
-        	move_forever(rcycle, lcycle);
-		while (sonarVal > sonarThreshold) {
-			current = clock();
-			sonarVal = get_sonar();
-				if ((current - previous)/C_PER_SECS > msec) {
-					move_forever(0,0);
-					turn_exact_rel(-delta,2);
-					if (get_sonar() < sonarThreshold){
-						return 0;
-					} else {
-						turn_exact_rel(2*delta, 2);
-						if (get_sonar() < sonarThreshold){
-							return 0;
-						}
-					}
-					turn_exact_rel(-delta, 2);
-				}
-				previous = current;
 
-
-		}
-		move_forever(0,0);
-	}
-}
-
-int detect_movable() {
-	// returns 1 if obect is movable (ie color = red) and 0 otherwise
-	int color = get_color();
-	if (color==5) {
-		return 1;
-	} else {
-		return 0;
-	}
-}
-int detect_type(int sonarThreshold){
-	// boucle while tant que different de la position init ou aue super eloigne
-	int x = get_X_position();
-	int y = get_Y_position();
-	float sonarVal;
-	turn_exact_rel(90,2);
-		sonarVal = get_sonar();
-		if (sonarVal > sonarThreshold){
-			move_real(10*22.447,10*22.447,400);
-			turn_exact_rel(-90,2);
-		}
-	sonarVal = get_sonar();
-	while ((x != get_X_position() || y !=get_Y_position) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40){ 
-		while (sonarVal < sonarThreshold) {
-			turn_exact_rel(90,2);
-			sonarVal = get_sonar();
-			if (sonarVal > sonarThreshold){
-				move_real(5*22.447,5*22.447,400);
-				turn_exact_rel(-90,2);
-			}
-			sonarVal = get_sonar();
-		}
-		turn_exact_rel(-90,2);
-	}
-	if (x == get_X_position() && y ==get_Y_position){
-		return 1;
-		printf("object \n");
-	}
-	printf("fronteer \n");
-	return 0; //return 1 si obstacle, 2 si frontiere
-
-}
 
 void detectBall(int delta){
     // detect if movable or non movable object
@@ -808,4 +733,82 @@ int get_Y_position() {
         pthread_mutex_unlock(&mutex);
         // fin SC1
 	return Y;
+}
+
+int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
+	// moves forward until it is close enough to an object
+    float sonarVal = get_sonar();
+	double C_PER_SECS;
+	C_PER_SECS = 1000000.0;
+	clock_t previous, current;
+	previous = clock();
+	sleep(1);
+	current = clock();
+	if (sonarVal > sonarThreshold) {
+        	move_forever(rcycle, lcycle);
+		while (sonarVal > sonarThreshold) {
+			current = clock();
+			sonarVal = get_sonar();
+				if ((current - previous)/C_PER_SECS > msec) {
+					move_forever(0,0);
+					turn_exact_rel(-delta,2);
+					if (get_sonar() < sonarThreshold){
+						return 0;
+					} else {
+						turn_exact_rel(2*delta, 2);
+						if (get_sonar() < sonarThreshold){
+							return 0;
+						}
+					}
+					turn_exact_rel(-delta, 2);
+				}
+				previous = current;
+
+
+		}
+		move_forever(0,0);
+	}
+}
+
+int detect_movable() {
+	// returns 1 if obect is movable (ie color = red) and 0 otherwise
+	int color = get_color();
+	if (color==5) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+int detect_type(int sonarThreshold){
+	// boucle while tant que different de la position init ou aue super eloigne
+	int x = get_X_position();
+	int y = get_Y_position();
+	float sonarVal;
+	turn_exact_rel(90,2);
+		sonarVal = get_sonar();
+		if (sonarVal > sonarThreshold){
+			move_real(10*22.447,10*22.447,400);
+			turn_exact_rel(-90,2);
+		}
+	sonarVal = get_sonar();
+	while ((x != get_X_position() || y !=get_Y_position) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40)){ 
+		while (sonarVal < sonarThreshold) {
+			turn_exact_rel(90,2);
+			sonarVal = get_sonar();
+			if (sonarVal > sonarThreshold){
+				move_real(5*22.447,5*22.447,400);
+				turn_exact_rel(-90,2);
+			}
+			sonarVal = get_sonar();
+		}
+		turn_exact_rel(-90,2);
+	}
+	if (x == get_X_position() && y ==get_Y_position){
+		return 1;
+		printf("object \n");
+	}
+	printf("fronteer \n");
+	return 0; //return 1 si obstacle, 2 si frontiere
+
 }
