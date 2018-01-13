@@ -785,7 +785,7 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int del
 			printf("in1");
 			current = clock();
 			sonarVal = get_sonar();
-				if ((current - previous)/C_PER_SECS > msec) {
+				if ((current - previous)/C_PER_SECS > sec) {
 					printf("in2");
 					move_forever(0,0);
 					turn_approx(-delta);
