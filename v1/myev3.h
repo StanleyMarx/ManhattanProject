@@ -697,6 +697,7 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 					}
 					turn_approx(-delta);
 				}
+				move_forever(rcycle, lcycle);
 				previous = current;
 
 
@@ -756,7 +757,7 @@ int detect_type(int sonarThreshold){
 	turn_approx(90);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
-			forwardTimed(1,400);
+			
 			forwardTimed(1,200);
 			turn_approx(-90);
 		}
