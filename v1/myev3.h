@@ -657,7 +657,8 @@ int get_Y_position() {
 
 int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
 	// moves forward until it is close enough to an object
-    float sonarVal = get_sonar();
+	printf("in forward sonar \n");
+    	float sonarVal = get_sonar();
 	double C_PER_SECS;
 	C_PER_SECS = 1000000.0;
 	clock_t previous, current;
@@ -671,16 +672,16 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int de
 			sonarVal = get_sonar();
 				if ((current - previous)/C_PER_SECS > msec) {
 					move_forever(0,0);
-					turn_exact_rel(-delta,2);
+					turn_approx(-delta,2);
 					if (get_sonar() < sonarThreshold){
 						return 0;
 					} else {
-						turn_exact_rel(2*delta, 2);
+						turn_approx(2*delta, 2);
 						if (get_sonar() < sonarThreshold){
 							return 0;
 						}
 					}
-					turn_exact_rel(-delta, 2);
+					turn_approx(-delta, 2);
 				}
 				previous = current;
 
@@ -706,14 +707,14 @@ void take_object(){
 }
 
 void drop_object() {
-	turn_exact_rel(-180,2);
+	turn_approx(-180);
     	move_real(8*22.447,8*22.447,400);
 	printf("[PELLE] opening pelle\n");//----------open pelle
 	set_tacho_speed_sp(sn_shovel, -80);
 	set_tacho_command(sn_shovel, "run-forever");
 	sleep(2);
 	move_real(8*22.447,8*22.447,-400);//---------movebackward
-    	turn_exact_rel(90,2); //-------half turn
+    	turn_approx(90); //-------half turn
 	printf("[PELLE] closing pelle\n");//----------close pelle
 	set_tacho_command(sn_shovel, "stop");
 	set_tacho_speed_sp(sn_shovel, 80);
@@ -737,24 +738,24 @@ int detect_type(int sonarThreshold){
 	int x = get_X_position();
 	int y = get_Y_position();
 	float sonarVal;
-	turn_exact_rel(90,2);
+	turn_approx(90);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
 			move_real(10*22.447,10*22.447,400);
-			turn_exact_rel(-90,2);
+			turn_approx(-90);
 		}
 	sonarVal = get_sonar();
 	while ((x != get_X_position() || y !=get_Y_position()) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40)){ 
 		while (sonarVal < sonarThreshold) {
-			turn_exact_rel(90,2);
+			turn_aprox(90);
 			sonarVal = get_sonar();
 			if (sonarVal > sonarThreshold){
 				move_real(5*22.447,5*22.447,400);
-				turn_exact_rel(-90,2);
+				turn_approx(-90);
 			}
 			sonarVal = get_sonar();
 		}
-		turn_exact_rel(-90,2);
+		turn_approx(-90);
 	}
 	if (x == get_X_position() && y ==get_Y_position()){
 		return 1;
