@@ -768,7 +768,7 @@ int detect_type(int sonarThreshold){
 
 
 
-int forward_Sonar(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
+int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
     // moves forward until it is close enough to an object
     int i=0;
 
