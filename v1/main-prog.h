@@ -105,8 +105,20 @@ int robot(int sw,int arg1,int arg2){
 	    printf("\nX,Y = %d,%d\n",x,y);
             break;
         case 5:
-	    forward_sonar(50, 50, 50, 10000, 20);
-	    break;
+	    	forward_sonar(50, 50, 50, 10000, 20);
+	    	break;
+	    case 6:
+	    	printf("testing basic opening/closing shovel functions");
+	    	open_shovel();
+	    	close_shovel();
+	    	break;
+	    case 7:
+	    	printf("testing take and drop object");
+	    	take_object();
+	    	printf("just took object, about to drop it");
+	    	sleep(5);
+	    	drop_object();
+	    	break;
     
     }
 	

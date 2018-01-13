@@ -8,41 +8,6 @@ int maxX = 0;
 int maxY = 0;
 FILE* posFile = NULL;
 
-int known_point(int checkX, int checkY) {
-	/*
-		by JB
-		checks if the robot already went through this (x, y) coordinates.
-		returns 1 if coordinates in file already, 0 otherwise.
-	*/
-    char * line = NULL;
-    size_t len = 0;
-    ssize_t read;
-    int x; int y;
-    char *token;
-    int count=0;
-
-  	posFile = fopen("pos.txt", "r");
-    if (posFile == NULL) exit(1);
-
-    while ((read = getline(&line, &len, posFile)) != -1) {
-  		x = -1000;
-  		y = -1000;
-  		token = strtok(line, ",");
-    	while(token) {
-        	if (x==-1000) {
-        		x = atoi(token);
-        	} else if (y==-1000) {
-        		y = atoi(token);
-        	}
-        	token = strtok(NULL, ",");
-   		}
-      if (x==checkX && y==checkY && count>0) return 1;
-      if (x==checkX && y==checkY) count++;
-    }
-    fclose(posFile);
-    if (line) free(line);
-  	return 0;
-}
 void find_corners() {
 	/*
 		by JB
@@ -92,7 +57,7 @@ int create_map() {
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
-    int x; int y;
+    int x; int y; int color;
     int xFile; int yFile;
 	int found = 0;
 	char *token;
@@ -110,16 +75,19 @@ int create_map() {
 			while (!found && ((read = getline(&line, &len, posFile)) != -1)) {
 				xFile = -1000; // value that should never be reached
 				yFile = -1000; // value that should never be reached
+        color = -1000;
 				token = strtok(line, ",");
 				while(token) {
 					if (xFile==-1000) {
 						xFile = atoi(token);
 					} else if (yFile==-1000) {
 						yFile = atoi(token);
+					} else if (color==-1000) {
+						color = atoi(token);
 					}
 					token = strtok(NULL, ",");
 		   		}
-				if (x==xFile && y==yFile) {
+				if (x==xFile && y==yFile && color==0) {
 					found = 1;
 				}
 				//free(line);
@@ -136,14 +104,14 @@ int create_map() {
 	printf("\n");
     return 0;
 }
-int append_pos_file(int x, int y) {
+int append_pos_file(int x, int y, int color) {
 	/*
 		by JB and Alix
 		When the robot is at (x,y), this script writes the coordinates in the Position text file that will be used to build the map at the end of the exploration.
 	*/
    	posFile = fopen("pos.txt", "a");
     if (posFile != NULL){
-    	fprintf(posFile, "%d,%d\n",x,y);
+    	fprintf(posFile, "%d,%d,%d\n",x,y,color);
         fclose(posFile);
     }
     else {
@@ -151,6 +119,78 @@ int append_pos_file(int x, int y) {
     }
     return 0;
 }
+int known_point(int checkX, int checkY) {
+	/*
+		by JB
+		checks if the robot already went through this (x, y) coordinates.
+		returns 1 if coordinates in file already, 0 otherwise.
+	*/
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+    int x; int y;
+    char *token;
+    int count=0;
+
+  	posFile = fopen("pos.txt", "r");
+    if (posFile == NULL) exit(1);
+
+    while ((read = getline(&line, &len, posFile)) != -1) {
+  		x = -1000;
+  		y = -1000;
+  		token = strtok(line, ",");
+    	while(token) {
+        	if (x==-1000) {
+        		x = atoi(token);
+        	} else if (y==-1000) {
+        		y = atoi(token);
+        	}
+        	token = strtok(NULL, ",");
+   		}
+      if (x==checkX && y==checkY && count>0) return 1;
+      if (x==checkX && y==checkY) count++;
+    }
+    fclose(posFile);
+    if (line) free(line);
+  	return 0;
+}
+
+///////////////////////////////////////////////////////////
+
+int fill_obstacles() {
+	/*
+		by JB
+	*/
+  char * line = NULL;
+  size_t len = 0;
+  ssize_t read;
+  int x; int y;
+	char *token;
+	posFile = fopen("pos.txt", "r");
+  if (posFile == NULL){
+      printf("[ERROR] create_map(): couldn't open pos.txt\n");
+      exit(1);
+  }
+  while ((read = getline(&line, &len, posFile)) != -1) {
+    x = -1000; // value that should never be reached
+    y = -1000; // value that should never be reached
+    token = strtok(line, ",");
+    while(token) {
+      if (x==-1000) {
+        x = atoi(token);
+      } else if (y==-1000) {
+        y = atoi(token);
+      }
+      token = strtok(NULL, ",");
+    }
+    printf("x=%d, y=%d\n", x, y);
+  }
+  fclose(posFile);
+  return 0;
+}
+
+
+///////////////////////////////////////
 
 int main() {
 	/*
@@ -160,21 +200,38 @@ int main() {
 	posFile = fopen("pos.txt", "w");
 	fclose(posFile);
 
-	append_pos_file(0,0);
-	append_pos_file(0,1);
-	append_pos_file(0,2);
-	append_pos_file(0,3);
-	append_pos_file(0,4);
-	append_pos_file(-1,4);
-	append_pos_file(-2,4);
-	append_pos_file(-3,4);
-	append_pos_file(-4,4);
-  append_pos_file(-1,4);
+	append_pos_file(0,0,0);
+	append_pos_file(0,1,0);
+	append_pos_file(0,2,0);
+	append_pos_file(1,2,0);
+	append_pos_file(2,2,0);
+  // around square
+	append_pos_file(2,3,0);
+	append_pos_file(2,4,0);
+	append_pos_file(2,5,0);
+
+	append_pos_file(3,5,0);
+	append_pos_file(4,5,0);
+	append_pos_file(5,5,0);
+	append_pos_file(6,5,0);
+
+	append_pos_file(6,4,0);
+	append_pos_file(6,3,0);
+	append_pos_file(6,2,0);
+	append_pos_file(6,1,0);
+
+  append_pos_file(5,1,0);
+  append_pos_file(4,1,0);
+  append_pos_file(3,1,0);
+  append_pos_file(2,1,0);
+
+	append_pos_file(2,2);
   int res;
-  res = known_point(-2, 4);
+  res = known_point(2, 4);
   printf("%d should be equal to 0\n", res);
-  res = known_point(-1, 4);
+  res = known_point(2, 2);
   printf("%d should be equal to 1\n", res);
+  fill_obstacles();
   create_map();
   exit(0);
 }
