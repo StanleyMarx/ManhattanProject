@@ -275,24 +275,24 @@ int detect_type(int sonarThreshold){
 	x = get_X_position();
 	y = get_Y_position();
 	float sonarVal;
-	turn_exact_rel(90,2);
+	turn_approx(90);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
-			move_real(10*22.447,10*22.447,400);
-			turn_exact_rel(-90,2);
+			move_real(5*22.447,5*22.447,400);
+			turn_approx(-90);
 		}
 	sonarVal = get_sonar();
-	while ((x != get_X_position() or y !=get_Y_position) and ( abs(x - get_X_position())<40 or abs(y-get_Y_position())<40){ 
+	while ((x != get_X_position() or y !=get_Y_position) and ( abs(x - get_X_position())<40 and abs(y-get_Y_position())<40){ 
 		while (sonarVal < sonarThreshold) {
-			turn_exact_rel(90,2);
+			turn_approx(90);
 			sonarVal = get_sonar();
 			if (sonarVal > sonarThreshold){
 				move_real(5*22.447,5*22.447,400);
-				turn_exact_rel(-90,2);
+				turn_approx(-90);
 			}
 			sonarVal = get_sonar();
 		}
-		turn_exact_rel(-90,2);
+		turn_approx(-90);
 	}
 	if (x == get_X_position() and y ==get_Y_position){
 		return 1;
