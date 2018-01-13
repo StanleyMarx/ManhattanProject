@@ -90,6 +90,11 @@ int robot(int sw,int arg1,int arg2){
 	    int y=get_Y_position();
 	    printf("\nX,Y = %d,%d\n",x,y);
             break;
+	case 5:
+		forward_sonar(50, 50, 500, 2000, 20);
+		detect_type(500);
+		break;
+    
     }
 	
 }
