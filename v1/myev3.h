@@ -756,7 +756,7 @@ int detect_type(int sonarThreshold){
 	turn_approx(90);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
-			forwardTimed(1,200);
+			forwardTimed(1,400);
 			turn_approx(-90);
 		}
 	sonarVal = get_sonar();
