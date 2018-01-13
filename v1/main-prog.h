@@ -54,6 +54,7 @@ void* Update_position(){
         get_tacho_position(sn_rwheel, &positionMotorR2);
         get_sensor_value0(sn_gyro, &thetaCompas);
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
+	printf("\n           thetaCompas = %f",thetaCompas);
         
         /* debut SC1 */
         pthread_mutex_lock(&mutex);
@@ -156,6 +157,7 @@ void* Update_position2(){
         get_tacho_position(sn_rwheel, &positionMotorR2);
         get_sensor_value0(sn_gyro, &thetaCompas);
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
+	printf("\n           thetaCompas = %f",thetaCompas);
         
         /* debut SC1 */
         pthread_mutex_lock(&mutex);
