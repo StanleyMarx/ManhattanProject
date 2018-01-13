@@ -86,6 +86,9 @@ int robot(int sw,int arg1,int arg2){
         case 4:
             test_Update_position2();
 	    create_map();
+	    int x=get_X_position();
+	    int y=get_Y_position();
+	    printf("\nX,Y = %d,%d\n",x,y);
             break;
     }
 	
