@@ -60,7 +60,7 @@ void test_sensors_verbose(){
     uint8_t sn_compass;
     uint8_t sn_sonar;
     uint8_t sn_mag;
-    uint8_t sn_gyro
+    uint8_t sn_gyro;
     float value;
     
     ev3_sensor_init();

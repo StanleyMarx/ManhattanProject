@@ -80,19 +80,17 @@ void* Update_position(){
     pthread_exit(NULL);
 }
 
-
-
 void* test_Update_position(){
     /* get the position while moving */
     pthread_t myUpdate_position;
     pthread_create(&myUpdate_position,NULL,Update_position,NULL);
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
-    move_forever(20,20);
+    move_forever(40,40);
     sleep(5);
     move_forever(0,0);
-    turn_exact_rel(90,1);
-    move_forever(20,20);
+    turn_approx(90);
+    move_forever(40,40);
     sleep(5);
     move_forever(0,0);
     //THE END OF THE INITIALISATION____________________________________________

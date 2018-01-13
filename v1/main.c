@@ -101,16 +101,17 @@ int main(int argc, char **argv) {
       printf ("Received start message!\n");
     }
       
-        /* ROBOT */
-      int arg1=0;
-      if (argc>2){
+        /* ROBOT - BEGIN*/
+        int arg1=0;
+        if (argc>2){
           arg1=atoi(argv[2]);
-      }
-      int arg2=0;
-      if (argc>3){
+        }
+        int arg2=0;
+        if (argc>3){
           arg2=atoi(argv[3]);
-      }
-      robot(atoi(argv[1]),arg1,arg2);
+        }
+        robot(atoi(argv[1]),arg1,arg2);
+        /* ROBOT - END */
       
       
     close (s);
