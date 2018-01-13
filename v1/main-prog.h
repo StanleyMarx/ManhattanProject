@@ -139,10 +139,9 @@ void test_turn(int rat){
 void* Update_position2(){
     /* get the position every secondes */
     get_sensor_value0(sn_gyro, &thetaCompasInit);
+    sleep(0.3);
+    get_sensor_value0(sn_gyro, &thetaCompasInit);
     get_tacho_position(sn_rwheel, &positionMotorR2);
-    get_sensor_value0(sn_gyro, &thetaCompas);
-    thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
-    thetaCompasOld = thetaCompas;
 
     /* debut SC1 */
     pthread_mutex_lock(&mutex);
@@ -163,17 +162,16 @@ void* Update_position2(){
         if ((abs(speedMotorR) > 5) && (abs(speedMotorL) > 5)) {
             if (speedMotorR/speedMotorL > 0) {
                 /*printf("\nrobot is moving");*/
-                Xdef=Xdef+sin(thetaCompasOld)*(positionMotorR2-positionMotorR1)*lambda;
-                Ydef=Ydef+cos(thetaCompasOld)*(positionMotorR2-positionMotorR1)*lambda;
+                Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+                Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
                 Xpos=(int) round(Xdef/5);
                 Ypos=(int) round(Ydef/5);
             } else {
                 //printf("\nrobot is turning");
-	        thetaCompasOld = thetaCompas;
             }
         }
         printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
-        if ((Xpos != XposOld) && (Ypos != YposOld)) {
+        if ((Xpos != XposOld) || (Ypos != YposOld)) {
             XposOld = Xpos;
             YposOld = Ypos;
             append_pos_file(Xpos, Ypos);
