@@ -23,7 +23,7 @@ int Xpos=0, Ypos=0, XposOld=0, YposOld=0;
 float pi=3.14159265;
 int speedMotorL, speedMotorR;
 int positionMotorR1, positionMotorR2;
-float thetaCompas, thetaCompasOld, thetaCompasInit;
+float thetaCompas, thetaCompasInit;
 float lambda=1/21.21*86/35;
 pthread_mutex_t mutex;
 int ThreadSituation=0;
@@ -669,6 +669,7 @@ void* Update_position2(){
     sleep(0.3);
     get_sensor_value0(sn_gyro, &thetaCompasInit);
     get_tacho_position(sn_rwheel, &positionMotorR2);
+    append_pos_file(Xpos, Ypos);
 
     /* debut SC1 */
     pthread_mutex_lock(&mutex);
