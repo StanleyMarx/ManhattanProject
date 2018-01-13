@@ -108,14 +108,14 @@ int robot(int sw,int arg1,int arg2){
 	    	forward_sonar(50, 50, 50, 10000, 20);
 	    	break;
 	    case 6:
-	    	printf("testing basic opening/closing shovel functions");
+	    	printf("testing basic opening/closing shovel functions\n");
 	    	open_shovel();
 	    	close_shovel();
 	    	break;
 	    case 7:
-	    	printf("testing take and drop object");
+	    	printf("testing take and drop object\n");
 	    	take_object();
-	    	printf("just took object, about to drop it");
+	    	printf("just took object, about to drop it in 5sec\n");
 	    	sleep(5);
 	    	drop_object();
 	    	break;
