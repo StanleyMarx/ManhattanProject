@@ -196,6 +196,7 @@ void* test_Update_position2(){
     sleep(5);
     move_forever(0,0);
     turn_approx(90);
+    sleep(5);
     move_forever(40,40);
     sleep(5);
     move_forever(0,0);
