@@ -75,7 +75,13 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-	    move_real(21*22.447,21*22.447,400);
+	    forwardTimed(1);
+            sleep(1);
+	    forwardTimed(2);
+            sleep(1);
+	    forwardTimed(5);
+		    
+	
     
         case 2:
             test_cs();
