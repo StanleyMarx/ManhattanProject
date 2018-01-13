@@ -102,16 +102,12 @@ int main(int argc, char **argv) {
     }
       
         /* ROBOT */
-      int arg1;
-      if (argc<3){
-          arg1=0;
-      } else {
+      int arg1=0;
+      if (argc>2){
           arg1=atoi(argv[2]);
       }
-      int arg2;
-      if (argc<4){
-          arg2=0;
-      } else {
+      int arg2=0;
+      if (argc>3){
           arg2=atoi(argv[3]);
       }
       robot(atoi(argv[1]),arg1,arg2);
