@@ -18,6 +18,19 @@ int maxX = 0;
 int maxY = 0;
 FILE* posFile = NULL;
 
+float Xdef=0.0, Ydef=0.0;
+int Xpos=0, Ypos=0, XposOld=0, YposOld=0;
+float pi=3.14159265;
+int speedMotorL, speedMotorR;
+int positionMotorR1, positionMotorR2;
+float thetaCompas, thetaCompasOld, thetaCompasInit;
+float lambda=1/21.21*86/35;
+pthread_mutex_t mutex;
+int ThreadSituation=0;
+
+
+
+
 void test_tachos_verbose(){
     int8_t sn;
     int allPlugged=1;
@@ -648,6 +661,85 @@ int append_pos_file(int x, int y) {
         printf("[ERROR] append_pos_file(%d,%d): couldn't open pos.txt",x,y);
     }
     return 0;
+}
+
+void* Update_position2(){
+    /* get the position every secondes */
+    get_sensor_value0(sn_gyro, &thetaCompasInit);
+    sleep(0.3);
+    get_sensor_value0(sn_gyro, &thetaCompasInit);
+    get_tacho_position(sn_rwheel, &positionMotorR2);
+
+    /* debut SC1 */
+    pthread_mutex_lock(&mutex);
+    while(ThreadSituation == 0){
+        pthread_mutex_unlock(&mutex);
+        /* fin SC1 */
+
+        sleep(0.3);
+        get_tacho_speed(sn_lwheel, &speedMotorL);
+        get_tacho_speed(sn_rwheel, &speedMotorR);
+        positionMotorR1 = positionMotorR2;
+        get_tacho_position(sn_rwheel, &positionMotorR2);
+        get_sensor_value0(sn_gyro, &thetaCompas);
+        thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
+	printf("\n           thetaCompas = %f",thetaCompas/pi*180);
+        
+        /* debut SC1 */
+        pthread_mutex_lock(&mutex);
+        if ((abs(speedMotorR) > 5) && (abs(speedMotorL) > 5)) {
+            if (speedMotorR/speedMotorL > 0) {
+                /*printf("\nrobot is moving");*/
+                Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+                Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+                Xpos=(int) round(Xdef/5);
+                Ypos=(int) round(Ydef/5);
+            } else {
+                printf("           robot is turning");
+            }
+        }
+        //printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+        if ((Xpos != XposOld) || (Ypos != YposOld)) {
+            XposOld = Xpos;
+            YposOld = Ypos;
+            append_pos_file(Xpos, Ypos);
+        }
+    }
+    pthread_mutex_unlock(&mutex);
+    /* fin SC1 */
+    pthread_exit(NULL);
+}
+
+
+
+void* test_Update_position2(){
+    /* get the position while moving */
+    pthread_t myUpdate_position;
+    pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+
+    //THE MOVEMENT FUNCTIONS___________________________________________________
+    move_forever(40,40);
+    printf("\nmoving\n");
+    sleep(5);
+    move_forever(0,0);
+    printf("\turning\n");
+    turn_approx(90);
+    printf("\nsleeping\n");
+    sleep(5);
+    move_forever(40,40);
+    printf("\nmoving\n");
+    sleep(5);
+    move_forever(0,0);
+    //THE END OF THE INITIALISATION____________________________________________
+
+    /* debut SC2 */
+    pthread_mutex_lock(&mutex);
+    ThreadSituation = 1;
+    pthread_mutex_unlock(&mutex);
+    /* fin SC2 */
+
+    pthread_join(myUpdate_position,NULL);
+    pthread_mutex_destroy(&mutex);
 }
 
 int get_X_position() {
