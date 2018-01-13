@@ -760,8 +760,8 @@ int detect_type(int sonarThreshold){
 			turn_approx(-90);
 		}
 	sonarVal = get_sonar();
-	a = get_X_position();
-	b = get_Y_position();
+	int a = get_X_position();
+	int b = get_Y_position();
 	printf("%d %d \n", a, b);
 	while ((x != get_X_position() || y !=get_Y_position()) && ( abs(x - get_X_position())<40 || abs(y-get_Y_position())<40)){ 
 		printf("in");
