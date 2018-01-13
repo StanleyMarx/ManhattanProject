@@ -777,16 +777,18 @@ int detect_type(int sonarThreshold){
 			}
 			sonarVal = get_sonar();
 		}
+		printf("out2");
 		turn_approx(-90);
 		a = get_X_position();
 		b = get_Y_position();
 	}
+	printf("out1");
 	if (x == get_X_position() && y ==get_Y_position()){
 		return 1;
 		printf("object \n");
 	}
 	printf("fronteer \n");
-	return 0; //return 1 si obstacle, 2 si frontiere
+	return 2; //return 1 si obstacle, 2 si frontiere
 
 }
 
