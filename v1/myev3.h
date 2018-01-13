@@ -650,7 +650,7 @@ int append_pos_file(int x, int y) {
     return 0;
 }
 
-/*int get_X_position() {
+int get_X_position() {
 	int X;
 	// debut SC1
     	pthread_mutex_lock(&mutex);
@@ -667,7 +667,7 @@ int get_Y_position() {
         pthread_mutex_unlock(&mutex);
         // fin SC1 
 	return Y;
-}*/
+}
 
 
 
