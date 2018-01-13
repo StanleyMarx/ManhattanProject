@@ -221,13 +221,17 @@ int robot(int sw,int arg1,int arg2){
             break;
         case 1:
             test_Update_position();
-	    	create_map();
+	    create_map();
             break;
         case 2:
             test_cs();
             break;
         case 3:
             test_turn(arg1);
+            break;
+        case 4:
+            test_Update_position2();
+	    create_map();
             break;
     }
 	
