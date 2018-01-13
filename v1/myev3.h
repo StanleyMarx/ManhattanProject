@@ -226,9 +226,9 @@ void turn_exact_gyro(float delta,float prec){
     }
 }
 
-void forwardTimed(int seconds) {
-	set_tacho_speed_sp(sn_rwheel, 400);
-	set_tacho_speed_sp(sn_lwheel, 400);
+void forwardTimed(int seconds, int speed) {
+	set_tacho_speed_sp(sn_rwheel, speed);
+	set_tacho_speed_sp(sn_lwheel, speed);
 	//printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_lwheel, "run-forever");
 	set_tacho_command(sn_rwheel, "run-forever");
