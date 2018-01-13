@@ -88,10 +88,15 @@ void* test_Update_position(){
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
     move_forever(40,40);
+    printf("\nmoving\n");
     sleep(5);
     move_forever(0,0);
+    printf("\turning\n");
     turn_approx(90);
+    printf("\sleeping\n");
+    sleep(5);
     move_forever(40,40);
+    printf("\nmoving\n");
     sleep(5);
     move_forever(0,0);
     //THE END OF THE INITIALISATION____________________________________________
@@ -193,11 +198,15 @@ void* test_Update_position2(){
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
     move_forever(40,40);
+    printf("\nmoving\n");
     sleep(5);
     move_forever(0,0);
+    printf("\turning\n");
     turn_approx(90);
+    printf("\sleeping\n");
     sleep(5);
     move_forever(40,40);
+    printf("\nmoving\n");
     sleep(5);
     move_forever(0,0);
     //THE END OF THE INITIALISATION____________________________________________
