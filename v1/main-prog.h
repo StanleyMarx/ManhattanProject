@@ -54,7 +54,7 @@ void* Update_position(){
         get_tacho_position(sn_rwheel, &positionMotorR2);
         get_sensor_value0(sn_gyro, &thetaCompas);
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
-	printf("\n           thetaCompas = %f",thetaCompas);
+	printf("\n           thetaCompas = %f",thetaCompas/pi*180);
         
         /* debut SC1 */
         pthread_mutex_lock(&mutex);
@@ -66,10 +66,10 @@ void* Update_position(){
                 Xpos=(int) round(Xdef/5);
                 Ypos=(int) round(Ydef/5);
             } else {
-                //printf("\nrobot is turning");
+                printf("           robot is turning");
             }
         }
-        printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+        //printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
         if ((Xpos != XposOld) || (Ypos != YposOld)) {
             XposOld = Xpos;
             YposOld = Ypos;
@@ -157,7 +157,7 @@ void* Update_position2(){
         get_tacho_position(sn_rwheel, &positionMotorR2);
         get_sensor_value0(sn_gyro, &thetaCompas);
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
-	printf("\n           thetaCompas = %f",thetaCompas);
+	printf("\n           thetaCompas = %f",thetaCompas/pi*180);
         
         /* debut SC1 */
         pthread_mutex_lock(&mutex);
@@ -169,10 +169,10 @@ void* Update_position2(){
                 Xpos=(int) round(Xdef/5);
                 Ypos=(int) round(Ydef/5);
             } else {
-                //printf("\nrobot is turning");
+                printf("           robot is turning");
             }
         }
-        printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+        //printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
         if ((Xpos != XposOld) || (Ypos != YposOld)) {
             XposOld = Xpos;
             YposOld = Ypos;
@@ -192,11 +192,11 @@ void* test_Update_position2(){
     pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
-    move_forever(20,20);
+    move_forever(40,40);
     sleep(5);
     move_forever(0,0);
-    turn_exact_rel(90,1);
-    move_forever(20,20);
+    turn_approx(90,1);
+    move_forever(40,40);
     sleep(5);
     move_forever(0,0);
     //THE END OF THE INITIALISATION____________________________________________
