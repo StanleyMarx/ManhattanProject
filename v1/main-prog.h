@@ -23,46 +23,43 @@ int test_update_pos(){
 }
 
 //--------------------------- CASE_1 ---------------------------
+float Xdef=0.0, Ydef=0.0;
+int Xpos=0, Ypos=0, XposOld=0, YposOld=0;
 float pi=3.14159265;
-float Xdef=0.0,Ydef=0.0;
-int Xpos=0,Ypos=0;
-int XposOld=0,YposOld=0;
 int speedMotorL, speedMotorR;
-int positionMotorL1, positionMotorR1, positionMotorL2, positionMotorR2;
+int positionMotorR1, positionMotorR2;
 float thetaCompas, thetaCompasInit;
 float lambda=1/21.21*86/35;
-int ThreadDisplay=0;
-pthread_mutex_t lock;
+pthread_mutex_t mutex;
+int ThreadSituation=0;
+
+
+
 
 void* Update_position(){
-        /* affiche la position toutes les secondes */
-    /* debut SC1 */
-        pthread_mutex_lock(&lock);
-    
+    /* get the position every secondes */
     get_sensor_value0(sn_gyro, &thetaCompasInit);
-        while(ThreadDisplay == 0){
-                pthread_mutex_unlock(&lock);
-                /* fin SC1 */
+    get_tacho_position(sn_rwheel, &positionMotorR2);
 
-                get_tacho_position(sn_lwheel, &positionMotorL1);
-                get_tacho_position(sn_rwheel, &positionMotorR1);
-                sleep(0.3);
-                get_tacho_speed(sn_lwheel, &speedMotorL);
-                get_tacho_speed(sn_rwheel, &speedMotorR);
-                get_tacho_position(sn_lwheel, &positionMotorL2);
-                get_tacho_position(sn_rwheel, &positionMotorR2);
-                get_sensor_value0(sn_gyro, &thetaCompas);
+    /* debut SC1 */
+    pthread_mutex_lock(&mutex);
+    while(ThreadSituation == 0){
+        pthread_mutex_unlock(&mutex);
+        /* fin SC1 */
+
+        sleep(0.3);
+        get_tacho_speed(sn_lwheel, &speedMotorL);
+        get_tacho_speed(sn_rwheel, &speedMotorR);
+        positionMotorR1 = positionMotorR2;
+        get_tacho_position(sn_rwheel, &positionMotorR2);
+        get_sensor_value0(sn_gyro, &thetaCompas);
         thetaCompas = (thetaCompas-thetaCompasInit)*pi/180;
-                //printf("\n speedMotorL,speedMotorR = %d,%d",speedMotorL,speedMotorR);
-                
+        
+        /* debut SC1 */
+        pthread_mutex_lock(&mutex);
         if ((abs(speedMotorR) > 5) && (abs(speedMotorL) > 5)) {
-            if ((speedMotorR > 0) && (speedMotorL > 0)) {
-                /*printf("\nrobot is moving");
-                printf("\nsin(thetaCompas) %f",sin(thetaCompas));
-                printf("             diffPosition %d",positionMotorR2-positionMotorR1);
-                printf("             lambda %f",lambda);*/
-		/* debut SC1 */
-        	pthread_mutex_lock(&lock);
+            if (speedMotorR/speedMotorL > 0) {
+                /*printf("\nrobot is moving");*/
                 Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
                 Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
                 Xpos=(int) round(Xdef/5);
@@ -71,33 +68,26 @@ void* Update_position(){
                 //printf("\nrobot is turning");
             }
         }
-                printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
-                if ((Xpos != XposOld) && (Ypos != YposOld)) {
-                    XposOld = Xpos;
-                    YposOld = Ypos;
-                    append_pos_file(Xpos, Ypos);
-                }
-  
+        printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
+        if ((Xpos != XposOld) && (Ypos != YposOld)) {
+            XposOld = Xpos;
+            YposOld = Ypos;
+            append_pos_file(Xpos, Ypos);
         }
-        pthread_mutex_unlock(&lock);
-        /* fin SC1 */
+    }
+    pthread_mutex_unlock(&mutex);
+    /* fin SC1 */
+    pthread_exit(NULL);
 }
+
+
+
 void* test_Update_position(){
-    
-    
-    pthread_t display;
-    pthread_create(&display,NULL,Update_position,NULL);
+    /* get the position while moving */
+    pthread_t myUpdate_position;
+    pthread_create(&myUpdate_position,NULL,Update_position,NULL);
 
-    //THE END OF THE INITIALISATION____________________________________________
     //THE MOVEMENT FUNCTIONS___________________________________________________
-
-    
-    /*forward_sonar(200,200,200);
-    turn_exact_rel(90,3);
-    forward_sonar(200,200,200);*/
-    
-    
-    
     move_forever(20,20);
     sleep(5);
     move_forever(0,0);
@@ -105,19 +95,16 @@ void* test_Update_position(){
     move_forever(20,20);
     sleep(5);
     move_forever(0,0);
-    
-
     //THE END OF THE INITIALISATION____________________________________________
-    //THE MOVEMENT FUNCTIONS___________________________________________________
 
     /* debut SC2 */
-    pthread_mutex_lock(&lock);
-    ThreadDisplay = 1;
-    pthread_mutex_unlock(&lock);
+    pthread_mutex_lock(&mutex);
+    ThreadSituation = 1;
+    pthread_mutex_unlock(&mutex);
     /* fin SC2 */
 
-    pthread_join(display,NULL);
-    pthread_mutex_destroy(&lock);
+    pthread_join(myUpdate_position,NULL);
+    pthread_mutex_destroy(&mutex);
 }
 
 //--------------------------- CASE_2 ---------------------------
