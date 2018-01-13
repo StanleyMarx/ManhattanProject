@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 //--------------------------- CASE_0 ---------------------------
 void* display_entry(){
     int c,lval,rval;
@@ -23,7 +21,6 @@ int test_update_pos(){
     pthread_join(display,NULL);
     return 0;
 }
-
 //--------------------------- CASE_1 ---------------------------
 //dans myev3.h
 int testDetectType():{
@@ -46,9 +43,7 @@ void test_cs(){
     send_obstacle(0,4,5);
     send_position_pos(1,2);
 }
-
 int X=0,Y=0;
-
 //--------------------------- CASE_3 ---------------------------
 void test_turn(int rat){
     printf("- testing the move_real_debug function -\n");
@@ -65,13 +60,9 @@ void test_turn(int rat){
     turn_exact_gyro(180,1);
     printf("turned to %f.\n",get_gyro());
 }
-
-
-
 //--------------------------- CASE_4 ---------------------------
 //dans myeve3.h
 //--------------------------- CASE_5 ---------------------------
-
 void debug_sensors(){
     while (1){
         printf("compass %f\n",get_compass());
@@ -80,7 +71,10 @@ void debug_sensors(){
         sleep(2);
     }
 }
-
+//--------------------------- CASE_8 ---------------------------
+void almost_the_real_stuff(){
+    
+}
 //--------------------------- ROBOT ---------------------------
 int robot(int sw,int arg1,int arg2){
     printf("case no: %d", sw);
@@ -89,7 +83,7 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-	    testDetectType();
+            testDetectType();
         case 2:
             test_cs();
             break;
@@ -118,18 +112,10 @@ int robot(int sw,int arg1,int arg2){
 	    	sleep(5);
 	    	drop_object();
 	    	break;
+        case 8:
+            printf("moving randomly and sending the position to the server, then sending the map\n");
+            almost_the_real_stuff();
+            break;
     
     }
-	
 }
-
-/*
-    0   test sur l'update des positions
-    1   test sur l'update des positions en cm en continu
-    2   test sur la com client/serveur
-    3   test virage
-    4   test l'update des positions sur un parcours en L
-    5   affiche la valeur des capteurs toutes les 2 secs
-*/
-
->>>>>>> 1d539b26682af00af707bca45d09871754f108cb
