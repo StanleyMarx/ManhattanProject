@@ -75,9 +75,14 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-	    printf("starting");
-	    detect_type(500);
-	    break;
+	    printf("1");
+	    move_real(50,50,400);
+	    printf("2");
+	    move_real(100,100,400);
+            printf("3");
+            move_real(200,200, 400);
+            printf("4");
+	    move_real(300,300,400);
     
         case 2:
             test_cs();
