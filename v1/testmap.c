@@ -22,6 +22,7 @@ int pos_exists(int x, int y, int* x_list, int* y_list, int len){
 void send_map_from_file(){
     // file: pos.txt
     // max number of coordinates: 100
+    // uses send_mapdata_pos for debug pruposes but looking forward to send_mapdata
     
     int x_list[100];
     int y_list[100];
