@@ -91,6 +91,8 @@ int robot(int sw,int arg1,int arg2){
 	    printf("\nX,Y = %d,%d\n",x,y);
             break;
 	case 5:
+		sleep(20);
+		printf("starting");
 		forward_sonar(50, 50, 500, 2000, 20);
 		detect_type(500);
 		break;
