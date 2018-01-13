@@ -806,7 +806,7 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int del
 		}
 		move_forever(0,0);
 	}
-	return 0
+	return 0;
 }
 void take_object(){
     	forward_sonar(50, 50, 80.0, 1000, 20);
