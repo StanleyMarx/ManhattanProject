@@ -74,9 +74,11 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-            test_Update_position2();
-	    create_map();
-            break;
+		    printf("starting");
+		    forward_sonar(50, 50, 500, 2000, 20);
+		    detect_type(500);
+		    break;
+    
         case 2:
             test_cs();
             break;
@@ -90,12 +92,7 @@ int robot(int sw,int arg1,int arg2){
 	    int y=get_Y_position();
 	    printf("\nX,Y = %d,%d\n",x,y);
             break;
-	case 5:
-		printf("starting");
-		forward_sonar(50, 50, 500, 2000, 20);
-		detect_type(500);
-		break;
-    
+		
     }
 	
 }
