@@ -117,11 +117,14 @@ int main() {
 	fclose(posFile);
 	
 	append_pos_file(0,0);
-	append_pos_file(1,1);
-	append_pos_file(2,2);
-	append_pos_file(3,3);
-	append_pos_file(4,4);
-	append_pos_file(1,0);
+	append_pos_file(0,1);
+	append_pos_file(0,2);
+	append_pos_file(0,3);
+	append_pos_file(0,4);
+	append_pos_file(-1,4);
+	append_pos_file(-2,4);
+	append_pos_file(-3,4);
+	append_pos_file(-4,4);
 	
 	find_corners();
 	printf("Bottom left : %d, %d\n", minX, minY);

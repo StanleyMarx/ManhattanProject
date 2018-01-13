@@ -606,13 +606,13 @@ int create_map() {
     		found = 0;
     		posFile = fopen("pos.txt", "r");
 			while (!found && ((read = getline(&line, &len, posFile)) != -1)) {
-				xFile = -1;
-				yFile = -1;
+				xFile = -1000;
+				yFile = -1000;
 				token = strtok(line, ",");
 				while(token) {
-					if (xFile==-1) {
+					if (xFile==-1000) {
 						xFile = atoi(token);
-					} else if (yFile==-1) {
+					} else if (yFile==-1000) {
 						yFile = atoi(token);
 					}
 					token = strtok(NULL, ",");
