@@ -19,13 +19,6 @@ int maxY = 0;
 FILE* posFile = NULL;
 
 void test_tachos_verbose(){
-    /*
-        checks that tachos are plugged in at the default port
-        right wheel = 66 (B)
-        shovel      = 67 (C)
-        left wheel  = 66 (D)
-        if one is not found, makes the list of all plugged ports
-    */
     int8_t sn;
     int allPlugged=1;
     int i;
@@ -62,15 +55,12 @@ void test_tachos_verbose(){
     }
 }
 void test_sensors_verbose(){
-    /*
-        search for the touch, color, compass, sonar and magnetic sensors.
-        if found, displays the value related to each of them.
-    */
     uint8_t sn_touch;
     uint8_t sn_color;
     uint8_t sn_compass;
     uint8_t sn_sonar;
     uint8_t sn_mag;
+    uint8_t sn_gyro
     float value;
     
     ev3_sensor_init();
@@ -111,32 +101,23 @@ void test_sensors_verbose(){
     else {
         printf("[ERROR] magnetic sensor is not found\n");
     }
+    if (ev3_search_sensor(LEGO_EV3_GYRO,&sn_mag,0)){
+        printf("[ OK  ] gyro is found at %d\n",sn_mag);
+        get_sensor_value0(sn_gyro,&value);
+        printf("\tvalue = %f\n",value);
+    }
+    else {
+        printf("[ERROR] gyro is not found\n");
+    }    
 }
 
 void move_forever(int rcycle,int lcycle){
-    /*
-        set the robot in motion
-        rcycle and lcycle must be in [-100,100]:
-            rcycle,lcycle = 50,50 : forward at 50% capacity
-            rcycle,lcycle = -50,-50 : forward at 50% capacity
-            rcycle,lcycle = -10,10 : turn right at 10% capacity
-            rcycle,lcycle = 0,0 : stops
-    */
     set_tacho_duty_cycle_sp(sn_rwheel,rcycle);
     set_tacho_duty_cycle_sp(sn_lwheel,lcycle);
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_DIRECT);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_DIRECT);
 }
 void move_real(int r,int l,int speed){
-    /*
-        forward:
-            356.4cm move_real(8000,8000,400)
-            Xcm     move_real(X*22.447,X*22.447,400)
-        turn:
-            360° move_real(815,-815,max_speed/2) 2.26
-            180° move_real(415,-415,max_speed/2) 2.3
-             90° move_real(210,-210,max_speed/2) 2.33
-    */
     set_tacho_stop_action_inx(sn_rwheel,TACHO_BRAKE);
     set_tacho_stop_action_inx(sn_lwheel,TACHO_BRAKE);
     set_tacho_speed_sp(sn_rwheel,speed);
@@ -151,10 +132,6 @@ void move_real(int r,int l,int speed){
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_TO_REL_POS);
 }
 void move_real_debug(int r,int l){
-    /*
-        same, but with some sleep at the end to prevent the bugs.
-        speed time calibrated on speed=100 so no need to specify the speed - it will always go at speed=100
-    */
     int time_ratio=4500;
     move_real(r,l,100);
     usleep(time_ratio*(abs(r)+abs(l)));
@@ -685,6 +662,9 @@ int append_pos_file(int x, int y) {
     if (posFile != NULL){
     	fprintf(posFile, "%d,%d\n",x,y);
         fclose(posFile);
+    }
+    else {
+        printf("[ERROR] append_pos_file(%d,%d): couldn't open pos.txt",x,y);
     }
     return 0;
 }
