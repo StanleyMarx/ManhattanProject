@@ -1071,14 +1071,14 @@ int forward_timed() {
 	clock_t start_t, check_t;
 	start_t = clock();
 	int timeIsUp = 0;
-	int initialGyro = get_gyro();
-	int checkGyro;
+	//int initialGyro = get_gyro();
+	//int checkGyro;
 	int obstacleInFront = 0;
-	int localRCycle=50;
-	int localLCycle=50;
-	move_forever(localRCycle, localLCycle);
+	//int localRCycle=50;
+	//int localLCycle=50;
+	move_forever(50, 50);//localRCycle, localLCycle);
 	while (!timeIsUp && !obstacleInFront) {
-		checkGyro = get_gyro();	
+		/*checkGyro = get_gyro();	
 		if (checkGyro<initialGyro) {
 			localRCycle++;
 		}
@@ -1087,7 +1087,7 @@ int forward_timed() {
 		}
 		if (checkGyro!=initialGyro) {
 			move_forever(localRCycle, localLCycle);
-		}
+		}*/
 		check_t = clock();
 		timeIsUp = ( ((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER); // should we use another timer ?
 		obstacleInFront = isThereSomethingInFront();
@@ -1113,20 +1113,20 @@ int forward_sonar_jb() {
 	int frontClear = 1;
 	int sidesClear = 1;
 	int sidesCheck;
-	int initialGyro = get_gyro();
+	/*int initialGyro = get_gyro();
 	int checkGyro;
 	int localRCycle=50;
-	int localLCycle=50;
+	int localLCycle=50;*/
 	printf("[MOTORS] starting motors\n");
 	while (frontClear && sidesClear) {
-		checkGyro = get_gyro();	
+		/*checkGyro = get_gyro();	
 		if (checkGyro<initialGyro) {
 			localRCycle++;
 		}
 		if (checkGyro>initialGyro) {
 			localLCycle++;
-		}
-		move_forever(localRCycle, localLCycle);
+		}*/
+		move_forever(50, 50);//localRCycle, localLCycle);
 		check_t = clock();
 		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {

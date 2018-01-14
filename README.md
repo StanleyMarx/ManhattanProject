@@ -8,6 +8,22 @@
 + [Documentation de la librairie EV3DEV-C](http://in4lio.github.io/ev3dev-c/)
 + [Documentation sur les tachos](http://docs.ev3dev.org/projects/lego-linux-drivers/en/ev3dev-jessie/motors.html#tacho-motor-subsystem)
 
+## final to-to list: 
+- inclure message pour serveur dans prog
+- tester asservissement angle 
+- strat parcours un fois tour fait 
+- le site :
+Description of the architecture of the robot: sensors and actuators, etc. Pictures of your robot on the web site would be appreciated.
+
+Algorithms used for the two most important points: cartography strategy, handling of obstacles, competition with other robots, etc. Don't provide source code here, just try to describe the algorithms using a pseudo C language. Also, do comment those algorithms, and explain why you think they are efficient.
+
+Source code, and instructions on how to use that source code: how to compile it, how to download it on the robot, and how to start the robot. To protect you work, you can set a password to access to the code, but make sure to give us access in order to grade it (e.g., private git repository). You could even put a fake code on your website until the very last moment ;-). I strongly advise you to rely on a versioning system (svn, git, hg) to work on the code. Also, frequently backup your code.
+
+Videos / pictures of your robot in action [we may provide you with cameras and video recorders if necessary].
+
+How you have worked in the group, i.e., who made what. Be clear about that. Each member of groups will get an individual grade. All members of a team must contribute to the source code. You source code must clearly indicate, with comments, who programmed which function.
+
+
 ## To-do list
 
 + **Maîtriser les capteurs**: faire des programmes affichant la mesure effectuée par tous les capteurs 
