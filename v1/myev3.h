@@ -795,6 +795,7 @@ int get_Y_position() {
 
 
 int forward_sonar(float sonarThreshold){
+	// old forward_sonar by JB
 	float sonarVal = get_sonar();
 	set_tacho_speed_sp(sn_rwheel, 400);
 	set_tacho_speed_sp(sn_lwheel, 400);
@@ -1004,6 +1005,7 @@ int checkSides();
 
 // GO AROUND MAP
 void turn_right() {
+	// by JB
 	printf("[TURNING] RIGHT\n");
 	float gyroVal;
     float gyroValInitial;
@@ -1024,6 +1026,7 @@ void turn_right() {
 }
 
 void turn_left() {
+	// by JB
 	printf("[TURNING] LEFT\n");
 	float gyroVal;
     float gyroValInitial;
@@ -1061,6 +1064,7 @@ int isThereSomethingInFront() {
 
 int checkSides() {
 	/*
+		by JB
 		return 1 if sides are clear
 		return 0 if obstacle left
 		return 2 if obstacle right
@@ -1086,6 +1090,7 @@ int checkSides() {
 
 int forward_timed() {
 	/*
+		by JB
 		robot goes forward until:
 			1/ timer runs out (CHECK_TIMER seconds)
 			2/ obstacle in front of robot
@@ -1127,6 +1132,7 @@ int forward_timed() {
 
 int forward_sonar_jb() {
 	/*
+		by JB
 		return 0 if obstacle in front
 		return 1 if obstacle to the right/left
 	*/
@@ -1176,6 +1182,7 @@ int forward_sonar_jb() {
 
 int forward_while_checking_left() {
 	/*
+		by JB
 		robot goes forward for a specific amount of time (CHECK_TIMER) then checks its left side.
 	*/
 	//int blocked = 0;
@@ -1201,6 +1208,7 @@ int forward_while_checking_left() {
 
 int go_around_map() {
 	/*
+		by JB
 		while the robot is not back in the start area (y = 0), it keeps on going around the map starting in the bottom left corner.
 		To do so, it always tries to go to the left, forward otherwise (and right if both front and left are blocked).
 	*/
