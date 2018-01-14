@@ -898,8 +898,11 @@ int detect_type(int sonarThreshold){
 	sonarVal = get_sonar();
 	int a = get_X_position();
 	int b = get_Y_position();
+	int i = 0;
 	printf(" pos %d %d \n", a, b);
-	while (x != a || y !=b){ 
+	while (i<10){ 
+		printf("i = %d",i);
+		i = i + 1;
 		printf("in1");
 		while (sonarVal < sonarThreshold) {
 			printf("in2");
