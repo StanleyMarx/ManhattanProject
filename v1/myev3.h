@@ -201,6 +201,22 @@ void turn_approx(float angle){
     float ratio=2.66;
     move_real_debug(ratio*angle,-ratio*angle);
 }
+
+void turn_compass(float angle ){
+	turn_approx(20.0);
+	printf("verifcompass begins\n");
+	float CompassVal = get_compass();
+	float diff = CompassVal - angle;
+	printf("angle %f\n", diff);
+	if(abs(diff)>1){
+		if(diff > 0){
+			turn_approx(diff)
+		}else{
+			turn_approx(-diff);
+		}
+	}
+	printf("verifcompass done\n");
+}
 void turn_exact_abs(float anglDest,float prec){
     float ratio=2.5;
     float anglCurr=get_compass();
@@ -458,6 +474,7 @@ int send_map_from_file(){
     if (!pos_file){
         printf("[ERROR] print_map(): couldn't open pos.txt in read mode\n");
     }
+    /*debug*/printf("file opened. reading file...\n");
     
     char is_x=1;
     int i_x=0;
@@ -483,6 +500,8 @@ int send_map_from_file(){
         }
         c=getc(pos_file);
     }
+    
+    /*debug*/printf("file read: x_list and y_list now have a length of %d and %d\n",i_x,i_y);
     fclose(pos_file);
     /* at this point, x_list and y_list contains the list of coordinates, and i_x is the length of these lists */
     if (i_x==0){
@@ -919,9 +938,11 @@ int detect_type(int sonarThreshold){
 			sonarValF = get_sonar();
 			if (sonarValF > sonarThreshold){
 				printf("etape2\n");
-				forwardTimed(1,100);
+				forwardTimed(1,200);
 				turn_approx(-90);
+				printf("fin etape2\n");
 			}
+			printf("fin etape2\n");
 			sonarVal = get_sonar();
 		}
 		printf("out2");
@@ -938,8 +959,6 @@ int detect_type(int sonarThreshold){
 	return 2; //return 1 si obstacle, 2 si frontiere
 
 }
-
-
 
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
     // moves forward until it is close enough to an object

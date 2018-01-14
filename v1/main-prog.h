@@ -138,7 +138,7 @@ void* update_pos_entry(){
 }
 void* send_pos_entry(){
     while(SEND_POS_ENABLE){
-        send_position_pos(X,Y);
+        send_position_pos((int)(X/SQUARE_SIZE),(int)(Y/SQUARE_SIZE));
         sleep(2);
     }
 }
@@ -168,11 +168,13 @@ void almost_the_real_stuff(){
     printf("X,Y,T = %f,%f,%f\n",X,Y,T);
     
     // stop threads
+    printf("stopping threads...\n");
     UPDATE_POS_ENABLE=0;
     SEND_POS_ENABLE=0;
+    printf("joining threads...\n");
     pthread_join(update_pos,NULL);
     pthread_join(send_pos,NULL);
-    
+    printf("sending map...\n");
     send_map_from_file();
     printf("- done -");
 }
@@ -185,9 +187,14 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-           testDetectType();
-	//	    forward_sonar_timed(50, 50, 50.0, 2, 20);
-		   
+         //  testDetectType();
+	//	
+		    //forward_sonar_timed(50, 50, 50.0, 2, 20);
+		   turn_compass(90);
+		    turn_compass(180);
+		
+		    testDetectType();
+		        break;
         case 2:
             test_cs();
             break;
