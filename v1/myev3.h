@@ -1090,6 +1090,9 @@ int go_around_map() {
 }
 
 int detect_nonmovable(int sonarThreshold){
+	/* by Alix
+	detects non movable objects. To get the width of the object, it turns around it until it gets back to its first position
+	*/
 	int x = get_X_position();
 	int y = get_Y_position();
 	printf(" init pos %d %d \n", x, y);
