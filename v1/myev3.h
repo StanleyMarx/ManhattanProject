@@ -1053,7 +1053,11 @@ int forward_timed() {
 		obstacleInFront = isThereSomethingInFront();
 	}
 	move_forever(0,0);
-	if (timeIsUp) return 0;
+	if (timeIsUp) {
+		printf("[TIME] time is up, gotta check left\n");
+		return 0;
+	}
+	printf("[OBSTACLES] FRONT is NOT clear\n");
 	return 1; // there is something in front of the robot
 }
 
@@ -1069,11 +1073,13 @@ int forward_sonar_jb() {
 	int frontClear = 1;
 	int sidesClear = 1;
 	int sidesCheck;
-	move_forever(50, 50);
+	printf("[MOTORS] starting motors\n");
 	while (frontClear && sidesClear) {
+		move_forever(50, 50);
 		check_t = clock();
 		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {
+			printf("[TIME] time is up, gotta check the sides\n");
 			sidesCheck = checkSides();
 			if (sidesCheck!=1) sidesClear=0;
 			timeIsUp = 0;
@@ -1083,7 +1089,11 @@ int forward_sonar_jb() {
 		frontClear = (!frontClear);
 	}
 	move_forever(0,0);
-	if (!frontClear) return 0; // obstacle in front
+	if (!frontClear) {
+		printf("[OBSTACLES] FRONT is NOT clear\n");	
+		return 0; // obstacle in front
+	}
+	printf("[OBSTACLES] OBSTACLE to the LEFT/RIGHT\n");
 	return 1; // obstacle to the right/left
 }
 
@@ -1100,10 +1110,13 @@ int forward_while_checking_left() {
 		obstacleLeft = isThereSomethingInFront();
 		turn_approx(-90);
 		if (!obstacleLeft) {
+			printf("[OBSTACLES] LEFT is CLEAR\n");
 			return 2; // left is free
 		} else if (obstacleInFront) {
+			printf("[OBSTACLES] FRONT is NOT clear\n");
 			return 1; // obstacle in front
 		}
+		printf("[DEBUG] should not be in here!\n");
 		//blocked = (obstacleInFront && obstacleLeft);
 	}
 	//return 1;
@@ -1116,8 +1129,10 @@ int go_around_map() {
 	*/
 	turn_approx(90);
 	forward_sonar_jb();
+	printf("[POSITION] should be in bottom left corner (x=0, y=0)\n");
 	turn_approx(-90);
 	forward_sonar_jb();
+	printf("[POSITION] should be in either top left corner or in front of an obstacle\n");
 	int yPos = get_Y_position();
 	int obstacleDir;
 	while (yPos!=0) {
