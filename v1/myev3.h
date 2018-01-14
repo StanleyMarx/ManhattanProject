@@ -766,6 +766,32 @@ int get_Y_position() {
 	return Y;
 }
 
+int look_around(){
+	turn_approx(-20);
+	if (get_sonar() < sonarThreshold){
+		return 1;
+	} else {
+		turn_approx(40);
+		if (get_sonar() < sonarThreshold){
+			return 1;
+		}
+		else{
+			turn_approx(-20);
+			return 0;
+		}
+	}
+}
+	
+int fs(){
+	float sonarVal = get_sonar();
+	int x = 0;
+	while (sonarVal > sonarThreshold && x == 0) {
+        	move_forever(rcycle, lcycle);
+		int x = InvokeRepeating("look_around", 2,2);
+	move_forever(0,0);
+	CancelInvoke("look_around");
+		
+}
 
 int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
 	// moves forward until it is close enough to an object
