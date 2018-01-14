@@ -899,7 +899,7 @@ int detect_type(int sonarThreshold){
 	int a = get_X_position();
 	int b = get_Y_position();
 	printf(" pos %d %d \n", a, b);
-	if ((x != a || y !=b) && ( abs(x - a)<40 || abs(y-b)<40)){ 
+	while (x != a || y !=b){ 
 		printf("in1");
 		while (sonarVal < sonarThreshold) {
 			printf("in2");
