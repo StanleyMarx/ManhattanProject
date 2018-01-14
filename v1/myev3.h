@@ -17,6 +17,8 @@ int minY = 0;
 int maxX = 0;
 int maxY = 0;
 FILE* posFile = NULL;
+int count_take = 1; //begin with an obstacle in the shovel
+int count_drop = 0;
 
 float Xdef=0.0, Ydef=0.0;
 int Xpos=0, Ypos=0, XposOld=0, YposOld=0;
@@ -793,7 +795,20 @@ int fs(){
     }
 }*/
 
-int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
+int forward_sonar(float sonarThreshold){
+	float sonarVal = getSonar();
+	set_tacho_speed_sp(sn_rwheel, 400);
+	set_tacho_speed_sp(sn_lwheel, 400);
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
+	while (sonarVal > sonarThreshold) {
+		sonarVal = getSonar();
+	}
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
+}
+
+int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
 	// moves forward until it is close enough to an object
 	printf("in forward sonar \n");
     	float sonarVal = get_sonar();
@@ -836,35 +851,49 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int del
 	return 0;
 }
 void take_object(){
-    	forward_sonar(50, 50, 80.0, 1000, 20);
-	printf("[PELLE] opening pelle\n");//--------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] closing pelle\n");//-------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
+	/* by Henri and Alix
+	check if the robot has already taken 3 objects (maximum drop allowed) before taking it 
+	*/
+	if (count_take < 3){
+		count_take = count_take + 1;
+		forward_sonar(50.0);
+		printf("[PELLE] opening pelle\n");//--------open pelle
+		set_tacho_speed_sp(sn_shovel, -90);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+    		forwardTimed(1,100);
+		printf("[PELLE] closing pelle\n");//-------close pelle
+		set_tacho_command(sn_shovel, "stop");
+		set_tacho_speed_sp(sn_shovel, 0);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+		set_tacho_command(sn_shovel, "stop");
+	}
+    	
 }
 
 void drop_object() {
-	turn_approx(-180);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] opening pelle\n");//----------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	move_real(8*22.447,8*22.447,-400);//---------movebackward
-    	turn_approx(90); //-------half turn
-	printf("[PELLE] closing pelle\n");//----------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
+	/* by Henri and Alix
+	check if the robot has already dropped two objects (maximum drop allowed) and places the object behind it so it doesn't bump into it
+	*/
+	if (count_drop < 3){
+		count_drop = count_drop + 1
+		turn_approx(-180);
+    		forwardTimed(1,200);
+		printf("[PELLE] opening pelle\n");//----------open pelle
+		set_tacho_speed_sp(sn_shovel, -90);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+		forwardTimed(1,-200);//---------movebackward
+    		turn_approx(90); //-------half turn
+		printf("[PELLE] closing pelle\n");//----------close pelle
+		set_tacho_command(sn_shovel, "stop");
+		set_tacho_speed_sp(sn_shovel, 90);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+		set_tacho_command(sn_shovel, "stop");
+	}
+
 }
 
 int detect_movable() {
