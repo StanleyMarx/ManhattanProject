@@ -139,7 +139,7 @@ void* update_pos_entry(){
 }
 void* send_pos_entry(){
     while(SEND_POS_ENABLE){
-        send_position_pos((int)(X/SQUARE_SIZE),(int)(Y/SQUARE_SIZE));
+        send_position((int)(X/SQUARE_SIZE),(int)(Y/SQUARE_SIZE));
         sleep(2);
     }
 }

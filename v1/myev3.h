@@ -267,9 +267,9 @@ void send_mapdata(int16_t x,int16_t y,char r,char g,char b){
 	str[3]=0xff;
 	str[4]=5;
     str[5]=x;
-    if (x<0){str[6]=0xff}else{str[6]=0x00};
+    if (x<0){str[6]=0xff;}else{str[6]=0x00;};
     str[7]=7;
-    if (y<0){str[8]=0xff}else{str[8]=0x00};
+    if (y<0){str[8]=0xff;}else{str[8]=0x00;};
 	str[9]=r;
 	str[10]=g;
 	str[11]=b;
@@ -362,7 +362,6 @@ int pos_exists(int x, int y, int* x_list, int* y_list, int len){
 }
 int send_map_from_file(){
     // file: pos.txt
-    // uses send_mapdata_pos for debug pruposes but looking forward to send_mapdata
     
     int x_list[10000];
     int y_list[10000];
@@ -434,11 +433,11 @@ int send_map_from_file(){
     for (int y=ymin; y<=ymax; y++){
         for (int x=xmin; x<=xmax; x++){
             if (pos_exists(x,y,x_list,y_list,i_x)){
-                send_mapdata_pos(x,y,0,0,0);
+                send_mapdata(x,y,0,0,0);
                 printf(" X ");
             }
             else {
-                send_mapdata_pos(x,y,255,255,255);
+                send_mapdata(x,y,255,255,255);
                 printf(" . ");
             }
         }
@@ -846,7 +845,7 @@ int detect_type(int sonarThreshold){
 		b = get_Y_position();
 	}
 	printf("out1, a fait le tour ");
-	return 0
+	return 0;
 }
 
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
