@@ -206,13 +206,13 @@ void turn_compass(float angle ){
 	turn_approx(20.0);
 	printf("verifcompass begins\n");
 	float CompassVal = get_compass();
-	float angle = CompassVal - angle;
-	printf("angle %f\n", angle);
-	if(abs(angle)>1){
-		if(angle > 0){
-			turn_approx(angle)
+	float diff = CompassVal - angle;
+	printf("angle %f\n", diff);
+	if(abs(diff)>1){
+		if(diff > 0){
+			turn_approx(diff)
 		}else{
-			turn_approx(-angle);
+			turn_approx(-diff);
 		}
 	}
 	printf("verifcompass done\n");
