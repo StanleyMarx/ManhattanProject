@@ -901,6 +901,7 @@ int detect_type(int sonarThreshold){
 	int i = 0;
 	printf(" pos %d %d \n", a, b);
 	while (i<10){ 
+		print("i = %d",i);
 		i = i + 1;
 		printf("in1");
 		while (sonarVal < sonarThreshold) {
