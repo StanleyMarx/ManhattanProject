@@ -211,7 +211,7 @@ int robot(int sw,int arg1,int arg2){
 	    	break;
 	    case 6:
 	    	printf("Going around map - test JB\n");
-	    	forward_sonar_jb();
+	    	//forward_sonar_jb();
 	    	test_go_around_map();
 	    	create_map();
 	    	printf("END OF TEST 6 JB\n");
