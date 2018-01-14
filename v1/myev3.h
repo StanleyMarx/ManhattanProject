@@ -26,7 +26,7 @@ int count_take = 1; //begin with an obstacle in the shovel
 int count_drop = 0;
 
 float Xdef=0.0, Ydef=0.0;
-int Xpos=0, Ypos=0, XposOld=0, YposOld=0;
+int Xpos=0, Ypos=2, XposOld=0, YposOld=2; //0
 float pi=3.14159265;
 int speedMotorL, speedMotorR;
 int positionMotorR1, positionMotorR2;
@@ -1100,7 +1100,7 @@ int forward_timed() {
 	//int localLCycle=50;
 	int yPos = get_Y_position();
 	move_forever(50, 50);//localRCycle, localLCycle);
-	while (!timeIsUp && !obstacleInFront && yPos>-2) {
+	while (!timeIsUp && !obstacleInFront && yPos>0) {
 		yPos = get_Y_position();
 		/*checkGyro = get_gyro();	
 		if (checkGyro<initialGyro) {
@@ -1143,7 +1143,7 @@ int forward_sonar_jb() {
 	int localRCycle=50;
 	int localLCycle=50;*/
 	printf("[MOTORS] starting motors\n");
-	while (frontClear && sidesClear && yPos>-2) {
+	while (frontClear && sidesClear && yPos>0) {
 		yPos = get_Y_position();
 		/*checkGyro = get_gyro();	
 		if (checkGyro<initialGyro) {
@@ -1213,7 +1213,7 @@ int go_around_map() {
 	printf("[POSITION] should be in either top left corner or in front of an obstacle\n");
 	int yPos = get_Y_position();
 	int obstacleDir;
-	while (yPos>-2) {
+	while (yPos>0) {
 		yPos = get_Y_position();
 		obstacleDir = forward_while_checking_left();
 		if (obstacleDir==2) turn_left();
