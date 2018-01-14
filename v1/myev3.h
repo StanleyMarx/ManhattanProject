@@ -128,12 +128,14 @@ void test_sensors_verbose(){
     }
 }
 
+//used
 void move_forever(int rcycle,int lcycle){
     set_tacho_duty_cycle_sp(sn_rwheel,rcycle);
     set_tacho_duty_cycle_sp(sn_lwheel,lcycle);
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_DIRECT);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_DIRECT);
 }
+//unused? 
 void move_real(int r,int l,int speed){
     set_tacho_stop_action_inx(sn_rwheel,TACHO_BRAKE);
     set_tacho_stop_action_inx(sn_lwheel,TACHO_BRAKE);
@@ -148,12 +150,14 @@ void move_real(int r,int l,int speed){
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_TO_REL_POS);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_TO_REL_POS);
 }
+
+//unused? 
 void move_real_debug(int r,int l){
     int time_ratio=4500;
     move_real(r,l,100);
     usleep(time_ratio*(abs(r)+abs(l)));
 }
-
+//not used
 void open_shovel(){
     set_tacho_stop_action_inx(sn_shovel,TACHO_COAST);
     set_tacho_speed_sp(sn_shovel,200);
@@ -162,6 +166,8 @@ void open_shovel(){
     set_tacho_position_sp(sn_shovel,-150);
     set_tacho_command_inx(sn_shovel,TACHO_RUN_TO_REL_POS);
 }
+
+//not used
 void close_shovel(){
     set_tacho_stop_action_inx(sn_shovel,TACHO_COAST);
     set_tacho_speed_sp(sn_shovel,100);
@@ -181,6 +187,8 @@ float get_compass(){
     get_sensor_value0(sn_compass,&ret);
     return ret;
 }
+
+//unused? 
 float get_compass_slow(){
     sleep(1);
     move_forever(0,0);
@@ -202,6 +210,7 @@ void turn_approx(float angle){
     move_real_debug(ratio*angle,-ratio*angle);
 }
 
+//unused? 
 void turn_exact_abs(float anglDest,float prec){
     float ratio=2.5;
     float anglCurr=get_compass();
@@ -217,10 +226,14 @@ void turn_exact_abs(float anglDest,float prec){
         if (delta<-180){delta=delta+180;}
     }
 }
+
+//unused? 
 void turn_exact_rel(float delta,float prec){
     float t0=get_compass();
     turn_exact_abs(fmod(t0+delta,360),prec);
 }
+
+//unused? 
 void turn_exact_gyro(float delta,float prec){
     float anglCurr=-get_gyro();
     float anglDest=anglCurr+delta;
@@ -231,6 +244,7 @@ void turn_exact_gyro(float delta,float prec){
     }
 }
 
+//used
 void forwardTimed(int seconds, int speed) {
 	/* by Alix
 	forwardTimed(1,200) : 10cm */
@@ -817,7 +831,7 @@ int detect_movable() {
 	}
 }
 
-
+//not used 
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
     // moves forward until it is close enough to an object
     int i=0;
