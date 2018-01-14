@@ -534,10 +534,10 @@ int create_map() {
 				if (x==0 && y==0) {
 					printf(" 0 ");
 				} else {
-					printf(" X ");//### WHITE: %d, %d\n", x, y);
+					printf(" X ");// send_mapdata_pos((int16_t) x, (int16_t) y, 255, 255, 255); //### WHITE: %d, %d\n", x, y);
 				}
 			} else {
-				printf(" . ");//BLACK: %d, %d\n", x, y);
+				printf(" . ");// send_mapdata_pos((int16_t) x, (int16_t) y, 0, 0, 0); //BLACK: %d, %d\n", x, y);
 			}
 			fclose(posFile);
 		}
