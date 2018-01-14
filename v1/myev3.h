@@ -794,13 +794,13 @@ int fs(){
 }
 
 int forward_sonar(float sonarThreshold){
-	float sonarVal = getSonar();
+	float sonarVal = get_sonar();
 	set_tacho_speed_sp(sn_rwheel, 400);
 	set_tacho_speed_sp(sn_lwheel, 400);
 	set_tacho_command(sn_lwheel, "run-forever");
 	set_tacho_command(sn_rwheel, "run-forever");
 	while (sonarVal > sonarThreshold) {
-		sonarVal = getSonar();
+		sonarVal = get_sonar();
 	}
 	set_tacho_command(sn_lwheel, "stop");
 	set_tacho_command(sn_rwheel, "stop");
