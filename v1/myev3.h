@@ -1075,7 +1075,7 @@ int forward_timed() {
 	int obstacleInFront = 0;
 	int localRCycle=50;
 	int localLCycle=50;
-	move_forever(localRCycle, localLeftCycle);
+	move_forever(localRCycle, localLCycle);
 	while (!timeIsUp && !obstacleInFront) {
 		checkGyro = get_gyro();	
 		if (checkGyro<initialGyro) {
@@ -1125,7 +1125,7 @@ int forward_sonar_jb() {
 		if (checkGyro>initialGyro) {
 			localLCycle++;
 		}
-		move_forever(localRCycle, localLeftCycle);
+		move_forever(localRCycle, localLCycle);
 		check_t = clock();
 		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {
