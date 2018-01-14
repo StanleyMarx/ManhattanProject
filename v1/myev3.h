@@ -842,8 +842,8 @@ int detect_nonmovable(int sonarThreshold){
 				printf("fin etape2\n");
 			}
 			printf("fin etape2\n");
-			sonarVal = get_sonar();
 		}
+		sonarVal = get_sonar();
 		printf("out2");
 		turn_approx(-90);
 		a = get_X_position();
