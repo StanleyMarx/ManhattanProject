@@ -202,22 +202,6 @@ void turn_approx(float angle){
     move_real_debug(ratio*angle,-ratio*angle);
 }
 
-void turn_compass(float angle ){
-	turn_approx(20.0);
-	printf("verifcompass begins\n");
-	float CompassVal = get_compass();
-	float diff = CompassVal - angle;
-	printf("angle %f\n", diff);
-	if(abs(diff)>1){
-		if(diff > 0){
-			turn_approx(diff);
-		}else{
-			turn_approx(-diff);
-		}
-	}
-	printf("verifcompass done\n");
-}
-
 void turn_exact_abs(float anglDest,float prec){
     float ratio=2.5;
     float anglCurr=get_compass();
