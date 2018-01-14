@@ -26,7 +26,7 @@ int test_update_pos(){
 int testDetectType(){
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
-      forward_sonar(50, 50, 50, 5, 20);
+      forward_sonar(50);
    //   detect_type(50);
       pthread_mutex_lock(&mutex);
       ThreadSituation = 1;
@@ -179,7 +179,7 @@ int robot(int sw,int arg1,int arg2){
             printf("\nX,Y = %d,%d\n",x,y);
             break;
         case 5:
-	    	forward_sonar(50, 50, 50, 10000, 20);
+	    	forward_sonar(50);
 	    	break;
 	    case 6:
 	    	printf("testing basic opening/closing shovel functions\n");
