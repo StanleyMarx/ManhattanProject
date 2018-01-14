@@ -788,11 +788,11 @@ int fs(){
 	float sonarVal = get_sonar();
 	int x = 0;
 	while (sonarVal > 50.0 && x == 0) {
-        move_forever(200,200);
+        	move_forever(200,200);
 		int x = InvokeRepeating("look_around", 2,2);
+	}
         move_forever(0,0);
         CancelInvoke("look_around");
-    }
 }
 
 int forward_sonar(float sonarThreshold){
