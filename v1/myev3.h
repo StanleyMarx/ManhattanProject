@@ -771,35 +771,7 @@ int get_Y_position() {
 	return Y;
 }
 
-/*using UnityEngine;
-using System.Collections;
-int look_around(){    
-	turn_approx(-20);
-	if (get_sonar() < 50.0){
-		return 1;
-	} else {
-		turn_approx(40);
-		if (get_sonar() < 50.0){
-			return 1;
-		}
-		else{
-			turn_approx(-20);
-			return 0;
-		}
-	}
-}
 
-int fs(){    
-	float sonarVal = get_sonar();
-	int x = 0;
-	while (sonarVal > 50.0 && x == 0) {
-        	move_forever(200,200);
-		int x = InvokeRepeating("look_around", 2,2);
-	}
-        move_forever(0,0);
-        CancelInvoke("look_around");
-}
-*/
 int forward_sonar(float sonarThreshold){
 	float sonarVal = get_sonar();
 	set_tacho_speed_sp(sn_rwheel, 400);
@@ -927,7 +899,7 @@ int detect_type(int sonarThreshold){
 	int a = get_X_position();
 	int b = get_Y_position();
 	printf(" pos %d %d \n", a, b);
-	while ((x != a || y !=b) && ( abs(x - a)<40 || abs(y-b)<40)){ 
+	while (x != a || y !=b){ 
 		printf("in1");
 		while (sonarVal < sonarThreshold) {
 			printf("in2");
