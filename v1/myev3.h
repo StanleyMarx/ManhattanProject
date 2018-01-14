@@ -705,6 +705,7 @@ int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, i
 	/* by Alix and JB 
 	moves forward until the sonar detects an object. 
 	If during sec seconds there was no object found, it stops, checks around if there are any.
+	forward_sonar_timed(50, 50, 50.0, 2, 20);
 	*/
 	printf("in forward sonar \n");
 	int timeup = 0;
