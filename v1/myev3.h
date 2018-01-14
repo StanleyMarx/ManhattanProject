@@ -458,6 +458,7 @@ int send_map_from_file(){
     if (!pos_file){
         printf("[ERROR] print_map(): couldn't open pos.txt in read mode\n");
     }
+    /*debug*/printf("file opened. reading file...\n");
     
     char is_x=1;
     int i_x=0;
@@ -483,6 +484,8 @@ int send_map_from_file(){
         }
         c=getc(pos_file);
     }
+    
+    /*debug*/printf("file read: x_list and y_list now have a length of %d and %d\n",i_x,i_y);
     fclose(pos_file);
     /* at this point, x_list and y_list contains the list of coordinates, and i_x is the length of these lists */
     if (i_x==0){
