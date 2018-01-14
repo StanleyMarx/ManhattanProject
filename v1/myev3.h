@@ -788,9 +788,9 @@ int forward_sonar(float sonarThreshold){
 int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
 	// moves forward until it is close enough to an object
 	printf("in forward sonar \n");
+	int timeup = 0;
     	float sonarVal = get_sonar();
 	double C_PER_SECS;
-	C_PER_SECS = 1000000.0;
 	clock_t previous, current;
 	previous = clock();
 	printf("previous %lf \n", previous);
@@ -803,7 +803,8 @@ int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, i
 			current = clock();
 			printf("current %lf \n", current);
 			sonarVal = get_sonar();
-			if ((current - previous)/C_PER_SECS > sec) {
+			timeup =(((double)(current - previous)/ CLOCKS_PER_SEC ) > sec);
+			if (timeup) {
 				printf("in2");
 				move_forever(0,0);
 				turn_approx(-delta);
@@ -816,15 +817,17 @@ int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, i
 					}
 				}
 				turn_approx(-delta);
+				previous = clock();
 				}
+			
 			move_forever(rcycle, lcycle);
-			previous = current;
 			printf("previous %lf \n", previous);
 
 
 		}
-		move_forever(0,0);
+		
 	}
+	move_forever(0,0);
 	return 0;
 }
 void take_object(){
