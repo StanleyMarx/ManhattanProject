@@ -863,7 +863,7 @@ void take_object(){
 		count_take = count_take + 1;
 	//	forward_sonar(50.0);
 		printf("[PELLE] opening pelle\n");//--------open pelle
-		set_tacho_speed_sp(sn_shovel, -130);
+		set_tacho_speed_sp(sn_shovel, -150);
 		set_tacho_command(sn_shovel, "run-forever");
 		sleep(2);
     		forwardTimed(1,100);
@@ -886,14 +886,14 @@ void drop_object() {
 		turn_approx(-180);
     		forwardTimed(1,200);
 		printf("[PELLE] opening pelle\n");//----------open pelle
-		set_tacho_speed_sp(sn_shovel, -130);
+		set_tacho_speed_sp(sn_shovel, -150);
 		set_tacho_command(sn_shovel, "run-forever");
 		sleep(2);
 		forwardTimed(1,-200);//---------movebackward
     		turn_approx(90); //-------half turn
 		printf("[PELLE] closing pelle\n");//----------close pelle
 		set_tacho_command(sn_shovel, "stop");
-		set_tacho_speed_sp(sn_shovel, 130);
+		set_tacho_speed_sp(sn_shovel, 150);
 		set_tacho_command(sn_shovel, "run-forever");
 		sleep(2);
 		set_tacho_command(sn_shovel, "stop");
