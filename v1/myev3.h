@@ -766,6 +766,8 @@ int get_Y_position() {
 	return Y;
 }
 
+using UnityEngine;
+using System.Collections;
 int look_around(){    
 	turn_approx(-20);
 	if (get_sonar() < 50.0){
