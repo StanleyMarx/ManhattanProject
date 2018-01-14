@@ -1006,7 +1006,9 @@ int isThereSomethingInFront() {
 	*/
 	float sonarVal;
 	sonarVal = get_sonar();
-	return (sonarVal < SONAR_THRESHOLD);
+	int res = (sonarVal < SONAR_THRESHOLD);
+	printf("[DEBUG] sonrVal = %f ; so res = %d\n", sonarVal, res);
+	return res;
 }
 
 int checkSides() {
@@ -1020,11 +1022,13 @@ int checkSides() {
 	turn_approx(30); // left ?
 	front = isThereSomethingInFront();
 	if (front) {
+		printf("[CHECKSIDES] obstacle to the left\n");
 		return 0;
 	}
 	turn_approx(-60); // right?
 	front = isThereSomethingInFront();
 	if (front) {
+		printf("[CHECKSIDES] obstacle to the right\n");
 		return 2;
 	}
 	turn_approx(30); // now facing back in front
@@ -1045,7 +1049,7 @@ int forward_timed() {
 	move_forever(50, 50);
 	while (!timeIsUp && !obstacleInFront) {
 		check_t = clock();
-		timeIsUp = ( ((check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER); // should we use another timer ?
+		timeIsUp = ( ((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER); // should we use another timer ?
 		obstacleInFront = isThereSomethingInFront();
 	}
 	move_forever(0,0);
@@ -1067,7 +1071,7 @@ int forward_sonar_jb() {
 	int sidesCheck;
 	move_forever(50, 50);
 	while (frontClear && sidesClear) {
-		timeIsUp = (((check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
+		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {
 			sidesCheck = checkSides();
 			if (sidesCheck!=1) sidesClear=0;

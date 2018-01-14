@@ -26,7 +26,7 @@ int forward_timed() {
 	move_forever(50, 50);
 	while (!timeIsUp && !obstacleInFront) {
 		check_t = clock();
-		timeIsUp = ( ((check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER); // should we use another timer ?
+		timeIsUp = ( ((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER); // should we use another timer ?
 		obstacleInFront = isThereSomethingInFront();
 	}
 	move_forever(0,0);
@@ -101,7 +101,7 @@ int forward_sonar_jb() {
 	int sidesCheck;
 	move_forever(50, 50);
 	while (frontClear && sidesClear) {
-		timeIsUp = (((check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
+		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {
 			sidesCheck = checkSides();
 			if (sidesCheck!=1) sidesClear=0;
