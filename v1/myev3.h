@@ -538,10 +538,10 @@ int create_map() {
 				if (x==0 && y==0) {
 					printf(" 0 ");
 				} else {
-					printf(" X ");//### WHITE: %d, %d\n", x, y);
+					printf(" X ");// send_mapdata_pos((int16_t) x, (int16_t) y, 255, 255, 255); //### WHITE: %d, %d\n", x, y);
 				}
 			} else {
-				printf(" . ");//BLACK: %d, %d\n", x, y);
+				printf(" . ");// send_mapdata_pos((int16_t) x, (int16_t) y, 0, 0, 0); //BLACK: %d, %d\n", x, y);
 			}
 			fclose(posFile);
 		}
@@ -1090,6 +1090,9 @@ int go_around_map() {
 }
 
 int detect_nonmovable(int sonarThreshold){
+	/* by Alix
+	detects non movable objects. To get the width of the object, it turns around it until it gets back to its first position
+	*/
 	int x = get_X_position();
 	int y = get_Y_position();
 	printf(" init pos %d %d \n", x, y);
@@ -1113,7 +1116,7 @@ int detect_nonmovable(int sonarThreshold){
 			sonarValF = get_sonar();
 			if (sonarValF > sonarThreshold){
 				printf("etape2\n");
-				forwardTimed(1,200);
+				forwardTimed(1,300);
 				turn_right();
 				printf("fin etape2\n");
 			}
@@ -1121,7 +1124,7 @@ int detect_nonmovable(int sonarThreshold){
 		}
 		else{
 			printf("else2\n");
-			forwardTimed(1,200);
+			forwardTimed(1,300);
 			turn_right();
 		}
 		printf("out2\n");
