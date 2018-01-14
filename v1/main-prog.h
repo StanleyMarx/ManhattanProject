@@ -183,9 +183,10 @@ int robot(int sw,int arg1,int arg2){
 	    	forward_sonar(50);
 	    	break;
 	    case 6:
-	    	printf("testing basic opening/closing shovel functions\n");
-	    	open_shovel();
-	    	close_shovel();
+	    	printf("Going around map - test JB\n");
+	    	go_around_map();
+	    	printf("END OF TEST 6 JB\n");
+	    	//close_shovel();
 	    	break;
 	    case 7:
 		forward_sonar(50);
