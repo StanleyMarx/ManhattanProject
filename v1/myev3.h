@@ -411,11 +411,11 @@ int send_map_from_file(){
     
     // DEBUG
     printf("list of coordinates:\n");
-    print_int_list(x_list,i_x);
-    print_int_list(y_list,i_y);
+    print_int_list(x_list,nb_lines);
+    print_int_list(y_list,nb_lines);
     
     int xmin=x_list[0],xmax=x_list[0],ymin=y_list[0],ymax=y_list[0];
-    for (int i=1; i<i_x; i++){
+    for (int i=1; i<nb_lines; i++){
         if (x_list[i]<xmin){
             xmin=x_list[i];
         }
@@ -436,7 +436,7 @@ int send_map_from_file(){
     printf("map:\n");
     for (int y=ymin; y<=ymax; y++){
         for (int x=xmin; x<=xmax; x++){
-            if (pos_exists(x,y,x_list,y_list,i_x)){
+            if (pos_exists(x,y,x_list,y_list,nb_lines)){
                 send_mapdata(x,y,0,0,0);
                 printf(" X ");
             }

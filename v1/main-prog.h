@@ -227,9 +227,12 @@ int robot(int sw,int arg1,int arg2){
 	    	drop_object();
 	    	break;
         case 8:
-            /* à tester */
             printf("moving for a while and sending the position to the server, then sending the map\n");
             almost_the_real_stuff();
+            break;
+        case 9:
+            printf("sending map from pos.txt...\n");
+            send_map_from_file();
             break;
     
     }
