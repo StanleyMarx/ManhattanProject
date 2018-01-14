@@ -758,11 +758,12 @@ int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, i
 }
 void take_object(){
 	/* by Henri and Alix
-	check if the robot has already taken 3 objects (maximum drop allowed) before taking it 
+	When the robot is in front of a movable object (at dist 5cm)
+	check if the robot has already taken 3 objects (maximum drop allowed) before taking it. 
+	
 	*/
 	if (count_take < 3){
 		count_take = count_take + 1;
-	//	forward_sonar(50.0);
 		printf("[PELLE] opening pelle\n");//--------open pelle
 		set_tacho_speed_sp(sn_shovel, -200);
 		set_tacho_command(sn_shovel, "run-forever");
@@ -828,7 +829,7 @@ int detect_nonmovable(int sonarThreshold){
 	int a = get_X_position();
 	int b = get_Y_position();
 	printf(" pos %d %d \n", a, b);
-	/*while (1){ 
+	while (1){ 
 		printf("in1");
 		if (sonarVal < sonarThreshold) {
 			printf("in2");
@@ -848,7 +849,6 @@ int detect_nonmovable(int sonarThreshold){
 		a = get_X_position();
 		b = get_Y_position();
 	}
-	*/
 	printf("out1, a fait le tour ");
 	return 0;
 }
