@@ -531,7 +531,11 @@ int create_map() {
 				//free(line);
 			}
 			if (x==xFile && y==yFile){
-				printf(" X ");//### WHITE: %d, %d\n", x, y);
+				if (x==0 && y==0) {
+					printf(" 0 ");
+				} else {
+					printf(" X ");//### WHITE: %d, %d\n", x, y);
+				}
 			} else {
 				printf(" . ");//BLACK: %d, %d\n", x, y);
 			}
