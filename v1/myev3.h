@@ -898,8 +898,8 @@ void turn_right() {
 	gyroValInitial = get_gyro();
 	gyroVal = get_gyro();
 	//printf("initial gyro value: %f\n", gyroValInitial);
-	set_tacho_speed_sp(sn_lwheel, 75);
-	set_tacho_speed_sp(sn_rwheel, -75);
+	set_tacho_speed_sp(sn_lwheel, 50);
+	set_tacho_speed_sp(sn_rwheel, -50);
 	//printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_lwheel, "run-forever");
 	set_tacho_command(sn_rwheel, "run-forever");
@@ -919,8 +919,8 @@ void turn_left() {
 	gyroValInitial = get_gyro();
 	gyroVal = get_gyro();
 	//printf("initial gyro value: %f\n", gyroValInitial);
-	set_tacho_speed_sp(sn_lwheel, -75);
-	set_tacho_speed_sp(sn_rwheel, 75);
+	set_tacho_speed_sp(sn_lwheel, -50);
+	set_tacho_speed_sp(sn_rwheel, 50);
 	//printf("[TACHO] starting tachos\n");
 	set_tacho_command(sn_lwheel, "run-forever");
 	set_tacho_command(sn_rwheel, "run-forever");
@@ -990,7 +990,7 @@ int forward_timed() {
 	//int localRCycle=50;
 	//int localLCycle=50;
 	int yPos = get_Y_position();
-	move_forever(50, 50);//localRCycle, localLCycle);
+	move_forever(25, 25);//localRCycle, localLCycle);
 	while (!timeIsUp && !obstacleInFront && yPos>-3) {
 		yPos = get_Y_position();
 		/*checkGyro = get_gyro();	
@@ -1044,7 +1044,7 @@ int forward_sonar_jb() {
 		if (checkGyro>initialGyro) {
 			localLCycle++;
 		}*/
-		move_forever(50, 50);//localRCycle, localLCycle);
+		move_forever(25, 25);//localRCycle, localLCycle);
 		check_t = clock();
 		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {
