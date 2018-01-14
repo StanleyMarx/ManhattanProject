@@ -1119,9 +1119,12 @@ int detect_nonmovable(int sonarThreshold){
 			}
 			printf("fin etape2\n");
 		}
+		else{
+			printf("else2\n");
+			forwardTimed(1,200);
+			turn_right();
+		}
 		printf("out2\n");
-		forwardTimed(1,200);
-		turn_right();
 		sonarVal = get_sonar();
 		a = get_X_position();
 		b = get_Y_position();
