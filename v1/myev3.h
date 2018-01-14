@@ -1007,7 +1007,7 @@ int isThereSomethingInFront() {
 	float sonarVal;
 	sonarVal = get_sonar();
 	int res = (sonarVal < SONAR_THRESHOLD);
-	printf("[DEBUG] sonrVal = %f ; so res = %d\n", sonarVal, res);
+	printf("[SONAR] sonarVal = %f ; so res = %d\n", sonarVal, res);
 	return res;
 }
 
@@ -1064,13 +1064,14 @@ int forward_sonar_jb() {
 	*/
 	clock_t start_t, check_t;
 	start_t = clock();
-	check_t = clock();
+	//check_t = clock();
 	int timeIsUp = 0;
 	int frontClear = 1;
 	int sidesClear = 1;
 	int sidesCheck;
 	move_forever(50, 50);
 	while (frontClear && sidesClear) {
+		check_t = clock();
 		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {
 			sidesCheck = checkSides();
@@ -1078,6 +1079,8 @@ int forward_sonar_jb() {
 			timeIsUp = 0;
 			start_t = clock();
 		}
+		frontClear = isThereSomethingInFront();
+		frontClear = (!frontClear);
 	}
 	move_forever(0,0);
 	if (!frontClear) return 0; // obstacle in front
