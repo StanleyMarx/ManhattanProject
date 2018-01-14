@@ -768,11 +768,11 @@ int get_Y_position() {
 
 int look_around(){    
 	turn_approx(-20);
-	if (get_sonar() < sonarThreshold){
+	if (get_sonar() < 50.0){
 		return 1;
 	} else {
 		turn_approx(40);
-		if (get_sonar() < sonarThreshold){
+		if (get_sonar() < 50.0){
 			return 1;
 		}
 		else{
