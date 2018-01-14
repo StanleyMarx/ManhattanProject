@@ -813,45 +813,7 @@ int detect_movable() {
 	}
 }
 
-int detect_nonmovable(int sonarThreshold){
-	int x = get_X_position();
-	int y = get_Y_position();
-	printf(" init pos %d %d \n", x, y);
-	float sonarVal;
-	float sonarValF;
-	turn_approx(90);
-	sonarVal = get_sonar();
-	if (sonarVal > sonarThreshold){
-		forwardTimed(1,200);
-		turn_approx(-90);
-	}
-	sonarVal = get_sonar();
-	int a = get_X_position();
-	int b = get_Y_position();
-	printf(" pos %d %d \n", a, b);
-	while (1){ 
-		printf("in1");
-		if (sonarVal < sonarThreshold) {
-			printf("in2");
-			turn_approx(90);
-			sonarValF = get_sonar();
-			if (sonarValF > sonarThreshold){
-				printf("etape2\n");
-				forwardTimed(1,200);
-				turn_approx(-90);
-				printf("fin etape2\n");
-			}
-			printf("fin etape2\n");
-			sonarVal = get_sonar();
-		}
-		printf("out2");
-		turn_approx(-90);
-		a = get_X_position();
-		b = get_Y_position();
-	}
-	printf("out1, a fait le tour ");
-	return 0;
-}
+
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
     // moves forward until it is close enough to an object
     int i=0;
@@ -1121,4 +1083,44 @@ int go_around_map() {
 	int x = get_X_position();
 	printf("x = %d\n", x);
 	return x;
+}
+
+int detect_nonmovable(int sonarThreshold){
+	int x = get_X_position();
+	int y = get_Y_position();
+	printf(" init pos %d %d \n", x, y);
+	float sonarVal;
+	float sonarValF;
+	turn_left();
+	sonarVal = get_sonar();
+	if (sonarVal > sonarThreshold){
+		forwardTimed(1,200);
+		turn_right();
+	}
+	sonarVal = get_sonar();
+	int a = get_X_position();
+	int b = get_Y_position();
+	printf(" pos %d %d \n", a, b);
+	while (1){ 
+		printf("in1");
+		if (sonarVal < sonarThreshold) {
+			printf("in2");
+			turn_left();
+			sonarValF = get_sonar();
+			if (sonarValF > sonarThreshold){
+				printf("etape2\n");
+				forwardTimed(1,200);
+				turn_right();
+				printf("fin etape2\n");
+			}
+			printf("fin etape2\n");
+		}
+		sonarVal = get_sonar();
+		printf("out2");
+		turn_right();
+		a = get_X_position();
+		b = get_Y_position();
+	}
+	printf("out1, a fait le tour ");
+	return 0;
 }
