@@ -27,7 +27,7 @@ int testDetectType(){
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
       forward_sonar(50);
-    detect_type(60);
+    detect_nonmovable(60);
       pthread_mutex_lock(&mutex);
       ThreadSituation = 1;
       pthread_mutex_unlock(&mutex);
@@ -130,7 +130,8 @@ void* update_pos_entry(){
             file_pos=fopen("pos.txt","a");
             fprintf(file_pos,"%d,%d\n",x_towrite,y_towrite);
             x_lastwritten=x_towrite;
-            y_lastwritten=y_towrite;            
+            y_lastwritten=y_towrite; 
+            fclose(file_pos);
         }
         
         right_pos_prev=right_pos;

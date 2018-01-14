@@ -361,48 +361,52 @@ int pos_exists(int x, int y, int* x_list, int* y_list, int len){
     return 0;
 }
 int send_map_from_file(){
-    // file: pos.txt
-    
-    int x_list[10000];
-    int y_list[10000];
-    
-    FILE* pos_file=fopen("pos.txt","r");
-    if (!pos_file){
-        printf("[ERROR] print_map(): couldn't open pos.txt in read mode\n");
+    FILE* f=fopen("pos.txt","r");
+    int nb_lines=0;
+    char c=getc(f);
+    while(c!=EOF){
+        if (c=='\n'){
+            nb_lines++;
+        }
+        c=getc(f);
     }
-    /*debug*/printf("file opened. reading file...\n");
+    fclose(f);
+    printf("number of lines: %d\n",nb_lines);
     
+    int x_list[nb_lines];
+    int y_list[nb_lines];
+    char x[10];
+    char y[10];
+    int xx=0,yy=0,x_i=0,y_i=0;
     char is_x=1;
-    int i_x=0;
-    int i_y=0;
-    char c=getc(pos_file);
-    while (c!=EOF){
+    
+    f=fopen("pos.txt","r");
+    c=getc(f);
+    while(c!=EOF){
         switch(c){
-            case ',':
-                is_x=0;
-                break;
             case '\n':
                 is_x=1;
+                y_list[y_i]=atoi(y);
+                strcpy(y,"");
+                yy=0;
+                break;
+            case ',':
+                is_x=0;
+                x_list[x_i]=atoi(x);
+                strcpy(x,"");
+                xx=0;
                 break;
             default:
                 if (is_x){
-                    x_list[i_x]=c-48;
-                    i_x++;
-                } else {
-                    y_list[i_y]=c-48;
-                    i_y++;
+                    x[xx]=c;
+                    xx++;
                 }
-                break;
+                else {
+                    y[yy]=c;
+                    yy++;
+                }
         }
-        c=getc(pos_file);
-    }
-    
-    /*debug*/printf("file read: x_list and y_list now have a length of %d and %d\n",i_x,i_y);
-    fclose(pos_file);
-    /* at this point, x_list and y_list contains the list of coordinates, and i_x is the length of these lists */
-    if (i_x==0){
-        printf("no position to send - aborting send_map_from_file()\n");
-        return 1;
+        c=getc(f);
     }
     
     // DEBUG
@@ -758,11 +762,12 @@ int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, i
 }
 void take_object(){
 	/* by Henri and Alix
-	check if the robot has already taken 3 objects (maximum drop allowed) before taking it 
+	When the robot is in front of a movable object (at dist 5cm)
+	check if the robot has already taken 3 objects (maximum drop allowed) before taking it. 
+	
 	*/
 	if (count_take < 3){
 		count_take = count_take + 1;
-	//	forward_sonar(50.0);
 		printf("[PELLE] opening pelle\n");//--------open pelle
 		set_tacho_speed_sp(sn_shovel, -200);
 		set_tacho_command(sn_shovel, "run-forever");
@@ -812,45 +817,6 @@ int detect_movable() {
 	}
 }
 
-int detect_type(int sonarThreshold){
-	int x = get_X_position();
-	int y = get_Y_position();
-	printf(" init pos %d %d \n", x, y);
-	float sonarVal;
-	float sonarValF;
-	turn_approx(90);
-		sonarVal = get_sonar();
-		if (sonarVal > sonarThreshold){
-			forwardTimed(1,200);
-			turn_approx(-90);
-		}
-	sonarVal = get_sonar();
-	int a = get_X_position();
-	int b = get_Y_position();
-	printf(" pos %d %d \n", a, b);
-	while (1){ 
-		printf("in1");
-		if (sonarVal < sonarThreshold) {
-			printf("in2");
-			turn_approx(90);
-			sonarValF = get_sonar();
-			if (sonarValF > sonarThreshold){
-				printf("etape2\n");
-				forwardTimed(1,200);
-				turn_approx(-90);
-				printf("fin etape2\n");
-			}
-			printf("fin etape2\n");
-			sonarVal = get_sonar();
-		}
-		printf("out2");
-		turn_approx(-90);
-		a = get_X_position();
-		b = get_Y_position();
-	}
-	printf("out1, a fait le tour ");
-	return 0;
-}
 
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
     // moves forward until it is close enough to an object
@@ -1121,4 +1087,51 @@ int go_around_map() {
 	int x = get_X_position();
 	printf("x = %d\n", x);
 	return x;
+}
+
+int detect_nonmovable(int sonarThreshold){
+	/* by Alix
+	detects non movable objects. To get the width of the object, it turns around it until it gets back to its first position
+	*/
+	int x = get_X_position();
+	int y = get_Y_position();
+	printf(" init pos %d %d \n", x, y);
+	float sonarVal;
+	float sonarValF;
+	turn_left();
+	sonarVal = get_sonar();
+	if (sonarVal > sonarThreshold){
+		forwardTimed(1,200);
+		turn_right();
+	}
+	sonarVal = get_sonar();
+	int a = get_X_position();
+	int b = get_Y_position();
+	printf(" pos %d %d \n", a, b);
+	while (a!=x || b!=y){ 
+		printf("in1\n");
+		if (sonarVal < sonarThreshold) {
+			printf("in2\n");
+			turn_left();
+			sonarValF = get_sonar();
+			if (sonarValF > sonarThreshold){
+				printf("etape2\n");
+				forwardTimed(1,300);
+				turn_right();
+				printf("fin etape2\n");
+			}
+			printf("fin etape2\n");
+		}
+		else{
+			printf("else2\n");
+			forwardTimed(1,300);
+			turn_right();
+		}
+		printf("out2\n");
+		sonarVal = get_sonar();
+		a = get_X_position();
+		b = get_Y_position();
+	}
+	printf("out1, a fait le tour ");
+	return 0;
 }
