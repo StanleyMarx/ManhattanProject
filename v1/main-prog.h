@@ -74,7 +74,7 @@ void debug_sensors(){
 float X=0, Y=0, T=0;
 char UPDATE_POS_ENABLE=1;
 char SEND_POS_ENABLE=1;
-float SQUARE_SIZE=1; // size of a 5cm square in the units of X. TO CALIBRATE
+float SQUARE_SIZE=200; // size of a 5cm square in the units of X. TO CALIBRATE
 
 void* update_pos_entry(){
     // updates the global variable X and Y given the input of the motors
@@ -105,8 +105,8 @@ void* update_pos_entry(){
             // turning
             T=get_gyro();
         }
-        x_towrite=(int)(X/10);
-        y_towrite=(int)(Y/10);
+        x_towrite=(int)(X/SQUARE_SIZE);
+        y_towrite=(int)(Y/SQUARE_SIZE);
         if (x_towrite!=x_lastwritten || y_towrite!=y_lastwritten){
             file_pos=fopen("pos.txt","a");
             fprintf(file_pos,"%d,%d\n",x_towrite,y_towrite);
@@ -154,6 +154,9 @@ void almost_the_real_stuff(){
     SEND_POS_ENABLE=0;
     pthread_join(update_pos,NULL);
     pthread_join(send_pos,NULL);
+    
+    send_map_from_file();
+    printf("- done -");
 }
 
 //------------------------ ROBOT ------------------------

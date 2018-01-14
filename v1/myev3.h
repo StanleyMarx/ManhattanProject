@@ -237,7 +237,6 @@ void forwardTimed(int seconds, int speed) {
 	//printf("[TACHO] function forward is over!\n");
 }
 
-
 /* à tester */
 float width_object(){
     /*
@@ -337,14 +336,12 @@ void send_position(int16_t x,int16_t y){
 	str[3]=0xff;
 	str[4]=MSG_POSITION;
 	*((int16_t*)&str[5])=x;
-    str[5]=0xff;
+    if (x<0){
+        str[6]=0x00;
+    }
 	*((int16_t*)&str[7])=y;
-    str[7]=0xff;
 	write(s,str,9);
 	Sleep(1000);
-
-    /*debug*/
-
 }
 void send_mapdata(int16_t x,int16_t y,char r,char g,char b){
     char str[58];
@@ -442,13 +439,13 @@ int pos_exists(int x, int y, int* x_list, int* y_list, int len){
     }
     return 0;
 }
-void send_map_from_file(){
+int send_map_from_file(){
     // file: pos.txt
-    // max number of coordinates: 100
+    // max number of coordinates: 1000
     // uses send_mapdata_pos for debug pruposes but looking forward to send_mapdata
     
-    int x_list[100];
-    int y_list[100];
+    int x_list[1000];
+    int y_list[1000];
     
     FILE* pos_file=fopen("pos.txt","r");
     if (!pos_file){
@@ -481,6 +478,10 @@ void send_map_from_file(){
     }
     fclose(pos_file);
     /* at this point, x_list and y_list contains the list of coordinates, and i_x is the length of these lists */
+    if (i_x==0){
+        printf("no position to send - aborting send_map_from_file()\n");
+        return 1;
+    }
     
     // DEBUG
     printf("list of coordinates:\n");
@@ -522,7 +523,8 @@ void send_map_from_file(){
     }
     send_mapdone();
     
-    printf("map sent to the server\n");    
+    printf("map sent to the server\n");
+    return 0;
 }
 
 void find_corners() {
