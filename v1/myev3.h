@@ -766,7 +766,6 @@ int get_Y_position() {
 	return Y;
 }
 
-/* FAILED TO COMPILE
 int look_around(){    
 	turn_approx(-20);
 	if (get_sonar() < sonarThreshold){
@@ -781,9 +780,8 @@ int look_around(){
 			return 0;
 		}
 	}
-}*/
+}
 
-/* FAILED TO COMPILE
 int fs(){    
 	float sonarVal = get_sonar();
 	int x = 0;
@@ -793,7 +791,7 @@ int fs(){
         move_forever(0,0);
         CancelInvoke("look_around");
     }
-}*/
+}
 
 int forward_sonar(float sonarThreshold){
 	float sonarVal = getSonar();
