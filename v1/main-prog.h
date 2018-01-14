@@ -43,7 +43,6 @@ void test_cs(){
     send_obstacle(0,4,5);
     send_position_pos(1,2);
 }
-int X=0,Y=0;
 //--------------------------- CASE_3 ---------------------------
 void test_turn(int rat){
     printf("- testing the move_real_debug function -\n");
@@ -72,12 +71,87 @@ void debug_sensors(){
     }
 }
 //--------------------------- CASE_8 ---------------------------
-void almost_the_real_stuff(){
+float X=0, Y=0, T=0;
+char UPDATE_POS_ENABLE=1;
+char SEND_POS_ENABLE=1;
+float SQUARE_SIZE=1; // size of a 5cm square in the units of X. TO CALIBRATE
+
+void* update_pos_entry(){
+    // updates the global variable X and Y given the input of the motors
     
+    int right_pos, left_pos, right_pos_prev, left_pos_prev, dr, dl;
+    get_tacho_position(sn_rwheel,&right_pos_prev);
+    get_tacho_position(sn_lwheel,&left_pos_prev);
+    T=get_gyro();
+    right_pos=right_pos_prev;
+    left_pos=left_pos_prev;
+    FILE* file_pos;
+    int x_towrite;
+    int y_towrite;
+    int x_lastwritten=0;
+    int y_lastwritten=0;
+    
+    while (UPDATE_POS_ENABLE){
+        get_tacho_position(sn_rwheel,&right_pos);
+        get_tacho_position(sn_lwheel,&left_pos);
+        dr=right_pos-right_pos_prev;
+        dl=left_pos-left_pos_prev;
+        
+        if (dr*dl>0){
+            // advancing
+            X+=(dr+dl)*cos(T/57.29577951308232);
+            Y+=(dr+dl)*sin(T/57.29577951308232);
+        } else {
+            // turning
+            T=get_gyro();
+        }
+        x_towrite=(int)(X/10);
+        y_towrite=(int)(Y/10);
+        if (x_towrite!=x_lastwritten || y_towrite!=y_lastwritten){
+            file_pos=fopen("pos.txt","a");
+            fprintf(file_pos,"%d,%d\n",x_towrite,y_towrite);
+            x_lastwritten=x_towrite;
+            y_lastwritten=y_towrite;            
+        }
+        
+        right_pos_prev=right_pos;
+        left_pos_prev=left_pos;
+    }
 }
+void* send_pos_entry(){
+    while(SEND_POS_ENABLE){
+        send_position_pos(X,Y);
+        sleep(2);
+    }
+}
+void almost_the_real_stuff(){
+    pthread_t update_pos;
+    pthread_create(&update_pos,NULL,update_pos_entry,NULL);
+    pthread_t send_pos;
+    pthread_create(&send_pos,NULL,send_pos_entry,NULL);
+    
+    // does some movements
+    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
+    move_real_debug(1000,1000);
+    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
+    turn_approx(90);
+    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
+    move_real_debug(-300,-300);
+    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
+    turn_approx(-180);
+    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
+    
+    // stop threads
+    UPDATE_POS_ENABLE=0;
+    SEND_POS_ENABLE=0;
+    pthread_join(update_pos,NULL);
+    pthread_join(send_pos,NULL);
+    return 0;
+}
+
 //--------------------------- ROBOT ---------------------------
 int robot(int sw,int arg1,int arg2){
-    printf("case no: %d", sw);
+    printf("case no: %d\n", sw);
     switch (sw){
         case 0:
             test_update_pos();
@@ -113,7 +187,8 @@ int robot(int sw,int arg1,int arg2){
 	    	drop_object();
 	    	break;
         case 8:
-            printf("moving randomly and sending the position to the server, then sending the map\n");
+            /* à tester */
+            printf("moving for a while and sending the position to the server, then sending the map\n");
             almost_the_real_stuff();
             break;
     

@@ -28,9 +28,6 @@ float lambda=1/21.21*86/35;
 pthread_mutex_t mutex;
 int ThreadSituation=0;
 
-
-
-
 void test_tachos_verbose(){
     int8_t sn;
     int allPlugged=1;
