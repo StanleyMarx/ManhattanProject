@@ -531,7 +531,11 @@ int create_map() {
 				//free(line);
 			}
 			if (x==xFile && y==yFile){
-				printf(" X ");//### WHITE: %d, %d\n", x, y);
+				if (x==0 && y==0) {
+					printf(" 0 ");
+				} else {
+					printf(" X ");//### WHITE: %d, %d\n", x, y);
+				}
 			} else {
 				printf(" . ");//BLACK: %d, %d\n", x, y);
 			}
@@ -808,7 +812,7 @@ int detect_movable() {
 	}
 }
 
-int detect_type(int sonarThreshold){
+int detect_nonmovable(int sonarThreshold){
 	int x = get_X_position();
 	int y = get_Y_position();
 	printf(" init pos %d %d \n", x, y);
@@ -824,7 +828,7 @@ int detect_type(int sonarThreshold){
 	int a = get_X_position();
 	int b = get_Y_position();
 	printf(" pos %d %d \n", a, b);
-	while (1){ 
+	/*while (1){ 
 		printf("in1");
 		if (sonarVal < sonarThreshold) {
 			printf("in2");
@@ -844,10 +848,10 @@ int detect_type(int sonarThreshold){
 		a = get_X_position();
 		b = get_Y_position();
 	}
+	*/
 	printf("out1, a fait le tour ");
 	return 0;
 }
-
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
     // moves forward until it is close enough to an object
     int i=0;
