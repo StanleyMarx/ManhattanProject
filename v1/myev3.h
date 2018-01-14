@@ -128,6 +128,7 @@ void test_sensors_verbose(){
     }
 }
 
+//used
 void move_forever(int rcycle,int lcycle){
     set_tacho_duty_cycle_sp(sn_rwheel,rcycle);
     set_tacho_duty_cycle_sp(sn_lwheel,lcycle);
@@ -153,7 +154,7 @@ void move_real_debug(int r,int l){
     move_real(r,l,100);
     usleep(time_ratio*(abs(r)+abs(l)));
 }
-
+//not used
 void open_shovel(){
     set_tacho_stop_action_inx(sn_shovel,TACHO_COAST);
     set_tacho_speed_sp(sn_shovel,200);
@@ -162,6 +163,8 @@ void open_shovel(){
     set_tacho_position_sp(sn_shovel,-150);
     set_tacho_command_inx(sn_shovel,TACHO_RUN_TO_REL_POS);
 }
+
+//not used
 void close_shovel(){
     set_tacho_stop_action_inx(sn_shovel,TACHO_COAST);
     set_tacho_speed_sp(sn_shovel,100);
@@ -181,6 +184,7 @@ float get_compass(){
     get_sensor_value0(sn_compass,&ret);
     return ret;
 }
+
 float get_compass_slow(){
     sleep(1);
     move_forever(0,0);
@@ -231,6 +235,7 @@ void turn_exact_gyro(float delta,float prec){
     }
 }
 
+//used
 void forwardTimed(int seconds, int speed) {
 	/* by Alix
 	forwardTimed(1,200) : 10cm */
@@ -817,7 +822,7 @@ int detect_movable() {
 	}
 }
 
-
+//not used 
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
     // moves forward until it is close enough to an object
     int i=0;
