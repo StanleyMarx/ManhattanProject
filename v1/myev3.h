@@ -975,6 +975,7 @@ int checkSides();
 
 // GO AROUND MAP
 void turn_right() {
+	printf("[TURNING] RIGHT\n");
 	float gyroVal;
     float gyroValInitial;
 	gyroValInitial = get_gyro();
@@ -994,6 +995,7 @@ void turn_right() {
 }
 
 void turn_left() {
+	printf("[TURNING] LEFT\n");
 	float gyroVal;
     float gyroValInitial;
 	gyroValInitial = get_gyro();
@@ -1022,6 +1024,9 @@ int isThereSomethingInFront() {
 	sonarVal = get_sonar();
 	//int res = (sonarVal < SONAR_THRESHOLD);
 	//printf("[SONAR] sonarVal = %f ; so res = %d\n", sonarVal, res);
+	if (sonarVal < SONAR_THRESHOLD) {
+		printf("[OBSTACLES] there is something in FRONT\n");
+	}
 	return (sonarVal < SONAR_THRESHOLD);//res;
 }
 
@@ -1071,7 +1076,7 @@ int forward_timed() {
 		printf("[TIME] time is up, gotta check left\n");
 		return 0;
 	}
-	printf("[OBSTACLES] FRONT is NOT clear\n");
+	printf("[OBSTACLES] FRONT is NOT clear, out of forward_timed\n");
 	return 1; // there is something in front of the robot
 }
 
@@ -1104,7 +1109,7 @@ int forward_sonar_jb() {
 	}
 	move_forever(0,0);
 	if (!frontClear) {
-		printf("[OBSTACLES] FRONT is NOT clear\n");	
+		printf("[OBSTACLES] FRONT is NOT clear, out of forward_sonar_jb\n");	
 		return 0; // obstacle in front
 	}
 	printf("[OBSTACLES] OBSTACLE to the LEFT/RIGHT\n");
@@ -1120,16 +1125,14 @@ int forward_while_checking_left() {
 	int obstacleLeft = 0;
 	while (1) { //!blocked) {
 		obstacleInFront = forward_timed(); // ARGUMENTS
-		printf("[TURNING] turning left");
 		turn_left();
 		obstacleLeft = isThereSomethingInFront();
-		printf("[TURNING] turning right");
 		turn_right();
 		if (!obstacleLeft) {
 			printf("[OBSTACLES] LEFT is CLEAR\n");
 			return 2; // left is free
 		} else if (obstacleInFront) {
-			printf("[OBSTACLES] FRONT is NOT clear\n");
+			printf("[OBSTACLES] FRONT is NOT clear, out of forward_while_checking_left\n");
 			return 1; // obstacle in front
 		}
 		printf("[DEBUG] should not be in here!\n");
@@ -1143,11 +1146,9 @@ int go_around_map() {
 		while the robot is not back in the start area (y = 0), it keeps on going around the map starting in the bottom left corner.
 		To do so, it always tries to go to the left, forward otherwise (and right if both front and left are blocked).
 	*/
-	printf("[TURNING] turning left");
 	turn_left();
 	forward_sonar_jb();
 	printf("[POSITION] should be in bottom left corner (x=0, y=0), facing towards negative y values\n");
-	printf("[TURNING] turning right");
 	turn_right();
 	printf("[POSITION] should be in bottom left corner (x=0, y=0), facing towards positive x values\n");
 	forward_sonar_jb();
