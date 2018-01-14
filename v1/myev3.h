@@ -819,11 +819,11 @@ int detect_nonmovable(int sonarThreshold){
 	float sonarVal;
 	float sonarValF;
 	turn_approx(90);
-		sonarVal = get_sonar();
-		if (sonarVal > sonarThreshold){
-			forwardTimed(1,200);
-			turn_approx(-90);
-		}
+	sonarVal = get_sonar();
+	if (sonarVal > sonarThreshold){
+		forwardTimed(1,200);
+		turn_approx(-90);
+	}
 	sonarVal = get_sonar();
 	int a = get_X_position();
 	int b = get_Y_position();
