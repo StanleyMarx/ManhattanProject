@@ -187,9 +187,12 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-           testDetectType();
-	//	    forward_sonar_timed(50, 50, 50.0, 2, 20);
-		   
+         //  testDetectType();
+	//	
+		    //forward_sonar_timed(50, 50, 50.0, 2, 20);
+		   turn_compass(90);
+		    turn_compass(180);
+		    break;
         case 2:
             test_cs();
             break;
