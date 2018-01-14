@@ -361,48 +361,52 @@ int pos_exists(int x, int y, int* x_list, int* y_list, int len){
     return 0;
 }
 int send_map_from_file(){
-    // file: pos.txt
-    
-    int x_list[10000];
-    int y_list[10000];
-    
-    FILE* pos_file=fopen("pos.txt","r");
-    if (!pos_file){
-        printf("[ERROR] print_map(): couldn't open pos.txt in read mode\n");
+    FILE* f=fopen("pos.txt","r");
+    int nb_lines=0;
+    char c=getc(f);
+    while(c!=EOF){
+        if (c=='\n'){
+            nb_lines++;
+        }
+        c=getc(f);
     }
-    /*debug*/printf("file opened. reading file...\n");
+    fclose(f);
+    printf("number of lines: %d\n",nb_lines);
     
+    int x_list[nb_lines];
+    int y_list[nb_lines];
+    char x[10];
+    char y[10];
+    int xx=0,yy=0,x_i=0,y_i=0;
     char is_x=1;
-    int i_x=0;
-    int i_y=0;
-    char c=getc(pos_file);
-    while (c!=EOF){
+    
+    f=fopen("pos.txt","r");
+    c=getc(f);
+    while(c!=EOF){
         switch(c){
-            case ',':
-                is_x=0;
-                break;
             case '\n':
                 is_x=1;
+                y_list[y_i]=atoi(y);
+                strcpy(y,"");
+                yy=0;
+                break;
+            case ',':
+                is_x=0;
+                x_list[x_i]=atoi(x);
+                strcpy(x,"");
+                xx=0;
                 break;
             default:
                 if (is_x){
-                    x_list[i_x]=c-48;
-                    i_x++;
-                } else {
-                    y_list[i_y]=c-48;
-                    i_y++;
+                    x[xx]=c;
+                    xx++;
                 }
-                break;
+                else {
+                    y[yy]=c;
+                    yy++;
+                }
         }
-        c=getc(pos_file);
-    }
-    
-    /*debug*/printf("file read: x_list and y_list now have a length of %d and %d\n",i_x,i_y);
-    fclose(pos_file);
-    /* at this point, x_list and y_list contains the list of coordinates, and i_x is the length of these lists */
-    if (i_x==0){
-        printf("no position to send - aborting send_map_from_file()\n");
-        return 1;
+        c=getc(f);
     }
     
     // DEBUG
