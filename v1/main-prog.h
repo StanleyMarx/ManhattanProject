@@ -193,6 +193,7 @@ int robot(int sw,int arg1,int arg2){
 		   turn_compass(90);
 		    turn_compass(180);
 		    break;
+		    testDetectType();
         case 2:
             test_cs();
             break;
