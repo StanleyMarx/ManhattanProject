@@ -26,8 +26,8 @@ int test_update_pos(){
 int testDetectType(){
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
-      forward_sonar(50, 50, 50, 5, 20);
-   //   detect_type(50);
+      forward_sonar(50);
+    detect_type(60);
       pthread_mutex_lock(&mutex);
       ThreadSituation = 1;
       pthread_mutex_unlock(&mutex);
@@ -70,6 +70,24 @@ void debug_sensors(){
         sleep(2);
     }
 }
+
+// ------------------------ CASE 6 ------------------------
+int test_go_around_map(){
+      pthread_t myUpdate_position;
+      pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+      
+      go_around_map();
+      
+      pthread_mutex_lock(&mutex);
+      ThreadSituation = 1;
+      pthread_mutex_unlock(&mutex);
+      
+      pthread_join(myUpdate_position,NULL);
+      pthread_mutex_destroy(&mutex);
+      return 0;
+}
+
+
 //----------------------- CASE_8 -----------------------
 float X=0, Y=0, T=0;
 char UPDATE_POS_ENABLE=1;
@@ -167,7 +185,9 @@ int robot(int sw,int arg1,int arg2){
             test_update_pos();
             break;
         case 1:
-            testDetectType();
+           testDetectType();
+	//	    forward_sonar_timed(50, 50, 50.0, 2, 20);
+		   
         case 2:
             test_cs();
             break;
@@ -182,14 +202,18 @@ int robot(int sw,int arg1,int arg2){
             printf("\nX,Y = %d,%d\n",x,y);
             break;
         case 5:
-	    	forward_sonar(50, 50, 50, 10000, 20);
+	    	forward_sonar(50);
 	    	break;
 	    case 6:
-	    	printf("testing basic opening/closing shovel functions\n");
-	    	open_shovel();
-	    	close_shovel();
+	    	printf("Going around map - test JB\n");
+	    	forward_sonar_jb();
+	    	test_go_around_map();
+	    	create_map();
+	    	printf("END OF TEST 6 JB\n");
+	    	//close_shovel();
 	    	break;
 	    case 7:
+		forward_sonar(50);
 	    	printf("testing take and drop object\n");
 	    	take_object();
 	    	printf("just took object, about to drop it in 5sec\n");

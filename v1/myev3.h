@@ -16,7 +16,14 @@ int minX = 0;
 int minY = 0;
 int maxX = 0;
 int maxY = 0;
+
 FILE* posFile = NULL;
+
+const int CHECK_TIMER = 3;
+const float SONAR_THRESHOLD = 50.0;
+
+int count_take = 1; //begin with an obstacle in the shovel
+int count_drop = 0;
 
 float Xdef=0.0, Ydef=0.0;
 int Xpos=0, Ypos=0, XposOld=0, YposOld=0;
@@ -766,41 +773,29 @@ int get_Y_position() {
 	return Y;
 }
 
-/* FAILED TO COMPILE
-int look_around(){    
-	turn_approx(-20);
-	if (get_sonar() < sonarThreshold){
-		return 1;
-	} else {
-		turn_approx(40);
-		if (get_sonar() < sonarThreshold){
-			return 1;
-		}
-		else{
-			turn_approx(-20);
-			return 0;
-		}
-	}
-}*/
 
-/* FAILED TO COMPILE
-int fs(){    
+int forward_sonar(float sonarThreshold){
 	float sonarVal = get_sonar();
-	int x = 0;
-	while (sonarVal > sonarThreshold && x == 0) {
-        move_forever(200,200);
-		int x = InvokeRepeating("look_around", 2,2);
-        move_forever(0,0);
-        CancelInvoke("look_around");
-    }
-}*/
+	set_tacho_speed_sp(sn_rwheel, 400);
+	set_tacho_speed_sp(sn_lwheel, 400);
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
+	while (sonarVal > sonarThreshold) {
+		sonarVal = get_sonar();
+	}
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
+}
 
-int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
-	// moves forward until it is close enough to an object
+int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
+	/* by Alix and JB 
+	moves forward until the sonar detects an object. 
+	If during sec seconds there was no object found, it stops, checks around if there are any.
+	*/
 	printf("in forward sonar \n");
+	int timeup = 0;
     	float sonarVal = get_sonar();
 	double C_PER_SECS;
-	C_PER_SECS = 1000000.0;
 	clock_t previous, current;
 	previous = clock();
 	printf("previous %lf \n", previous);
@@ -813,7 +808,8 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int del
 			current = clock();
 			printf("current %lf \n", current);
 			sonarVal = get_sonar();
-			if ((current - previous)/C_PER_SECS > sec) {
+			timeup =(((double)(current - previous)/ CLOCKS_PER_SEC ) > sec);
+			if (timeup) {
 				printf("in2");
 				move_forever(0,0);
 				turn_approx(-delta);
@@ -826,47 +822,63 @@ int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int del
 					}
 				}
 				turn_approx(-delta);
+				previous = clock();
 				}
+			
 			move_forever(rcycle, lcycle);
-			previous = current;
 			printf("previous %lf \n", previous);
 
 
 		}
-		move_forever(0,0);
+		
 	}
+	move_forever(0,0);
 	return 0;
 }
 void take_object(){
-    	forward_sonar(50, 50, 80.0, 1000, 20);
-	printf("[PELLE] opening pelle\n");//--------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] closing pelle\n");//-------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
+	/* by Henri and Alix
+	check if the robot has already taken 3 objects (maximum drop allowed) before taking it 
+	*/
+	if (count_take < 3){
+		count_take = count_take + 1;
+	//	forward_sonar(50.0);
+		printf("[PELLE] opening pelle\n");//--------open pelle
+		set_tacho_speed_sp(sn_shovel, -200);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+    		forwardTimed(1,100);
+		printf("[PELLE] closing pelle\n");//-------close pelle
+		set_tacho_command(sn_shovel, "stop");
+		set_tacho_speed_sp(sn_shovel, 0);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+		set_tacho_command(sn_shovel, "stop");
+	}
+    	
 }
 
 void drop_object() {
-	turn_approx(-180);
-    	move_real(8*22.447,8*22.447,400);
-	printf("[PELLE] opening pelle\n");//----------open pelle
-	set_tacho_speed_sp(sn_shovel, -80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	move_real(8*22.447,8*22.447,-400);//---------movebackward
-    	turn_approx(90); //-------half turn
-	printf("[PELLE] closing pelle\n");//----------close pelle
-	set_tacho_command(sn_shovel, "stop");
-	set_tacho_speed_sp(sn_shovel, 80);
-	set_tacho_command(sn_shovel, "run-forever");
-	sleep(2);
-	set_tacho_command(sn_shovel, "stop");
+	/* by Henri and Alix
+	check if the robot has already dropped two objects (maximum drop allowed) and places the object behind it so it doesn't bump into it
+	*/
+	if (count_drop < 3){
+		count_drop = count_drop + 1;
+		turn_approx(-180);
+    		forwardTimed(1,200);
+		printf("[PELLE] opening pelle\n");//----------open pelle
+		set_tacho_speed_sp(sn_shovel, -200);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+		forwardTimed(1,-200);//---------movebackward
+    		turn_approx(90); //-------half turn
+		printf("[PELLE] closing pelle\n");//----------close pelle
+		set_tacho_command(sn_shovel, "stop");
+		set_tacho_speed_sp(sn_shovel, 200);
+		set_tacho_command(sn_shovel, "run-forever");
+		sleep(2);
+		set_tacho_command(sn_shovel, "stop");
+	}
+
 }
 
 int detect_movable() {
@@ -885,6 +897,7 @@ int detect_type(int sonarThreshold){
 	int y = get_Y_position();
 	printf(" init pos %d %d \n", x, y);
 	float sonarVal;
+	float sonarValF;
 	turn_approx(90);
 		sonarVal = get_sonar();
 		if (sonarVal > sonarThreshold){
@@ -894,14 +907,17 @@ int detect_type(int sonarThreshold){
 	sonarVal = get_sonar();
 	int a = get_X_position();
 	int b = get_Y_position();
+	int i = 0;
 	printf(" pos %d %d \n", a, b);
-	while ((x != a || y !=b) && ( abs(x - a)<40 || abs(y-b)<40)){ 
+	while (i<10){ 
+		printf("i = %d",i);
+		i = i + 1;
 		printf("in1");
 		while (sonarVal < sonarThreshold) {
 			printf("in2");
 			turn_approx(90);
-			sonarVal = get_sonar();
-			if (sonarVal > sonarThreshold){
+			sonarValF = get_sonar();
+			if (sonarValF > sonarThreshold){
 				printf("etape2\n");
 				forwardTimed(1,100);
 				turn_approx(-90);
@@ -954,4 +970,230 @@ int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int d
         }
         move_forever(0,0);
     }
+}
+
+// SIGNATURES
+/*
+int forward_timed();
+int forward_while_checking_left();
+int go_around_map();
+int isThereSomethingInFront();
+int forward_sonar_jb();
+int checkSides();
+*/
+
+// GO AROUND MAP
+void turn_right() {
+	printf("[TURNING] RIGHT\n");
+	float gyroVal;
+    float gyroValInitial;
+	gyroValInitial = get_gyro();
+	gyroVal = get_gyro();
+	//printf("initial gyro value: %f\n", gyroValInitial);
+	set_tacho_speed_sp(sn_lwheel, 75);
+	set_tacho_speed_sp(sn_rwheel, -75);
+	//printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
+	while (abs(gyroVal - gyroValInitial) < 90) {
+		gyroVal = get_gyro();
+	}
+	//printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
+}
+
+void turn_left() {
+	printf("[TURNING] LEFT\n");
+	float gyroVal;
+    float gyroValInitial;
+	gyroValInitial = get_gyro();
+	gyroVal = get_gyro();
+	//printf("initial gyro value: %f\n", gyroValInitial);
+	set_tacho_speed_sp(sn_lwheel, -75);
+	set_tacho_speed_sp(sn_rwheel, 75);
+	//printf("[TACHO] starting tachos\n");
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
+	while (abs(gyroVal - gyroValInitial) < 90) {
+		gyroVal = get_gyro();
+	}
+	//printf("[TACHO] stopping tachos\n");
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
+}
+
+
+int isThereSomethingInFront() {
+	/*
+		by JB
+		returns 1 if an obstacle is close enough to the sonar sensor, 0 otherwise
+	*/
+	float sonarVal;
+	sonarVal = get_sonar();
+	//int res = (sonarVal < SONAR_THRESHOLD);
+	//printf("[SONAR] sonarVal = %f ; so res = %d\n", sonarVal, res);
+	if (sonarVal < SONAR_THRESHOLD) {
+		printf("[OBSTACLES] there is something in FRONT\n");
+	}
+	return (sonarVal < SONAR_THRESHOLD);//res;
+}
+
+int checkSides() {
+	/*
+		return 1 if sides are clear
+		return 0 if obstacle left
+		return 2 if obstacle right
+	*/
+	int front;
+	move_forever(0,0);
+	turn_approx(30); // left ?
+	front = isThereSomethingInFront();
+	if (front) {
+		printf("[CHECKSIDES] obstacle to the left\n");
+		return 0;
+	}
+	turn_approx(-60); // right?
+	front = isThereSomethingInFront();
+	if (front) {
+		printf("[CHECKSIDES] obstacle to the right\n");
+		return 2;
+	}
+	turn_approx(30); // now facing back in front
+	return 1; // sides are clear
+}
+
+
+int forward_timed() {
+	/*
+		robot goes forward until:
+			1/ timer runs out (CHECK_TIMER seconds)
+			2/ obstacle in front of robot
+	*/
+	clock_t start_t, check_t;
+	start_t = clock();
+	int timeIsUp = 0;
+	int initialGyro = get_gyro();
+	int checkGyro;
+	int obstacleInFront = 0;
+	int localRCycle=50;
+	int localLCycle=50;
+	move_forever(localRCycle, localLCycle);
+	while (!timeIsUp && !obstacleInFront) {
+		checkGyro = get_gyro();	
+		if (checkGyro<initialGyro) {
+			localRCycle++;
+		}
+		if (checkGyro>initialGyro) {
+			localLCycle++;
+		}
+		if (checkGyro!=initialGyro) {
+			move_forever(localRCycle, localLCycle);
+		}
+		check_t = clock();
+		timeIsUp = ( ((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER); // should we use another timer ?
+		obstacleInFront = isThereSomethingInFront();
+	}
+	move_forever(0,0);
+	if (timeIsUp) {
+		printf("[TIME] time is up, gotta check left\n");
+		return 0;
+	}
+	printf("[OBSTACLES] FRONT is NOT clear, out of forward_timed\n");
+	return 1; // there is something in front of the robot
+}
+
+int forward_sonar_jb() {
+	/*
+		return 0 if obstacle in front
+		return 1 if obstacle to the right/left
+	*/
+	clock_t start_t, check_t;
+	start_t = clock();
+	//check_t = clock();
+	int timeIsUp = 0;
+	int frontClear = 1;
+	int sidesClear = 1;
+	int sidesCheck;
+	int initialGyro = get_gyro();
+	int checkGyro;
+	int localRCycle=50;
+	int localLCycle=50;
+	printf("[MOTORS] starting motors\n");
+	while (frontClear && sidesClear) {
+		checkGyro = get_gyro();	
+		if (checkGyro<initialGyro) {
+			localRCycle++;
+		}
+		if (checkGyro>initialGyro) {
+			localLCycle++;
+		}
+		move_forever(localRCycle, localLCycle);
+		check_t = clock();
+		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
+		if (timeIsUp) {
+			printf("[TIME] time is up, gotta check the sides\n");
+			sidesCheck = checkSides();
+			if (sidesCheck!=1) sidesClear=0;
+			timeIsUp = 0;
+			start_t = clock();
+		}
+		frontClear = isThereSomethingInFront();
+		frontClear = (!frontClear);
+	}
+	move_forever(0,0);
+	if (!frontClear) {
+		printf("[OBSTACLES] FRONT is NOT clear, out of forward_sonar_jb\n");	
+		return 0; // obstacle in front
+	}
+	printf("[OBSTACLES] OBSTACLE to the LEFT/RIGHT\n");
+	return 1; // obstacle to the right/left
+}
+
+int forward_while_checking_left() {
+	/*
+		robot goes forward for a specific amount of time (CHECK_TIMER) then checks its left side.
+	*/
+	//int blocked = 0;
+	int obstacleInFront = 0;
+	int obstacleLeft = 0;
+	while (1) { //!blocked) {
+		obstacleInFront = forward_timed(); // ARGUMENTS
+		turn_left();
+		obstacleLeft = isThereSomethingInFront();
+		turn_right();
+		if (!obstacleLeft) {
+			printf("[OBSTACLES] LEFT is CLEAR\n");
+			return 2; // left is free
+		} else if (obstacleInFront) {
+			printf("[OBSTACLES] FRONT is NOT clear, out of forward_while_checking_left\n");
+			return 1; // obstacle in front
+		}
+		printf("[DEBUG] should not be in here!\n");
+		//blocked = (obstacleInFront && obstacleLeft);
+	}
+	//return 1;
+}
+
+int go_around_map() {
+	/*
+		while the robot is not back in the start area (y = 0), it keeps on going around the map starting in the bottom left corner.
+		To do so, it always tries to go to the left, forward otherwise (and right if both front and left are blocked).
+	*/
+	turn_left();
+	forward_sonar_jb();
+	printf("[POSITION] should be in bottom left corner (x=0, y=0), facing towards negative y values\n");
+	turn_right();
+	printf("[POSITION] should be in bottom left corner (x=0, y=0), facing towards positive x values\n");
+	forward_sonar_jb();
+	printf("[POSITION] should be in either top left corner or in front of an obstacle\n");
+	int yPos = get_Y_position();
+	int obstacleDir;
+	while (yPos!=0) {
+		obstacleDir = forward_while_checking_left();
+		if (obstacleDir==2) turn_left();
+		if (obstacleDir==1) turn_right();
+	}
+	int x = get_X_position();
+	return x;
 }
