@@ -1047,16 +1047,16 @@ int go_around_map() {
 		while the robot is not back in the start area (y = 0), it keeps on going around the map starting in the bottom left corner.
 		To do so, it always tries to go to the left, forward otherwise (and right if both front and left are blocked).
 	*/
-	turn_left();
+	turn_approx(90);
 	forward_sonar_jb();
-	turn_left();
+	turn_approx(-90);
 	forward_sonar_jb();
 	int yPos = get_Y_position();
 	int obstacleDir;
 	while (yPos!=0) {
 		obstacleDir = forward_while_checking_left();
-		if (obstacleDir==2) turn_left();
-		if (obstacleDir==1) turn_right();
+		if (obstacleDir==2) turn_approx(90);
+		if (obstacleDir==1) turn_approx(-90);
 	}
 	int x = get_X_position();
 	return x;
