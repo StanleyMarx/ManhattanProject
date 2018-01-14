@@ -1009,6 +1009,29 @@ int isThereSomethingInFront() {
 	return (sonarVal < SONAR_THRESHOLD);
 }
 
+int checkSides() {
+	/*
+		return 1 if sides are clear
+		return 0 if obstacle left
+		return 2 if obstacle right
+	*/
+	int front;
+	move_forever(0,0);
+	turn_approx(30); // left ?
+	front = isThereSomethingInFront();
+	if (front) {
+		return 0;
+	}
+	turn_approx(-60); // right?
+	front = isThereSomethingInFront();
+	if (front) {
+		return 2;
+	}
+	turn_approx(30); // now facing back in front
+	return 1; // sides are clear
+}
+
+
 int forward_timed() {
 	/*
 		robot goes forward until:
@@ -1055,28 +1078,6 @@ int forward_sonar_jb() {
 	move_forever(0,0);
 	if (!frontClear) return 0; // obstacle in front
 	return 1; // obstacle to the right/left
-}
-
-int checkSides() {
-	/*
-		return 1 if sides are clear
-		return 0 if obstacle left
-		return 2 if obstacle right
-	*/
-	int front;
-	move_forever(0,0);
-	turn_approx(30); // left ?
-	front = isThereSomethingInFront();
-	if (front) {
-		return 0;
-	}
-	turn_approx(-60); // right?
-	front = isThereSomethingInFront();
-	if (front) {
-		return 2;
-	}
-	turn_approx(30); // now facing back in front
-	return 1; // sides are clear
 }
 
 int forward_while_checking_left() {
