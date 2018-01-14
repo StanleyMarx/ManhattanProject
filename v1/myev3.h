@@ -980,17 +980,17 @@ void turn_right() {
 	gyroValInitial = get_gyro();
 	gyroVal = get_gyro();
 	//printf("initial gyro value: %f\n", gyroValInitial);
-	set_tacho_speed_sp(sn_left, 75);
-	set_tacho_speed_sp(sn_right, -75);
+	set_tacho_speed_sp(sn_lwheel, 75);
+	set_tacho_speed_sp(sn_rwheel, -75);
 	//printf("[TACHO] starting tachos\n");
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
 	while (abs(gyroVal - gyroValInitial) < 90) {
 		gyroVal = get_gyro();
 	}
 	//printf("[TACHO] stopping tachos\n");
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
 }
 
 void turn_left() {
@@ -999,17 +999,17 @@ void turn_left() {
 	gyroValInitial = get_gyro();
 	gyroVal = get_gyro();
 	//printf("initial gyro value: %f\n", gyroValInitial);
-	set_tacho_speed_sp(sn_left, -75);
-	set_tacho_speed_sp(sn_right, 75);
+	set_tacho_speed_sp(sn_lwheel, -75);
+	set_tacho_speed_sp(sn_rwheel, 75);
 	//printf("[TACHO] starting tachos\n");
-	set_tacho_command(sn_left, "run-forever");
-	set_tacho_command(sn_right, "run-forever");
+	set_tacho_command(sn_lwheel, "run-forever");
+	set_tacho_command(sn_rwheel, "run-forever");
 	while (abs(gyroVal - gyroValInitial) < 90) {
 		gyroVal = get_gyro();
 	}
 	//printf("[TACHO] stopping tachos\n");
-	set_tacho_command(sn_left, "stop");
-	set_tacho_command(sn_right, "stop");
+	set_tacho_command(sn_lwheel, "stop");
+	set_tacho_command(sn_rwheel, "stop");
 }
 
 
