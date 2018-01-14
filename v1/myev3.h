@@ -938,9 +938,11 @@ int detect_type(int sonarThreshold){
 			sonarValF = get_sonar();
 			if (sonarValF > sonarThreshold){
 				printf("etape2\n");
-				forwardTimed(1,100);
+				forwardTimed(1,200);
 				turn_approx(-90);
+				printf("fin etape2\n");
 			}
+			printf("fin etape2\n");
 			sonarVal = get_sonar();
 		}
 		printf("out2");
