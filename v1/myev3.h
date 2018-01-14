@@ -875,7 +875,7 @@ void drop_object() {
 	check if the robot has already dropped two objects (maximum drop allowed) and places the object behind it so it doesn't bump into it
 	*/
 	if (count_drop < 3){
-		count_drop = count_drop + 1
+		count_drop = count_drop + 1;
 		turn_approx(-180);
     		forwardTimed(1,200);
 		printf("[PELLE] opening pelle\n");//----------open pelle
