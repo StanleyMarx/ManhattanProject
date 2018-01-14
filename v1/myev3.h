@@ -1006,9 +1006,9 @@ int isThereSomethingInFront() {
 	*/
 	float sonarVal;
 	sonarVal = get_sonar();
-	int res = (sonarVal < SONAR_THRESHOLD);
-	printf("[SONAR] sonarVal = %f ; so res = %d\n", sonarVal, res);
-	return res;
+	//int res = (sonarVal < SONAR_THRESHOLD);
+	//printf("[SONAR] sonarVal = %f ; so res = %d\n", sonarVal, res);
+	return (sonarVal < SONAR_THRESHOLD);//res;
 }
 
 int checkSides() {

@@ -70,6 +70,24 @@ void debug_sensors(){
         sleep(2);
     }
 }
+
+// ------------------------ CASE 6 ------------------------
+int test_go_around_map(){
+      pthread_t myUpdate_position;
+      pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+      
+      go_around_map();
+      
+      pthread_mutex_lock(&mutex);
+      ThreadSituation = 1;
+      pthread_mutex_unlock(&mutex);
+      
+      pthread_join(myUpdate_position,NULL);
+      pthread_mutex_destroy(&mutex);
+      return 0;
+}
+
+
 //----------------------- CASE_8 -----------------------
 float X=0, Y=0, T=0;
 char UPDATE_POS_ENABLE=1;
@@ -184,7 +202,7 @@ int robot(int sw,int arg1,int arg2){
 	    	break;
 	    case 6:
 	    	printf("Going around map - test JB\n");
-	    	go_around_map();
+	    	test_go_around_map();
 	    	printf("END OF TEST 6 JB\n");
 	    	//close_shovel();
 	    	break;
