@@ -27,7 +27,7 @@ int testDetectType(){
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
       forward_sonar(50);
-    detect_type(60);
+    detect_nonmovable(60);
       pthread_mutex_lock(&mutex);
       ThreadSituation = 1;
       pthread_mutex_unlock(&mutex);
