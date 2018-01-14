@@ -999,6 +999,16 @@ int checkSides();
 */
 
 // GO AROUND MAP
+int isThereSomethingInFront() {
+	/*
+		by JB
+		returns 1 if an obstacle is close enough to the sonar sensor, 0 otherwise
+	*/
+	float sonarVal;
+	sonarVal = get_sonar();
+	return (sonarVal < SONAR_THRESHOLD);
+}
+
 int forward_timed() {
 	/*
 		robot goes forward until:
@@ -1018,59 +1028,6 @@ int forward_timed() {
 	move_forever(0,0);
 	if (timeIsUp) return 0;
 	return 1; // there is something in front of the robot
-}
-
-int forward_while_checking_left() {
-	/*
-		robot goes forward for a specific amount of time (CHECK_TIMER) then checks its left side.
-	*/
-	//int blocked = 0;
-	int obstacleInFront = 0;
-	int obstacleLeft = 0;
-	while (1) { //!blocked) {
-		obstacleInFront = forward_timed(); // ARGUMENTS
-		turn_approx(90);
-		obstacleLeft = isThereSomethingInFront();
-		turn_approx(-90);
-		if (!obstacleLeft) {
-			return 2; // left is free
-		} else if (obstacleInFront) {
-			return 1; // obstacle in front
-		}
-		//blocked = (obstacleInFront && obstacleLeft);
-	}
-	//return 1;
-}
-
-int go_around_map() {
-	/*
-		while the robot is not back in the start area (y = 0), it keeps on going around the map starting in the bottom left corner.
-		To do so, it always tries to go to the left, forward otherwise (and right if both front and left are blocked).
-	*/
-	turn_approx(90);
-	forward_sonar_jb();
-	turn_approx(-90);
-	forward_sonar_jb();
-	int yPos = get_Y_position();
-	int obstacleDir;
-	while (yPos!=0) {
-		obstacleDir = forward_while_checking_left();
-		if (obstacleDir==2) turn_approx(90);
-		if (obstacleDir==1) turn_approx(-90);
-	}
-	int x = get_X_position();
-	return x;
-}
-
-// USEFUL FUNCTIONS
-int isThereSomethingInFront() {
-	/*
-		by JB
-		returns 1 if an obstacle is close enough to the sonar sensor, 0 otherwise
-	*/
-	float sonarVal;
-	sonarVal = get_sonar();
-	return (sonarVal < SONAR_THRESHOLD);
 }
 
 int forward_sonar_jb() {
@@ -1120,4 +1077,46 @@ int checkSides() {
 	}
 	turn_approx(30); // now facing back in front
 	return 1; // sides are clear
+}
+
+int forward_while_checking_left() {
+	/*
+		robot goes forward for a specific amount of time (CHECK_TIMER) then checks its left side.
+	*/
+	//int blocked = 0;
+	int obstacleInFront = 0;
+	int obstacleLeft = 0;
+	while (1) { //!blocked) {
+		obstacleInFront = forward_timed(); // ARGUMENTS
+		turn_approx(90);
+		obstacleLeft = isThereSomethingInFront();
+		turn_approx(-90);
+		if (!obstacleLeft) {
+			return 2; // left is free
+		} else if (obstacleInFront) {
+			return 1; // obstacle in front
+		}
+		//blocked = (obstacleInFront && obstacleLeft);
+	}
+	//return 1;
+}
+
+int go_around_map() {
+	/*
+		while the robot is not back in the start area (y = 0), it keeps on going around the map starting in the bottom left corner.
+		To do so, it always tries to go to the left, forward otherwise (and right if both front and left are blocked).
+	*/
+	turn_approx(90);
+	forward_sonar_jb();
+	turn_approx(-90);
+	forward_sonar_jb();
+	int yPos = get_Y_position();
+	int obstacleDir;
+	while (yPos!=0) {
+		obstacleDir = forward_while_checking_left();
+		if (obstacleDir==2) turn_approx(90);
+		if (obstacleDir==1) turn_approx(-90);
+	}
+	int x = get_X_position();
+	return x;
 }
