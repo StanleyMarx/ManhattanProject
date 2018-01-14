@@ -203,6 +203,7 @@ int robot(int sw,int arg1,int arg2){
 	    case 6:
 	    	printf("Going around map - test JB\n");
 	    	test_go_around_map();
+	    	create_map();
 	    	printf("END OF TEST 6 JB\n");
 	    	//close_shovel();
 	    	break;
