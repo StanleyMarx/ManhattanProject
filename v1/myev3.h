@@ -202,22 +202,6 @@ void turn_approx(float angle){
     move_real_debug(ratio*angle,-ratio*angle);
 }
 
-void turn_compass(float angle ){
-	turn_approx(20.0);
-	printf("verifcompass begins\n");
-	float CompassVal = get_compass();
-	float diff = CompassVal - angle;
-	printf("angle %f\n", diff);
-	if(abs(diff)>1){
-		if(diff > 0){
-			turn_approx(diff);
-		}else{
-			turn_approx(-diff);
-		}
-	}
-	printf("verifcompass done\n");
-}
-
 void turn_exact_abs(float anglDest,float prec){
     float ratio=2.5;
     float anglCurr=get_compass();
@@ -248,7 +232,8 @@ void turn_exact_gyro(float delta,float prec){
 }
 
 void forwardTimed(int seconds, int speed) {
-	/* forwardTimed(1,200) : 10cm */
+	/* by Alix
+	forwardTimed(1,200) : 10cm */
 	set_tacho_speed_sp(sn_rwheel, speed);
 	set_tacho_speed_sp(sn_lwheel, speed);
 	//printf("[TACHO] starting tachos\n");
@@ -259,97 +244,6 @@ void forwardTimed(int seconds, int speed) {
 	set_tacho_command(sn_lwheel, "stop");
 	set_tacho_command(sn_rwheel, "stop");
 	//printf("[TACHO] function forward is over!\n");
-}
-
-/* à tester */
-float width_object(){
-    /*
-        return the angular width of the object in front of him
-        end position: at the right of it
-    */
-    int speed_scan=20;
-    float treshold=200;
-    float al,ar;
-
-    move_forever(speed_scan,-speed_scan);
-    while(get_sonar()<treshold);
-    move_forever(0,0);
-    sleep(1);
-    al=get_compass();
-    move_forever(-speed_scan,speed_scan);
-    while(get_sonar()<treshold);
-    move_forever(0,0);
-    sleep(1);
-    ar=get_compass();
-    return al-ar;
-}
-float width_object2(){
-    int speed_scan=20;
-    float treshold_drop=50;
-    float d0=get_sonar(),d1=d0;
-    float al,ar;
-
-    move_forever(speed_scan,-speed_scan);
-    while(abs(d1-d0)<treshold_drop){
-        d0=d1;
-        d1=get_sonar();
-    }
-    al=get_compass_slow();
-    move_forever(-speed_scan,speed_scan);
-    while(abs(d1-d0)<treshold_drop){
-        d0=d1;
-        d1=get_sonar();
-    }
-    ar=get_compass_slow();
-
-    return al-ar;
-}
-void scan_object(){
-    int speed_scan=20;
-    float treshold=200;
-    int prec=256;
-    int scan[prec];
-    float ar,al;
-    int i;
-
-    move_forever(speed_scan,-speed_scan);
-    while(get_sonar()<treshold);
-    move_forever(0,0);
-    sleep(1);
-    al=get_compass();
-    move_forever(-speed_scan,speed_scan);
-    for (i=0; i<256; i++){
-        scan[i]=get_sonar();
-    }
-    move_forever(0,0);
-    sleep(1);
-    get_compass();
-
-    // max
-    int imax=0;
-    for (i=0; i<prec; i++){
-        if (scan[i]>scan[imax]){
-            imax=i;
-        }
-    }
-    float aobjmax=al+(ar-al)*imax/prec;
-
-    // boundaries via scan'
-    float scanp,scanpmin=scan[1]-scan[0],scanpmax=scanpmin;
-    int ipmin,ipmax;
-    for (i=0; i<prec-1; i++){
-        scanp=scan[i+1]-scan[i];
-        if (scanpmin>scanp){
-            scanpmin=scanp;
-            ipmin=i;
-        }
-        if (scanpmax<scanp){
-            scanpmax=scanp;
-            ipmax=i;
-        }
-    }
-    float aobjl=al+(ar-al)*ipmin/prec;
-    float aobjr=al+(ar-al)*ipmax/prec;
 }
 
 /* communication client/serveur */
@@ -812,6 +706,7 @@ int forward_sonar_timed(int rcycle, int lcycle, float sonarThreshold, int sec, i
 	/* by Alix and JB 
 	moves forward until the sonar detects an object. 
 	If during sec seconds there was no object found, it stops, checks around if there are any.
+	forward_sonar_timed(50, 50, 50.0, 2, 20);
 	*/
 	printf("in forward sonar \n");
 	int timeup = 0;
@@ -913,7 +808,6 @@ int detect_movable() {
 }
 
 int detect_type(int sonarThreshold){
-	// boucle while tant que different de la position init ou aue super eloigne
 	int x = get_X_position();
 	int y = get_Y_position();
 	printf(" init pos %d %d \n", x, y);
@@ -928,11 +822,8 @@ int detect_type(int sonarThreshold){
 	sonarVal = get_sonar();
 	int a = get_X_position();
 	int b = get_Y_position();
-	int i = 0;
 	printf(" pos %d %d \n", a, b);
-	while (i<10){ 
-		printf("i = %d",i);
-		i = i + 1;
+	while (a!=x && b!=y){ 
 		printf("in1");
 		while (sonarVal < sonarThreshold) {
 			printf("in2");
@@ -952,14 +843,8 @@ int detect_type(int sonarThreshold){
 		a = get_X_position();
 		b = get_Y_position();
 	}
-	printf("out1");
-	if (x == get_X_position() && y ==get_Y_position()){
-		return 1;
-		printf("object \n");
-	}
-	printf("fronteer \n");
-	return 2; //return 1 si obstacle, 2 si frontiere
-
+	printf("out1, a fait le tour ");
+	return 0
 }
 
 int forward_Sonar2(int rcycle, int lcycle, float sonarThreshold, int msec, int delta) {
