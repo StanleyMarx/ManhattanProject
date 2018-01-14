@@ -167,7 +167,7 @@ void close_shovel(){
 float get_gyro(){
     float ret;
     get_sensor_value0(sn_gyro,&ret);
-    return ret;
+    return -ret;
 }
 float get_compass(){
     float ret;
@@ -717,8 +717,6 @@ void* Update_position2(){
     pthread_exit(NULL);
 }
 
-
-
 void* test_Update_position2(){
     /* get the position while moving */
     pthread_t myUpdate_position;
@@ -766,7 +764,8 @@ int get_Y_position() {
 	return Y;
 }
 
-int look_around(){
+/* FAILED TO COMPILE
+int look_around(){    
 	turn_approx(-20);
 	if (get_sonar() < sonarThreshold){
 		return 1;
@@ -780,18 +779,19 @@ int look_around(){
 			return 0;
 		}
 	}
-}
-	
-int fs(){
+}*/
+
+/* FAILED TO COMPILE
+int fs(){    
 	float sonarVal = get_sonar();
 	int x = 0;
 	while (sonarVal > sonarThreshold && x == 0) {
-        	move_forever(rcycle, lcycle);
+        move_forever(200,200);
 		int x = InvokeRepeating("look_around", 2,2);
-	move_forever(0,0);
-	CancelInvoke("look_around");
-		
-}
+        move_forever(0,0);
+        CancelInvoke("look_around");
+    }
+}*/
 
 int forward_sonar(int rcycle, int lcycle, float sonarThreshold, int sec, int delta) {
 	// moves forward until it is close enough to an object

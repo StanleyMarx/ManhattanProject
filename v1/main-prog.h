@@ -1,4 +1,4 @@
-//--------------------------- CASE_0 ---------------------------
+//----------------------- CASE_0 -----------------------
 void* display_entry(){
     int c,lval,rval;
     printf("[THREAD] displaying the position value every second\n");
@@ -21,9 +21,9 @@ int test_update_pos(){
     pthread_join(display,NULL);
     return 0;
 }
-//--------------------------- CASE_1 ---------------------------
+//----------------------- CASE_1 -----------------------
 //dans myev3.h
-int testDetectType():{
+int testDetectType(){
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
       forward_sonar(50, 50, 50, 5, 20);
@@ -35,7 +35,7 @@ int testDetectType():{
       pthread_join(myUpdate_position,NULL);
       pthread_mutex_destroy(&mutex);
 }
-//--------------------------- CASE_2 ---------------------------
+//----------------------- CASE_2 -----------------------
 void test_cs(){
     send_position(1,2);
     send_position(-1,-2);
@@ -43,7 +43,7 @@ void test_cs(){
     send_obstacle(0,4,5);
     send_position_pos(1,2);
 }
-//--------------------------- CASE_3 ---------------------------
+//----------------------- CASE_3 -----------------------
 void test_turn(int rat){
     printf("- testing the move_real_debug function -\n");
     move_real_debug(500,500);
@@ -59,9 +59,9 @@ void test_turn(int rat){
     turn_exact_gyro(180,1);
     printf("turned to %f.\n",get_gyro());
 }
-//--------------------------- CASE_4 ---------------------------
+//----------------------- CASE_4 -----------------------
 //dans myeve3.h
-//--------------------------- CASE_5 ---------------------------
+//----------------------- CASE_5 -----------------------
 void debug_sensors(){
     while (1){
         printf("compass %f\n",get_compass());
@@ -70,7 +70,7 @@ void debug_sensors(){
         sleep(2);
     }
 }
-//--------------------------- CASE_8 ---------------------------
+//----------------------- CASE_8 -----------------------
 float X=0, Y=0, T=0;
 char UPDATE_POS_ENABLE=1;
 char SEND_POS_ENABLE=1;
@@ -131,14 +131,22 @@ void almost_the_real_stuff(){
     pthread_create(&send_pos,NULL,send_pos_entry,NULL);
     
     // does some movements
-    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
+    printf("X,Y,T = %f,%f,%f\n(advancing)\n",X,Y,T);
     move_real_debug(1000,1000);
-    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
+    printf("X,Y,T = %f,%f,%f\n(turning)\n",X,Y,T);
     turn_approx(90);
-    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
-    move_real_debug(-300,-300);
-    printf("X,Y,T = %f,%f,%f\n",X,Y,T);
-    turn_approx(-180);
+    printf("X,Y,T = %f,%f,%f\n(advancing)\n",X,Y,T);
+    move_real_debug(1000,1000);
+    printf("X,Y,T = %f,%f,%f\n(turning)\n",X,Y,T);
+    turn_approx(90);
+    printf("X,Y,T = %f,%f,%f\n(advancing)\n",X,Y,T);
+    move_real_debug(1000,1000);
+    printf("X,Y,T = %f,%f,%f\n(turning)\n",X,Y,T);
+    turn_approx(90);
+    printf("X,Y,T = %f,%f,%f\n(advancing)\n",X,Y,T);
+    move_real_debug(1000,1000);
+    printf("X,Y,T = %f,%f,%f\n(turning)\n",X,Y,T);
+    turn_approx(90);
     printf("X,Y,T = %f,%f,%f\n",X,Y,T);
     
     // stop threads
@@ -146,10 +154,9 @@ void almost_the_real_stuff(){
     SEND_POS_ENABLE=0;
     pthread_join(update_pos,NULL);
     pthread_join(send_pos,NULL);
-    return 0;
 }
 
-//--------------------------- ROBOT ---------------------------
+//------------------------ ROBOT ------------------------
 int robot(int sw,int arg1,int arg2){
     printf("case no: %d\n", sw);
     switch (sw){
