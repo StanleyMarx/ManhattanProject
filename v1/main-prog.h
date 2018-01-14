@@ -165,7 +165,7 @@ int robot(int sw,int arg1,int arg2){
             break;
         case 1:
            // testDetectType();
-		    fs();
+		   
         case 2:
             test_cs();
             break;
