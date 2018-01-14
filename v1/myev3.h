@@ -1101,7 +1101,7 @@ int detect_nonmovable(int sonarThreshold){
 	int a = get_X_position();
 	int b = get_Y_position();
 	printf(" pos %d %d \n", a, b);
-	while (a!=x && b!=y){ 
+	while (a!=x || b!=y){ 
 		printf("in1\n");
 		if (sonarVal < sonarThreshold) {
 			printf("in2\n");
