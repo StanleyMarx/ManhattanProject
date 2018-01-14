@@ -806,7 +806,6 @@ int detect_movable() {
 }
 
 int detect_type(int sonarThreshold){
-	// boucle while tant que different de la position init ou aue super eloigne
 	int x = get_X_position();
 	int y = get_Y_position();
 	printf(" init pos %d %d \n", x, y);
@@ -821,7 +820,6 @@ int detect_type(int sonarThreshold){
 	sonarVal = get_sonar();
 	int a = get_X_position();
 	int b = get_Y_position();
-	int i = 0;
 	printf(" pos %d %d \n", a, b);
 	while (a!=x && b!=y){ 
 		printf("in1");
