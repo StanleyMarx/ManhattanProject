@@ -359,11 +359,10 @@ void send_position(int16_t x,int16_t y){
 	str[2]=TEAM_ID;
 	str[3]=0xff;
 	str[4]=MSG_POSITION;
-	*((int16_t*)&str[5])=x;
-    if (x<0){
-        str[6]=0x00;
-    }
-	*((int16_t*)&str[7])=y;
+	str[5]=x;
+    if (x<0){str[6]=0xff;} else {str[6]=0x00;}
+	str[7]=y;
+    if (y<0){str[8]=0xff;} else {str[8]=0x00;}
 	write(s,str,9);
 	Sleep(1000);
 }
@@ -373,8 +372,10 @@ void send_mapdata(int16_t x,int16_t y,char r,char g,char b){
 	str[2]=TEAM_ID;
 	str[3]=0xff;
 	str[4]=5;
-	*((int16_t*)&str[5])=x;
-	*((int16_t*)&str[7])=y;
+    str[5]=x;
+    if (x<0){str[6]=0xff}else{str[6]=0x00};
+    str[7]=7;
+    if (y<0){str[8]=0xff}else{str[8]=0x00};
 	str[9]=r;
 	str[10]=g;
 	str[11]=b;
@@ -397,8 +398,10 @@ void send_obstacle(int act,uint16_t x,uint16_t y){
 	str[3]=0xff;
 	str[4]=7;
     str[5]=act;
-	*((int16_t*)&str[6])=x;
-	*((int16_t*)&str[8])=y;
+	str[6]=x;
+    if (x<0){str[7]=0xff;} else {str[7]=0x00;}
+	str[8]=y;
+    if (y<0){str[9]=0xff;} else {str[9]=0x00;}
 	write(s,str,10);
 	Sleep(1000);
 }
@@ -465,11 +468,10 @@ int pos_exists(int x, int y, int* x_list, int* y_list, int len){
 }
 int send_map_from_file(){
     // file: pos.txt
-    // max number of coordinates: 1000
     // uses send_mapdata_pos for debug pruposes but looking forward to send_mapdata
     
-    int x_list[1000];
-    int y_list[1000];
+    int x_list[10000];
+    int y_list[10000];
     
     FILE* pos_file=fopen("pos.txt","r");
     if (!pos_file){
@@ -699,7 +701,7 @@ int known_point(int checkX, int checkY) {
 }
 
 void* Update_position2(){
-    /* get the position every secondes */
+    /* get the position every seconds */
     get_sensor_value0(sn_gyro, &thetaCompasInit);
     sleep(0.3);
     get_sensor_value0(sn_gyro, &thetaCompasInit);

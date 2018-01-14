@@ -42,6 +42,7 @@ void test_cs(){
     send_obstacle(1,2,3);
     send_obstacle(0,4,5);
     send_position_pos(1,2);
+    send_position_pos(-1,-2);
 }
 //----------------------- CASE_3 -----------------------
 void test_turn(int rat){
