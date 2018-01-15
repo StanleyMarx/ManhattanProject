@@ -529,7 +529,7 @@ int forward_sonar_jb() {
 		if (checkGyro>initialGyro) {
 			localRCycle--;
 		}*/
-		move_forever(35, 35);
+		move_real_debug(35, 35);//move_forever(35, 35);
 		check_t = clock();
 		timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
 		if (timeIsUp) {
