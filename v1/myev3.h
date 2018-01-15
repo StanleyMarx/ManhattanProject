@@ -767,6 +767,7 @@ void* Update_position2(){
         timeIsUp = ( ((double)(check_t - start_t) / CLOCKS_PER_SEC) > 2);
         if (timeIsUp) {
         	printf("[SERVER] Xpos = %d, Ypos = %d\n", Xpos, Ypos);
+        	send_position(Xpos, Ypos);
         	start_t = clock();
         } 
         //printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
@@ -1161,12 +1162,16 @@ int create_map(int x0, int y0) {
 			if (x==xFile && y==yFile){
 				if (x==x0 && y==y0) {
 					printf(" 0 ");
+					send_mapdata(x, y, 255, 255, 255);
 				} else if (nature==0) {
 					printf(" X ");// send_mapdata_pos((int16_t) x, (int16_t) y, 255, 255, 255); //### WHITE: %d, %d\n", x, y);
+					send_mapdata(x, y, 255, 255, 255);
 				} else if (nature==1) {
 					printf(" + "); //this is a non-movable object
+					send_mapdata(x, y, 0, 0, 0);
 				} else {
 					printf(" o "); // this is a movable obj
+					send_mapdata(x, y, 255, 0, 0);
 				}
 			} else {
 				printf(" . ");// send_mapdata_pos((int16_t) x, (int16_t) y, 0, 0, 0); //BLACK: %d, %d\n", x, y);
@@ -1176,6 +1181,7 @@ int create_map(int x0, int y0) {
 		printf("\n");
 	}
 	printf("\n");
+	send_mapdone();
     return 0;
 }
 
