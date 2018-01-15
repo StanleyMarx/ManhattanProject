@@ -31,6 +31,7 @@ const int PELLE_PORT = 67; // port C
 ////////////////// INITIALISATION ///////////////////////
 
 void findSensors(uint8_t sn_compass, uint8_t sn_sonar, uint8_t sn_gyro) {
+	// from the OS GitHub, modified by JB
 	int i, val;
 	uint32_t n, ii;
 	float value;
@@ -88,6 +89,7 @@ void findSensors(uint8_t sn_compass, uint8_t sn_sonar, uint8_t sn_gyro) {
 }
 
 uint8_t findLeftMotor(uint8_t sn_left) {
+	// from the OS GitHub, modified by JB
 	// find left motor	
 	if ( ev3_search_tacho_plugged_in(LEFT_PORT,0, &sn_left, 0 )) {
 		printf( "LEGO_EV3_M_MOTOR LEFT is found on port %d, for sn=%d\n", LEFT_PORT, sn_left);
@@ -100,6 +102,7 @@ uint8_t findLeftMotor(uint8_t sn_left) {
 }
 
 uint8_t findRightMotor(uint8_t sn_right) {
+	// from the OS GitHub, modified by JB
 	// find right motor	
 	if ( ev3_search_tacho_plugged_in(RIGHT_PORT,0, &sn_right, 0 )) {
 		printf( "LEGO_EV3_M_MOTOR RIGHT is found on port %d, for sn=%d\n", RIGHT_PORT, sn_right);
@@ -112,6 +115,7 @@ uint8_t findRightMotor(uint8_t sn_right) {
 }
 
 uint8_t findPelleMotor(uint8_t sn_pelle) {
+	// from the OS GitHub, modified by JB
 	// find pelle motor	
 	if ( ev3_search_tacho_plugged_in(PELLE_PORT,0, &sn_pelle, 0 )) {
 		printf( "LEGO_EV3_M_MOTOR PELLE is found on port %d, for sn=%d\n", PELLE_PORT, sn_pelle);
@@ -126,6 +130,7 @@ uint8_t findPelleMotor(uint8_t sn_pelle) {
 //////////////////////// SENSORS /////////////////////
 
 float getGyro(uint8_t sn_gyro) {
+	// from the OS GitHub, modified by JB
 	float value;
 	if (ev3_search_sensor(LEGO_EV3_GYRO, &sn_gyro,0)){
 		//printf("[DEBUG] reading GYRO\n");
@@ -141,6 +146,7 @@ float getGyro(uint8_t sn_gyro) {
 }
 
 float getCompass(uint8_t sn_compass) {
+	// from the OS GitHub, modified by JB
 	float value;
 	if (ev3_search_sensor(HT_NXT_COMPASS, &sn_compass,0)){
 		//printf("[DEBUG] reading COMPASS\n");
@@ -156,6 +162,7 @@ float getCompass(uint8_t sn_compass) {
 }
 
 float getSonar(uint8_t sn_sonar) {
+	// from the OS GitHub, modified by JB
 	float value;
 	if (ev3_search_sensor(LEGO_EV3_US, &sn_sonar,0)){
 		//printf("[DEBUG] reading SONAR\n");
@@ -173,6 +180,7 @@ float getSonar(uint8_t sn_sonar) {
 //////////////// MOTORS WHEELS /////////////////////
 
 void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
+	// by JB Henri and Alix
 	set_tacho_speed_sp(sn_right, 500);
 	set_tacho_speed_sp(sn_left, 500);
 	printf("[TACHO] starting tachos\n");
@@ -186,6 +194,7 @@ void forwardTimed(uint8_t sn_left, uint8_t sn_right, int seconds) {
 }
 
 void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float sonarThreshold) {
+	// by JB and Alix
 	float sonarVal = getSonar(sn_sonar);
 	set_tacho_speed_sp(sn_right, 500);
 	set_tacho_speed_sp(sn_left, 500);
@@ -201,6 +210,7 @@ void forwardSonar(uint8_t sn_left, uint8_t sn_right, uint8_t sn_sonar, float son
 }
 
 void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
+	// by JB
 	float gyroVal;
     	float gyroValInitial;
 	gyroValInitial = getGyro(sn_gyro);
@@ -220,6 +230,7 @@ void turnRight(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 }
 
 void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
+	//  by JB
 	float gyroVal;
     	float gyroValInitial;
 	gyroValInitial = getGyro(sn_gyro);
@@ -241,6 +252,7 @@ void turnLeft(uint8_t sn_left, uint8_t sn_right, uint8_t sn_gyro) {
 ///////////////////////////// PELLE MOTOR ///////////////////////////////////
 
 size_t initializePelle(uint8_t sn_pelle) {
+	// by JB - not working
 	printf("[PELLE] initializing pelle with sn = %d\n", sn_pelle);
 	set_tacho_position_sp(sn_pelle, 10); // OK
 	set_tacho_speed_sp(sn_pelle, 50);
@@ -294,6 +306,7 @@ size_t initializePelle(uint8_t sn_pelle) {
 ///////////////////////////////////// MMMMAAAAIIIIINNNNNN ///////////////////////////////////
 
 int main(void) {
+	// by JB to test the basic functions
 	uint8_t sn_left;
 	uint8_t sn_right;
 	uint8_t sn_pelle;
