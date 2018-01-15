@@ -134,7 +134,6 @@ int go_random(int x0, int y0) {
     return 0;
 }
 
-
 //----------------------- CASE_8 -----------------------
 float X=0, Y=0, T=0;
 char UPDATE_POS_ENABLE=1;
@@ -284,6 +283,14 @@ int robot(int sw,int arg1,int arg2){
         	create_map(arg1, arg2);
         	printf("END OF TEST 10 JB\n");
         	break;
-    
+        case 11:
+            printf("displays the sensor values every 2 seconds\n");
+            while (1){
+                printf("sonar:   %f\n",get_sonar());
+                printf("gyro:    %f\n",get_gyro());
+                printf("compass: %f\n",get_compass());
+                printf("color:   %d\n",get_color());
+                sleep(2);
+            }
     }
 }
