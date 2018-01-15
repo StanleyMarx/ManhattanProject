@@ -819,21 +819,18 @@ int detect_movable() {
 	}
 }
 
-void position_in_front() {
+void position_in_front(int nature) {
 	/*
 		by JB
 		supposed to return the position right in front of the robot but it keeps on making some mistakes...
 	*/
-	float theta;
-	int xFront, yFront;
 	int actualX = get_X_position();
 	int actualY = get_Y_position();
-	theta = get_gyro();
-	theta = (theta-thetaCompasInit)*pi/180;
-	xFront = (int) round((Xdef/5)+2*sin(theta));
-	yFront = (int) round((Ydef/5)+2*cos(theta));
-	printf("[OBJECT POSITION] front is at x=%d, y=%d (robot is at x=%d, y=%d)\n", xFront, yFront, actualX, actualY);
-	append_pos_file(xFront, yFront, 1);
+	float sonarVal = get_sonar();
+	int xObj = (int) (X + cos(T)*sonarVal)/SQUARE_SIZE;
+	int yObj = (int) (Y + sin(T)*sonarVal)/SQUARE_SIZE;
+	printf("[OBJECT POSITION] front is at x=%d, y=%d (robot is at x=%d, y=%d)\n", xObj, yObj, actualX, actualY);
+	append_pos_file(xFront, yFront, nature);
 }
 
 int isThereSomethingInFront() {
@@ -863,11 +860,11 @@ int isThereSomethingInFront() {
 		int movable = detect_movable();
 		if (!movable) {
 			printf("[OBJECT] non movable\n");
-			position_in_front();
+			position_in_front(1);
 			return 1;
 		}
 		printf("[OBJECT] movable\n");
-		position_in_front();
+		position_in_front(2);
 		return 1;
 	}
 	return 0;//res;
@@ -1166,8 +1163,10 @@ int create_map(int x0, int y0) {
 					printf(" 0 ");
 				} else if (nature==0) {
 					printf(" X ");// send_mapdata_pos((int16_t) x, (int16_t) y, 255, 255, 255); //### WHITE: %d, %d\n", x, y);
+				} else if (nature==1) {
+					printf(" + "); //this is a non-movable object
 				} else {
-					printf(" + "); //this is an object
+					printf(" o "); // this is a movable obj
 				}
 			} else {
 				printf(" . ");// send_mapdata_pos((int16_t) x, (int16_t) y, 0, 0, 0); //BLACK: %d, %d\n", x, y);
