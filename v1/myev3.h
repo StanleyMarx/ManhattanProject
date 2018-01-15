@@ -527,7 +527,7 @@ int forward_sonar_jb() {
         if (checkGyro>initialGyro) {
             localRCycle--;
         }*/
-        move_real_debug(35, 35);//move_forever(35, 35);
+        move_forever(35, 35);//move_forever(35, 35);
         check_t = clock();
         timeIsUp = (((double)(check_t - start_t) / CLOCKS_PER_SEC) > CHECK_TIMER);
         if (timeIsUp) {
@@ -1540,7 +1540,7 @@ void deplacement(float sonarThreshold , int speed) {
             }
         }else {
             //do move_a_bit
-            move_real_debug(800,800);
+            move_real_debug(500,500);
 
 
             turn_exact_gyro(lastTurn,1);
