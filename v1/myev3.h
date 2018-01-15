@@ -751,14 +751,14 @@ void* Update_position2(){
         timeIsUp = ( ((double)(check_t - start_t) / CLOCKS_PER_SEC) > 2);
         if (timeIsUp) {
         	printf("[SERVER] Xpos = %d, Ypos = %d\n", Xpos, Ypos);
-        	send_position2(Xpos, Ypos);
+        	send_position(Xpos, Ypos);
         	start_t = clock();
         } 
         //printf("\n Xdef,Ydef = %f,%f       X,Y = %d,%d\n",Xdef,Ydef,Xpos,Ypos);
         if ((Xpos != XposOld) || (Ypos != YposOld)) {
             XposOld = Xpos;
             YposOld = Ypos;
-            append_pos_file(Xpos, Ypos, 0);
+            append_pos_file2(Xpos, Ypos, 0);
         }
     }
     pthread_mutex_unlock(&mutex);
