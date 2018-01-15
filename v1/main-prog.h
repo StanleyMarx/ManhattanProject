@@ -75,18 +75,29 @@ void debug_sensors(){
 //--------------------------- CASE 6 ----------------
 
 int test_explore_mountain() {
-	pthread_t myUpdate_position;
-	pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
-
+	set_sensor_mode(sn_gyro, "GYRO-G&A");
+	set_sensor_mode(sn_gyro, "GYRO-ANG");
+	T = get_gyro();
+	pthread_t update_pos;
+    pthread_create(&update_pos,NULL,update_pos_entry,NULL);
+    pthread_t send_pos;
+    pthread_create(&send_pos,NULL,send_pos_entry,NULL);
+    move_forever(35, 20);
+    sleep(3);
+    move_forever(0,0);
+    
 	explore_mountain();
 
-	pthread_mutex_lock(&mutex);
-	ThreadSituation = 1;
-	pthread_mutex_unlock(&mutex);
-
-	pthread_join(myUpdate_position,NULL);
-	pthread_mutex_destroy(&mutex);
-	return 0;
+	create_map(x0, y0);
+    // stop threads
+    printf("stopping threads...\n");
+    UPDATE_POS_ENABLE=0;
+    SEND_POS_ENABLE=0;
+    printf("joining threads...\n");
+    pthread_join(update_pos,NULL);
+    pthread_join(send_pos,NULL);
+    printf("- done -");
+    return 0;
 }
 
 // ------------------------ CASE 7 ------------------------
@@ -113,12 +124,13 @@ int go_random(int x0, int y0) {
 	*/
 	set_sensor_mode(sn_gyro, "GYRO-G&A");
 	set_sensor_mode(sn_gyro, "GYRO-ANG");
+	T = get_gyro();
 	pthread_t update_pos;
     pthread_create(&update_pos,NULL,update_pos_entry,NULL);
     pthread_t send_pos;
     pthread_create(&send_pos,NULL,send_pos_entry,NULL);
     move_forever(35, 20);
-    sleep(6);
+    sleep(3);
     move_forever(0,0);
     //printf("x = %d, y = %d\n");
     int side;
