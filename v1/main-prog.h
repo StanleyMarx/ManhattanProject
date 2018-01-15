@@ -142,58 +142,6 @@ int go_random(int x0, int y0) {
 }
 
 //----------------------- CASE_8 -----------------------
-char UPDATE_POS_ENABLE=1;
-char SEND_POS_ENABLE=1;
-
-void* update_pos_entry(){
-    // updates the global variable X and Y given the input of the motors
-    
-    int right_pos, left_pos, right_pos_prev, left_pos_prev, dr, dl;
-    get_tacho_position(sn_rwheel,&right_pos_prev);
-    get_tacho_position(sn_lwheel,&left_pos_prev);
-    T=get_gyro();
-    right_pos=right_pos_prev;
-    left_pos=left_pos_prev;
-    FILE* file_pos;
-    int x_towrite;
-    int y_towrite;
-    int x_lastwritten=0;
-    int y_lastwritten=0;
-    
-    while (UPDATE_POS_ENABLE){
-        get_tacho_position(sn_rwheel,&right_pos);
-        get_tacho_position(sn_lwheel,&left_pos);
-        dr=right_pos-right_pos_prev;
-        dl=left_pos-left_pos_prev;
-        
-        if (dr*dl>0){
-            // advancing
-            X+=(dr+dl)*cos(T/57.29577951308232);
-            Y+=(dr+dl)*sin(T/57.29577951308232);
-        } else {
-            // turning
-            T=get_gyro();
-        }
-        x_towrite=(int)(X/SQUARE_SIZE);
-        y_towrite=(int)(Y/SQUARE_SIZE);
-        if (x_towrite!=x_lastwritten || y_towrite!=y_lastwritten){
-            file_pos=fopen("pos.txt","a");
-            fprintf(file_pos,"%d,%d,0\n",x_towrite,y_towrite);
-            x_lastwritten=x_towrite;
-            y_lastwritten=y_towrite; 
-            fclose(file_pos);
-        }
-        
-        right_pos_prev=right_pos;
-        left_pos_prev=left_pos;
-    }
-}
-void* send_pos_entry(){
-    while(SEND_POS_ENABLE){
-        send_position((int)(X/SQUARE_SIZE),(int)(Y/SQUARE_SIZE));
-        sleep(2);
-    }
-}
 void almost_the_real_stuff(){
     pthread_t update_pos;
     pthread_create(&update_pos,NULL,update_pos_entry,NULL);

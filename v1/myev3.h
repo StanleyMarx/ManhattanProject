@@ -290,11 +290,11 @@ void turn_exact_rel(float delta,float prec){
 
 //unused? 
 void turn_exact_gyro(float delta,float prec){
-    float anglCurr=-get_gyro();
+    float anglCurr=get_gyro();
     float anglDest=anglCurr+delta;
     while (abs(delta)>prec){
         turn_approx(delta);
-        anglCurr=-get_gyro();
+        anglCurr=get_gyro();
         delta=anglDest-anglCurr;
     }
 }
@@ -1423,7 +1423,7 @@ void newtake_object() {
 }
 
 void newdrop_object() {
-    turn_exact_gyro(180);//-------half turn
+    turn_exact_gyro(180,1);//-------half turn
     newforwardTimed(2, 80);//---------moveforward
     printf("[PELLE] opening pelle\n");//----------open pelle
     set_tacho_speed_sp(sn_shovel, -80);
@@ -1431,7 +1431,7 @@ void newdrop_object() {
     sleep(2);
     //set_tacho_command(sn_shovel, "stop");
     newforwardTimed(2, -80);//---------movebackward
-    turn_exact_gyro(-180);//-------half turn
+    turn_exact_gyro(-180,1);//-------half turn
     printf("[PELLE] closing pelle\n");//----------close pelle
     set_tacho_command(sn_shovel, "stop");
     set_tacho_speed_sp(sn_shovel, 80);
@@ -1442,22 +1442,22 @@ void newdrop_object() {
 
 void newisThisABall(float delta) {
     newforwardSonar(50.0, 100);
-    turn_exact_gyro(delta);
+    turn_exact_gyro(delta,1);
     sleep(0.5);
     float sonarValG = get_sonar();
-    turn_exact_gyro(-delta);
+    turn_exact_gyro(-delta,1);
     sleep(0.5);
-    turn_exact_gyro(-delta);
+    turn_exact_gyro(-delta,1);
     sleep(0.5);
     float sonarValD = get_sonar();
-    turn_exact_gyro(delta);
+    turn_exact_gyro(delta,1);
     if ((sonarValG > 150) && (sonarValD > 150)){
         printf("movable object\n");
         newtake_object();
         newdrop_object();
     }else {
         printf("UNmovable object\n");
-        turn_exact_gyro(-90);
+        turn_exact_gyro(-90,-1);
     }
 }
 
@@ -1467,7 +1467,7 @@ void deplacement(float sonarThreshold , int speed ) {
     //int sonarThreshold = 60;
     //int speed = 200;
 
-    turn_exact_gyro(90);
+    turn_exact_gyro(90,1);
     printf("finish turn\n");
     newforwardSonar(sonarThreshold, speed);
     printf("finish forward\n");
@@ -1484,12 +1484,12 @@ void deplacement(float sonarThreshold , int speed ) {
             //newisThisABall(25);
 
             lastTurn*=-1;
-            turn_exact_gyro(lastTurn);
+            turn_exact_gyro(lastTurn,1);
             if (isThereSomethingInFront()) {
                 lastTurn*=-1;
-                turn_exact_gyro(lastTurn);
+                turn_exact_gyro(lastTurn,1);
                 if (isThereSomethingInFront()) {
-                    turn_exact_gyro(lastTurn);
+                    turn_exact_gyro(lastTurn,1);
                 } else {
                     lastMove=01;
                 }
@@ -1500,15 +1500,15 @@ void deplacement(float sonarThreshold , int speed ) {
             //do move_a_bit
             newforwardTimed(2.5, 80);
 
-            turn_exact_gyro(lastTurn);
+            turn_exact_gyro(lastTurn,1);
             if (isThereSomethingInFront()) {
                 lastTurn*=-1;
-                turn_exact_gyro(2*lastTurn);
+                turn_exact_gyro(2*lastTurn,1);
                 if (isThereSomethingInFront()) {
                     lastTurn*=-1;
-                    turn_exact_gyro(lastTurn);
+                    turn_exact_gyro(lastTurn,1);
                     if (isThereSomethingInFront()) {
-                        turn_exact_gyro(2*lastTurn);
+                        turn_exact_gyro(2*lastTurn,1);
                     }
                 } else {
                     lastMove=50;
@@ -1543,4 +1543,57 @@ void* test_Update_position2(){
     pthread_mutex_destroy(&mutex);
 }
 
-//**********************
+/* THREADS */
+
+
+char UPDATE_POS_ENABLE=1;
+void* update_pos_entry(){
+    // updates the global variable X and Y given the input of the motors
+    
+    int right_pos, left_pos, right_pos_prev, left_pos_prev, dr, dl;
+    get_tacho_position(sn_rwheel,&right_pos_prev);
+    get_tacho_position(sn_lwheel,&left_pos_prev);
+    T=get_gyro();
+    right_pos=right_pos_prev;
+    left_pos=left_pos_prev;
+    FILE* file_pos;
+    int x_towrite;
+    int y_towrite;
+    int x_lastwritten=0;
+    int y_lastwritten=0;
+    
+    while (UPDATE_POS_ENABLE){
+        get_tacho_position(sn_rwheel,&right_pos);
+        get_tacho_position(sn_lwheel,&left_pos);
+        dr=right_pos-right_pos_prev;
+        dl=left_pos-left_pos_prev;
+        
+        if (dr*dl>0){
+            // advancing
+            X+=(dr+dl)*cos(T/57.29577951308232);
+            Y+=(dr+dl)*sin(T/57.29577951308232);
+        } else {
+            // turning
+            T=get_gyro();
+        }
+        x_towrite=(int)(X/SQUARE_SIZE);
+        y_towrite=(int)(Y/SQUARE_SIZE);
+        if (x_towrite!=x_lastwritten || y_towrite!=y_lastwritten){
+            file_pos=fopen("pos.txt","a");
+            fprintf(file_pos,"%d,%d,0\n",x_towrite,y_towrite);
+            x_lastwritten=x_towrite;
+            y_lastwritten=y_towrite; 
+            fclose(file_pos);
+        }
+        
+        right_pos_prev=right_pos;
+        left_pos_prev=left_pos;
+    }
+}
+char SEND_POS_ENABLE=1;
+void* send_pos_entry(){
+    while(SEND_POS_ENABLE){
+        send_position((int)(X/SQUARE_SIZE),(int)(Y/SQUARE_SIZE));
+        sleep(2);
+    }
+}
