@@ -1363,14 +1363,20 @@ int send_map_from_file(){
 //********************
 
 void newforwardSonar(float sonarThreshold, int speed) {
-    float sonarVal = get_sonar();
-    if (sonarVal > sonarThreshold+10) {
-        move_forever(speed, speed);
-        while (sonarVal > sonarThreshold) {
-            sonarVal = get_sonar();
-        }
-        move_forever(0, 0);
-    }
+	float sonarVal = get_sonar();
+	if (sonarVal > sonarThreshold+10) {
+		set_tacho_speed_sp(sn_right, speed);
+		set_tacho_speed_sp(sn_left, speed);
+		printf("[TACHO] starting tachos\n");
+		set_tacho_command(sn_left, "run-forever");
+		set_tacho_command(sn_right, "run-forever");
+		while (sonarVal > sonarThreshold) {
+			sonarVal = get_sonar();
+		}
+		printf("[TACHO] stopping tachos\n");
+		set_tacho_command(sn_left, "stop");
+		set_tacho_command(sn_right, "stop");
+	}
 }
 
 void newbackwardSonar(float sonarThreshold, float speed) {
