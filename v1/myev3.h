@@ -1165,10 +1165,10 @@ int create_map(int x0, int y0) {
 			if (x==xFile && y==yFile){
 				if (x==x0 && y==y0) {
 					printf(" 0 ");
-					send_mapdata(x, y, 255, 255, 255); //send_mapdata
+					send_mapdata(x, y, 0, 255, 0); //send_mapdata
 				} else if (nature==0) {
 					printf(" X ");// send_mapdata_pos((int16_t) x, (int16_t) y, 255, 255, 255); //### WHITE: %d, %d\n", x, y);
-					send_mapdata(x, y, 255, 255, 255);
+					send_mapdata(x, y, 0, 255, 0);
 				} else if (nature==1) {
 					printf(" + "); //this is a non-movable object
 					send_mapdata(x, y, 0, 0, 0);
