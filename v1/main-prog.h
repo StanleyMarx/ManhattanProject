@@ -118,7 +118,7 @@ int go_random(int x0, int y0) {
     
     int side;
     int i;
-    while(i=0; i<7; i++) {
+    for (i=0; i<7; i++) {
     	forward_sonar_jb();
     	side = rand() % 2;
 		if (side==0) {
@@ -142,10 +142,8 @@ int go_random(int x0, int y0) {
 }
 
 //----------------------- CASE_8 -----------------------
-float X=0, Y=0, T=0;
 char UPDATE_POS_ENABLE=1;
 char SEND_POS_ENABLE=1;
-float SQUARE_SIZE=200; // size of a 5cm square in the units of X. TO CALIBRATE
 
 void* update_pos_entry(){
     // updates the global variable X and Y given the input of the motors
@@ -299,5 +297,6 @@ int robot(int sw,int arg1,int arg2){
                 printf("color:   %d\n",get_color());
                 sleep(2);
             }
+            break;
     }
 }
