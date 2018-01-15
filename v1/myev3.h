@@ -98,7 +98,7 @@ int create_map(int x0, int y0);
 int append_pos_file(int x, int y, int nature);
 int known_point(int checkX, int checkY);
 void set_initial_coordinates(int x, int y);
-// Nino map ?
+// Nino map
 void print_int_list(int* list, int len);
 int pos_exists(int x, int y, int* x_list, int* y_list, int len);
 int send_map_from_file();
@@ -287,11 +287,11 @@ void turn_exact_rel(float delta,float prec){
 
 //unused? 
 void turn_exact_gyro(float delta,float prec){
-    float anglCurr=-get_gyro();
+    float anglCurr=get_gyro();
     float anglDest=anglCurr+delta;
     while (abs(delta)>prec){
         turn_approx(delta);
-        anglCurr=-get_gyro();
+        anglCurr=get_gyro();
         delta=anglDest-anglCurr;
     }
 }
