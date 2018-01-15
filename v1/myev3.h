@@ -38,6 +38,9 @@ float lambda=1/21.21*86/35;
 pthread_mutex_t mutex;
 int ThreadSituation=0;
 
+float X=0, Y=0, T=0;
+float SQUARE_SIZE=200; // size of a 5cm square in the units of X
+
 // ---------------------------------- Signatures
 // Testing Functions
 void test_tachos_verbose();
