@@ -1445,20 +1445,23 @@ void newisThisABall(float delta) {
     }
 }
 
-void deplacement(int sonarThreshold , int speed ) {
+void deplacement(float sonarThreshold , int speed ) {
     int Xinit=get_X_position();
     int Yinit=get_Y_position();
     //int sonarThreshold = 60;
     //int speed = 200;
 
     turn_approx(90);
+    printf("finish turn\n");
     newforwardSonar(sonarThreshold, speed);
+    printf("finish forward\n");
 
     int lastMove = 50;
     int lastTurn = 90;
     int firstOrientation = 90;
 
     while(get_X_position()!=Xinit && get_Y_position()!=Yinit) {
+	printf("enter the while\n");
         if (lastMove == 50) {
             //do newforward_sonar
             newforwardSonar(sonarThreshold, speed);
@@ -1511,7 +1514,7 @@ void* test_Update_position2(){
     pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
-    deplacement(70, 200);
+    deplacement(70.0, 200);
     //THE END OF THE INITIALISATION____________________________________________
 
     /* debut SC2 */
