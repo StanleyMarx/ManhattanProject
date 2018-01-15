@@ -111,8 +111,10 @@ int go_random(int x0, int y0) {
 		by JB
 		Robot is supposed to go forward in random directions while avoiding obstacles, x axis and y axis
 	*/
-	pthread_t myUpdate_position;
-    pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+	pthread_t update_pos;
+    pthread_create(&update_pos,NULL,update_pos_entry,NULL);
+    pthread_t send_pos;
+    pthread_create(&send_pos,NULL,send_pos_entry,NULL);
     
     int side;
     int i;
@@ -126,12 +128,16 @@ int go_random(int x0, int y0) {
 		}
     }
     
-    pthread_mutex_lock(&mutex);
-    ThreadSituation = 1;
-    pthread_mutex_unlock(&mutex);
-      
-    pthread_join(myUpdate_position,NULL);
-    pthread_mutex_destroy(&mutex);
+    // stop threads
+    printf("stopping threads...\n");
+    UPDATE_POS_ENABLE=0;
+    SEND_POS_ENABLE=0;
+    printf("joining threads...\n");
+    pthread_join(update_pos,NULL);
+    pthread_join(send_pos,NULL);
+    printf("sending map...\n");
+    send_map_from_file();
+    printf("- done -");
     return 0;
 }
 
@@ -172,7 +178,7 @@ void* update_pos_entry(){
         y_towrite=(int)(Y/SQUARE_SIZE);
         if (x_towrite!=x_lastwritten || y_towrite!=y_lastwritten){
             file_pos=fopen("pos.txt","a");
-            fprintf(file_pos,"%d,%d\n",x_towrite,y_towrite);
+            fprintf(file_pos,"%d,%d,0\n",x_towrite,y_towrite);
             x_lastwritten=x_towrite;
             y_lastwritten=y_towrite; 
             fclose(file_pos);
