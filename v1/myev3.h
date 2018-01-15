@@ -10,7 +10,7 @@ uint8_t sn_gyro;
 uint8_t sn_sonar;
 uint8_t sn_rwheel;
 uint8_t sn_lwheel;
-uint8_t sn_shovel;
+uint8_t sn;
 uint8_t sn_color;
 int max_speed;
 // for the map
@@ -1388,7 +1388,16 @@ int send_map_from_file(){
 
 //********************
 
-
+void newforwardSonar(float sonarThreshold, int speed) {
+    float sonarVal = get_sonar();
+    if (sonarVal > sonarThreshold+10) {
+        move_forever(speed, speed);
+        while (sonarVal > sonarThreshold) {
+            sonarVal = get_sonar();
+        }
+        move_forever(0, 0);
+    }
+}
 
 void newbackwardSonar(float sonarThreshold, float speed) {
     float sonarVal = get_sonar();
@@ -1410,35 +1419,35 @@ void newforwardTimed(int seconds, int speed) {
 void newtake_object() {
     newforwardSonar(80.0, 100);
     printf("[PELLE] opening pelle\n");//--------open pelle
-    set_tacho_speed_sp(sn_pelle, -80);
-    set_tacho_command(sn_pelle, "run-forever");
+    set_tacho_speed_sp(sn_shovel, -80);
+    set_tacho_command(sn_shovel, "run-forever");
     sleep(2);
-    //set_tacho_command(sn_pelle, "stop");
+    //set_tacho_command(sn_shovel, "stop");
     newforwardTimed(2, 100);//---------moveforward
     printf("[PELLE] closing pelle\n");//-------close pelle
-    set_tacho_command(sn_pelle, "stop");
-    set_tacho_speed_sp(sn_pelle, 80);
-    set_tacho_command(sn_pelle, "run-forever");
+    set_tacho_command(sn_shovel, "stop");
+    set_tacho_speed_sp(sn_shovel, 80);
+    set_tacho_command(sn_shovel, "run-forever");
     sleep(2);
-    set_tacho_command(sn_pelle, "stop");
+    set_tacho_command(sn_shovel, "stop");
 }
 
 void newdrop_object() {
     turn_approx(180);//-------half turn
     newforwardTimed(2, 80);//---------moveforward
     printf("[PELLE] opening pelle\n");//----------open pelle
-    set_tacho_speed_sp(sn_pelle, -80);
-    set_tacho_command(sn_pelle, "run-forever");
+    set_tacho_speed_sp(sn_shovel, -80);
+    set_tacho_command(sn_shovel, "run-forever");
     sleep(2);
-    //set_tacho_command(sn_pelle, "stop");
+    //set_tacho_command(sn_shovel, "stop");
     newforwardTimed(2, -80);//---------movebackward
-    Tturn_approx(-180);//-------half turn
+    turn_approx(-180);//-------half turn
     printf("[PELLE] closing pelle\n");//----------close pelle
-    set_tacho_command(sn_pelle, "stop");
-    set_tacho_speed_sp(sn_pelle, 80);
-    set_tacho_command(sn_pelle, "run-forever");
+    set_tacho_command(sn_shovel, "stop");
+    set_tacho_speed_sp(sn_shovel, 80);
+    set_tacho_command(sn_shovel, "run-forever");
     sleep(2);
-    set_tacho_command(sn_pelle, "stop");
+    set_tacho_command(sn_shovel, "stop");
 }
 
 void newisThisABall(float delta) {
@@ -1469,7 +1478,7 @@ void deplacement(int sonarThreshold , int speed ) {
     //int speed = 200;
 
     turn_approx(90);
-    forward_sonar(sonarThreshold, speed);
+    newforward_sonar(sonarThreshold, speed);
 
     int lastMove = 50;
     int lastTurn = 90;
@@ -1477,7 +1486,7 @@ void deplacement(int sonarThreshold , int speed ) {
 
     while(get_X_position()!=Xinit && get_Y_position()!=Yinit) {
         if (lastMove == 50) {
-            //do forward_sonar
+            //do newforward_sonar
             newbackwardSonar(sonarThreshold, speed);
             newforward_sonar(sonarThreshold, speed);
             //newisThisABall(25);
