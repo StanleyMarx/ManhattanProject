@@ -1474,13 +1474,13 @@ void deplacement(float sonarThreshold , int speed ) {
     newforwardSonar(sonarThreshold, speed);
     printf("finish forward\n");
 
-    int lastMove = 50;
+    int nextMove = 01;
     int lastTurn = 90;
     int firstOrientation = 90;
 
     while(get_X_position()!=Xinit || get_Y_position()!=Yinit) {
     printf("enter the while\n");
-        if (lastMove == 50) {
+        if (nextMove == 50) {
             //do newforward_sonar
             newforwardSonar(sonarThreshold, speed);
             //newisThisABall(25);
@@ -1495,14 +1495,17 @@ void deplacement(float sonarThreshold , int speed ) {
                 if (isThereSomethingInFront()) {
                     turn_exact_gyro(lastTurn,1);
                 } else {
-                    lastMove=01;
+                    nextMove=01;
                 }
             } else {
-                lastMove=01;
+                nextMove=01;
             }
         }else {
             //do move_a_bit
-            newforwardTimed(2, 80);
+            move_real_debug(200,200);
+            sleep(1);
+            move_real_debug(0,0);
+
 
             turn_exact_gyro(lastTurn,1);
             sleep(0.2);
@@ -1518,15 +1521,16 @@ void deplacement(float sonarThreshold , int speed ) {
                         turn_exact_gyro(2*lastTurn,1);
                     }
                 } else {
-                    lastMove=50;
+                    nextMove=50;
                 }
             } else {
-                lastMove=50;
+                nextMove=50;
             }
         }
 
     }
 }
+
 
 
 
