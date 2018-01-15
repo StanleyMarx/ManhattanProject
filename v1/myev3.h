@@ -288,7 +288,6 @@ void turn_exact_rel(float delta,float prec){
     turn_exact_abs(fmod(t0+delta,360),prec);
 }
 
-//unused? 
 void turn_exact_gyro(float delta,float prec){
     float anglCurr=get_gyro();
     float anglDest=anglCurr+delta;
