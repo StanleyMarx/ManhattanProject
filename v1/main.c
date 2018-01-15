@@ -12,6 +12,8 @@
 #include <pthread.h>
 
 #define SERV_ADDR "30:3a:64:ea:bf:0e" // server = nino-hp
+// #define SERV_ADDR "??" // server = laetitia
+// #define SERV_ADDR "??" // server = french 
 
 #define TEAM_ID 12
 
