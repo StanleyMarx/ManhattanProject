@@ -127,7 +127,7 @@ int go_random(int x0, int y0) {
 			turn_left();
 		}
     }
-    
+    create_map(x0, y0);
     // stop threads
     printf("stopping threads...\n");
     UPDATE_POS_ENABLE=0;
@@ -135,8 +135,6 @@ int go_random(int x0, int y0) {
     printf("joining threads...\n");
     pthread_join(update_pos,NULL);
     pthread_join(send_pos,NULL);
-    printf("sending map...\n");
-    send_map_from_file();
     printf("- done -");
     return 0;
 }
@@ -285,7 +283,7 @@ int robot(int sw,int arg1,int arg2){
         	printf("TEST JB - random going forward and turning, avoiding obstacles, x axis and y axis\n");
         	set_initial_coordinates(arg1, arg2);
         	go_random(arg1, arg2);
-        	create_map(arg1, arg2);
+        	//create_map(arg1, arg2);
         	printf("END OF TEST 10 JB\n");
         	break;
         case 11:
