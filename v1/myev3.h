@@ -1479,7 +1479,7 @@ void deplacement(float sonarThreshold , int speed , int number) {
     newforwardSonar(sonarThreshold, speed);
     printf("finish forward\n");
 
-    int nextMove = 01;
+    int nextMove = 50;
     int lastTurn = 90;
     int firstOrientation = 90;
 
