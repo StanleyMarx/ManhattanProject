@@ -1384,7 +1384,7 @@ void newforwardSonar(float sonarThreshold, int speed) {
 		while (sonarVal > sonarThreshold) {
 			sonarVal = get_sonar();
 		}
-        move_forever(0, 0);
+		move_forever(0, 0);
 	}
 }
 
