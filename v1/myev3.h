@@ -1432,7 +1432,7 @@ void newdrop_object() {
 
 void newisThisABall(float sonarThreshold, float speed) {
     float delta=20;
-    newforwardSonar(sonarThreshold, speed);
+    forward_sonar_jb();
     turn_approx(delta);
     sleep(0.5);
     float sonarValG = get_sonar();
@@ -1446,7 +1446,7 @@ void newisThisABall(float sonarThreshold, float speed) {
         printf("movable object\n");
         newtake_object();
         newdrop_object();
-    newisThisABall(sonarThreshold, speed);
+        newisThisABall(sonarThreshold, speed);
     }else {
         printf("UNmovable object\n");
     }
@@ -1472,7 +1472,9 @@ void deplacement(float sonarThreshold , int speed) {
     printf("enter the while\n");
         if (nextMove == 50) {
             //do newforward_sonar
+            
             newisThisABall(sonarThreshold, speed);
+            
             //newisThisABall(25);
 
             lastTurn*=-1;
