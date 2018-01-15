@@ -470,7 +470,7 @@ int forward_timed() {
 	int yPos = get_Y_position();
 	int xPos = get_X_position();
 	move_forever(35, 35);//localRCycle, localLCycle); //25
-	while (!timeIsUp && !obstacleInFront && yPos>POS_THRESHOLD && xPos>POS_THRESHOLD) {
+	while (!timeIsUp && !obstacleInFront && Y>POS_THRESHOLD && X>POS_THRESHOLD) {
 		yPos = get_Y_position();
 		xPos = get_X_position();
 		/*checkGyro = get_gyro();	
@@ -521,7 +521,7 @@ int forward_sonar_jb() {
 	int localRCycle=50;
 	int localLCycle=50;*/
 	printf("[MOTORS] starting motors\n");
-	while (frontClear && sidesClear && yPos>POS_THRESHOLD && xPos>POS_THRESHOLD) {
+	while (frontClear && sidesClear && Y>POS_THRESHOLD && X>POS_THRESHOLD) {
 		yPos = get_Y_position();
 		xPos = get_X_position();
 		/*checkGyro = get_gyro();	
@@ -1017,7 +1017,7 @@ int go_around_map() {
 	int yPos = get_Y_position();
 	int xPos = get_X_position();
 	int obstacleDir;
-	while (yPos>POS_THRESHOLD && xPos>POS_THRESHOLD) {
+	while (Y>POS_THRESHOLD && X>POS_THRESHOLD) {
 		obstacleDir = forward_while_checking_left();
 		if (obstacleDir==2) turn_left();
 		if (obstacleDir==1) turn_right();
