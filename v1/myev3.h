@@ -37,7 +37,7 @@ float thetaCompas, thetaCompasInit;
 float lambda=1/21.21*86/35; 
 pthread_mutex_t mutex;
 int ThreadSituation=0;
-
+int matrix [][] = {0};
 float X=0, Y=0, T=0;
 float SQUARE_SIZE=200; // size of a 5cm square in the units of X
 
@@ -252,8 +252,7 @@ void move_real(int r,int l,int speed){
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_TO_REL_POS);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_TO_REL_POS);
 }
-
-//unused? 
+ 
 void move_real_debug(int r,int l){
     int time_ratio=4500;
     move_real(r,l,100);
