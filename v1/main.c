@@ -76,8 +76,10 @@ int main(int argc, char **argv) {
     get_tacho_max_speed(sn_rwheel,&max_speed);
     
     // empty the Position pos.txt file where we'll store all of our coordinates
-    posFile = fopen("pos.txt", "w");
-	fclose(posFile);
+    if (argc>1 && argv[1]!=13) {
+    	posFile = fopen("pos.txt", "w");
+		fclose(posFile);
+	}
     
   struct sockaddr_rc addr = { 0 };
   int status;
