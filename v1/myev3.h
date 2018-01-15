@@ -1378,14 +1378,15 @@ int send_map_from_file(){
 //********************
 
 void newforwardSonar(float sonarThreshold, int speed) {
-	float sonarVal = get_sonar();
+	forward_sonar_jb();
+	/*float sonarVal = get_sonar();
 	if (sonarVal > sonarThreshold+10) {
         	move_forever(speed, speed);
 		while (sonarVal > sonarThreshold) {
 			sonarVal = get_sonar();
 		}
 		move_forever(0, 0);
-	}
+	}*/
 }
 
 void newbackwardSonar(float sonarThreshold, float speed) {
