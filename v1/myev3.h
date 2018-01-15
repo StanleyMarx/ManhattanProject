@@ -755,7 +755,7 @@ void* Update_position2(){
         if ((Xpos != XposOld) || (Ypos != YposOld)) {
             XposOld = Xpos;
             YposOld = Ypos;
-            append_pos_file2(Xpos, Ypos, 0);
+            append_pos_file(Xpos, Ypos, 0);
         }
     }
     pthread_mutex_unlock(&mutex);
