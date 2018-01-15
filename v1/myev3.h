@@ -1540,7 +1540,7 @@ void deplacement(float sonarThreshold , int speed) {
             }
         }else {
             //do move_a_bit
-            move_real_debug(800,800);
+            move_real_debug(500,500);
 
 
             turn_exact_gyro(lastTurn,1);
