@@ -1488,11 +1488,11 @@ void deplacement(float sonarThreshold , int speed ) {
             lastTurn*=-1;
             turn_exact_gyro(lastTurn,1);
             sleep(0.2);
-            if (isThereSomethingInFront() != 0) {
+            if (isThereSomethingInFront()) {
                 lastTurn*=-1;
                 turn_exact_gyro(lastTurn,1);
                 sleep(0.2);
-                if (isThereSomethingInFront() != 0) {
+                if (isThereSomethingInFront()) {
                     turn_exact_gyro(lastTurn,1);
                 } else {
                     lastMove=01;
@@ -1506,15 +1506,15 @@ void deplacement(float sonarThreshold , int speed ) {
 
             turn_exact_gyro(lastTurn,1);
             sleep(0.2);
-            if (isThereSomethingInFront() != 0) {
+            if (isThereSomethingInFront()) {
                 lastTurn*=-1;
                 turn_exact_gyro(2*lastTurn,1);
                 sleep(0.2);
-                if (isThereSomethingInFront() != 0) {
+                if (isThereSomethingInFront()) {
                     lastTurn*=-1;
                     turn_exact_gyro(lastTurn,1);
                     sleep(0.2);
-                    if (isThereSomethingInFront() != 0) {
+                    if (isThereSomethingInFront()) {
                         turn_exact_gyro(2*lastTurn,1);
                     }
                 } else {
