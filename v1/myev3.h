@@ -77,9 +77,6 @@ void send_position(int16_t x,int16_t y);
 void send_mapdata(int16_t x,int16_t y,char r,char g,char b);
 void send_mapdone();
 void send_obstacle(int act,uint16_t x,uint16_t y);
-void send_position_pos(int16_t x,int16_t y);
-void send_mapdata_pos(int16_t x,int16_t y,char r,char g,char b);
-void send_obstacle_pos(int act,uint16_t x,uint16_t y);
 // Robot Position
 void* Update_position2();
 void* test_Update_position2();
