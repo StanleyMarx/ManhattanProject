@@ -41,12 +41,15 @@ void test_cs(){
     send_position(-1,-2);
     send_obstacle(1,2,3);
     send_obstacle(0,4,5);
-    for (int x=0; x<32; x++){
-        for (int y=0; y<32; y++){
+    for (uint16_t x=0; x<32; x++){
+        for (uint16_t y=0; y<32; y++){
+            printf("sending (%d,%d)...\n",x,y);
             send_mapdata(x,y,8*x,0,8*y);
         }
     }
+    printf("sending mapdone...\n");
     send_mapdone();
+    printf("all done!\n");
 }
 //----------------------- CASE_3 -----------------------
 void test_turn(int rat){
