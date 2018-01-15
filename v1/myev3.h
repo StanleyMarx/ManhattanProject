@@ -1385,8 +1385,8 @@ void newforwardSonar(float sonarThreshold, int speed) {
     set_tacho_command(sn_lwheel, "run-forever");
     set_tacho_command(sn_rwheel, "run-forever");
     while (sonarVal > sonarThreshold) {
-            sonarVal = get_sonar();
-        }
+	    sonarVal = get_sonar();
+    }
     set_tacho_command(sn_lwheel, "stop");
     set_tacho_command(sn_rwheel, "stop");
 }
