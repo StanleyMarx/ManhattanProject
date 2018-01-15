@@ -1468,7 +1468,7 @@ void newisThisABall(float delta) {
     }
 }
 
-void deplacement(float sonarThreshold , int speed , int number) {
+void deplacement(float sonarThreshold , int speed) {
     int Xinit=get_X_position();
     int Yinit=get_Y_position();
     //int sonarThreshold = 60;
