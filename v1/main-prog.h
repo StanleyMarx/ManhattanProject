@@ -111,6 +111,8 @@ int go_random(int x0, int y0) {
 		by JB
 		Robot is supposed to go forward in random directions while avoiding obstacles, x axis and y axis
 	*/
+	set_sensor_mode(sn_gyro, "GYRO-G&A");
+	set_sensor_mode(sn_gyro, "GYRO-ANG");
 	pthread_t update_pos;
     pthread_create(&update_pos,NULL,update_pos_entry,NULL);
     pthread_t send_pos;
