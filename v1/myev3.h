@@ -1467,18 +1467,18 @@ void newisThisABall(float delta) {
     }
 }
 
-void deplacement(float sonarThreshold , int speed ) {
+void deplacement(float sonarThreshold , int speed , int number) {
     int Xinit=get_X_position();
     int Yinit=get_Y_position();
     //int sonarThreshold = 60;
     //int speed = 200;
-
+	
     turn_exact_gyro(90,1);
     printf("finish turn\n");
     newforwardSonar(sonarThreshold, speed);
     printf("finish forward\n");
 
-    int nextMove = 01;
+    int nextMove = 50;
     int lastTurn = 90;
     int firstOrientation = 90;
 
@@ -1507,7 +1507,7 @@ void deplacement(float sonarThreshold , int speed ) {
         }else {
             //do move_a_bit
             move_real_debug(200,200);
-            sleep(1);
+            sleep(2);
             move_real_debug(0,0);
 
 
