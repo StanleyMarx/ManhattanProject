@@ -283,5 +283,13 @@ int robot(int sw,int arg1,int arg2){
         	create_map(arg1, arg2);
         	printf("END OF TEST 10 JB\n");
         	break;
+        case 11:
+            while (1){
+                printf("sonar:   %f\n",get_sonar());
+                printf("gyro:    %f\n",get_gyro());
+                printf("compass: %f\n",get_compass());
+                printf("color:   %d\n",get_color());
+                sleep(2);
+            }
     }
 }
