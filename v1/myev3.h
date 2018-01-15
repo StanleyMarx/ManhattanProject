@@ -677,32 +677,33 @@ void send_obstacle(int act,uint16_t x,uint16_t y){
 }
 
 
+
 int append_pos_file2(int x, int y, int nature) {
     pthread_mutex_lock(&mutex);
     float theta=thetaCompas;
     pthread_mutex_unlock(&mutex);
     float Xici=5*x;
     float Yici=5*y;
-    append_pos_file2(Xici+sin(theta)*5*lambda, Yici+cos(theta)*5*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*10*lambda, Yici+cos(theta)*10*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*-5*lambda, Yici+cos(theta)*-5*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*-10*lambda, Yici+cos(theta)*-10*lambda, nature);
+    append_pos_file(Xici+sin(theta)*5*lambda, Yici+cos(theta)*5*lambda, nature);
+    append_pos_file(Xici+sin(theta)*10*lambda, Yici+cos(theta)*10*lambda, nature);
+    append_pos_file(Xici+sin(theta)*-5*lambda, Yici+cos(theta)*-5*lambda, nature);
+    append_pos_file(Xici+sin(theta)*-10*lambda, Yici+cos(theta)*-10*lambda, nature);
     theta+=pi/2;
     Xici=Xici+sin(theta)*5*lambda;
     Yici=Yici+cos(theta)*5*lambda;
     theta-=pi/2;
-    append_pos_file2(Xici+sin(theta)*5*lambda, Yici+cos(theta)*5*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*10*lambda, Yici+cos(theta)*10*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*-5*lambda, Yici+cos(theta)*-5*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*-10*lambda, Yici+cos(theta)*-10*lambda, nature);
+    append_pos_file(Xici+sin(theta)*5*lambda, Yici+cos(theta)*5*lambda, nature);
+    append_pos_file(Xici+sin(theta)*10*lambda, Yici+cos(theta)*10*lambda, nature);
+    append_pos_file(Xici+sin(theta)*-5*lambda, Yici+cos(theta)*-5*lambda, nature);
+    append_pos_file(Xici+sin(theta)*-10*lambda, Yici+cos(theta)*-10*lambda, nature);
     theta-=pi/2;
     Xici=Xici+sin(theta)*10*lambda;
     Yici=Yici+cos(theta)*10*lambda;
     theta-=-pi/2;
-    append_pos_file2(Xici+sin(theta)*5*lambda, Yici+cos(theta)*5*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*10*lambda, Yici+cos(theta)*10*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*-5*lambda, Yici+cos(theta)*-5*lambda, nature);
-    append_pos_file2(Xici+sin(theta)*-10*lambda, Yici+cos(theta)*-10*lambda, nature);
+    append_pos_file(Xici+sin(theta)*5*lambda, Yici+cos(theta)*5*lambda, nature);
+    append_pos_file(Xici+sin(theta)*10*lambda, Yici+cos(theta)*10*lambda, nature);
+    append_pos_file(Xici+sin(theta)*-5*lambda, Yici+cos(theta)*-5*lambda, nature);
+    append_pos_file(Xici+sin(theta)*-10*lambda, Yici+cos(theta)*-10*lambda, nature);
 }
 
 // ------------------------------ Robot Position
