@@ -1420,7 +1420,7 @@ void newdrop_object() {
     set_tacho_command(sn_shovel, "run-forever");
     sleep(2);
     //set_tacho_command(sn_shovel, "stop");
-    move_real_debug(200,200);//---------movebackward
+    move_real_debug(-200,-200);//---------movebackward
     turn_exact_gyro(-180,1);//-------half turn
     printf("[PELLE] closing pelle\n");//----------close pelle
     set_tacho_command(sn_shovel, "stop");
