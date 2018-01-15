@@ -1380,29 +1380,29 @@ int send_map_from_file(){
 void newforwardSonar(float sonarThreshold, int speed) {
 	float sonarVal = get_sonar();
 	if (sonarVal > sonarThreshold+10) {
-        	move_real_debug(speed, speed);
+        	move_forever(speed, speed);
 		while (sonarVal > sonarThreshold) {
 			sonarVal = get_sonar();
 		}
-        move_real_debug(0, 0);
+        move_forever(0, 0);
 	}
 }
 
 void newbackwardSonar(float sonarThreshold, float speed) {
     float sonarVal = get_sonar();
     if (sonarVal < sonarThreshold-10) {
-        move_real_debug(-speed, -speed);
+        move_forever(-speed, -speed);
         while (sonarVal < sonarThreshold) {
             sonarVal = get_sonar();
         }
-        move_real_debug(0, 0);
+        move_forever(0, 0);
     }
 }
 
 void newforwardTimed(float seconds, int speed) {
-    move_real_debug(speed, speed);
+    move_forever(speed, speed);
     sleep(seconds);
-    move_real_debug(0, 0);
+    move_forever(0, 0);
 }
 
 void newtake_object() {
