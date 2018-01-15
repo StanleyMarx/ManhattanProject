@@ -11,9 +11,9 @@
 #include <math.h>
 #include <pthread.h>
 
-#define SERV_ADDR "30:3a:64:ea:bf:0e" // server = nino-hp
+// #define SERV_ADDR "30:3a:64:ea:bf:0e" // server = nino-hp
 // #define SERV_ADDR "dc:53:60:ad:61:90" // server = laetitia
-// #define SERV_ADDR "??" // server = french 
+#define SERV_ADDR "00:1a:7d:da:71:06" // server = french 
 
 #define TEAM_ID 12
 
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     get_tacho_max_speed(sn_rwheel,&max_speed);
     
     // empty the Position pos.txt file where we'll store all of our coordinates
-    if (argc>1 && argv[1]!=13) {
+    if (argc>1 && atoi(argv[1])!=13) {
     	posFile = fopen("pos.txt", "w");
 		fclose(posFile);
 	}
