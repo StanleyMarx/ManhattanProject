@@ -1397,7 +1397,7 @@ void newbackwardSonar(float sonarThreshold, float speed) {
     }
 }
 
-void newforwardTimed(int seconds, int speed) {
+void newforwardTimed(float seconds, int speed) {
     move_real_debug(speed, speed);
     sleep(seconds);
     move_real_debug(0, 0);
