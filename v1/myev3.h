@@ -1541,7 +1541,6 @@ void* test_Update_position2(){
 
     pthread_join(myUpdate_position,NULL);
     pthread_mutex_destroy(&mutex);
-    create_map(0,0);
 }
 
 /* THREADS */
