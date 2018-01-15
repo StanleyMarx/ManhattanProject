@@ -830,8 +830,8 @@ void position_in_front() {
 	int actualY = get_Y_position();
 	theta = get_gyro();
 	theta = (theta-thetaCompasInit)*pi/180;
-	xFront = (int) round((Xdef/5)+sin(theta));
-	yFront = (int) round((Ydef/5)+cos(theta));
+	xFront = (int) round((Xdef/5)+2*sin(theta));
+	yFront = (int) round((Ydef/5)+2*cos(theta));
 	printf("[OBJECT POSITION] front is at x=%d, y=%d (robot is at x=%d, y=%d)\n", xFront, yFront, actualX, actualY);
 	append_pos_file(xFront, yFront, 1);
 }
@@ -1189,6 +1189,14 @@ int append_pos_file(int x, int y, int nature) {
    	posFile = fopen("pos.txt", "a");
     if (posFile != NULL){
     	fprintf(posFile, "%d,%d,%d\n",x,y,nature);
+    	fprintf(posFile, "%d,%d,%d\n",x+1,y,nature);
+    	fprintf(posFile, "%d,%d,%d\n",x-1,y,nature);
+    	fprintf(posFile, "%d,%d,%d\n",x,y+1,nature);
+    	fprintf(posFile, "%d,%d,%d\n",x,y-1,nature);
+    	/*
+    	Xdef=Xdef+sin(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+        Ydef=Ydef+cos(thetaCompas)*(positionMotorR2-positionMotorR1)*lambda;
+        */
         fclose(posFile);
     }
     else {
