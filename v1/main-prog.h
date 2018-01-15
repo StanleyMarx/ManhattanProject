@@ -117,7 +117,7 @@ int go_random(int x0, int y0) {
     pthread_create(&update_pos,NULL,update_pos_entry,NULL);
     pthread_t send_pos;
     pthread_create(&send_pos,NULL,send_pos_entry,NULL);
-    move_forever(35, 35);
+    move_forever(35, 20);
     sleep(6);
     move_forever(0,0);
     //printf("x = %d, y = %d\n");
