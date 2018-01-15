@@ -677,49 +677,6 @@ void send_obstacle(int act,uint16_t x,uint16_t y){
 	write(s,str,10);
 	Sleep(1000);
 }
-void send_position_pos(int16_t x,int16_t y){
-    char str[58];
-	*((uint16_t*)str)=msgId++;
-	str[2]=TEAM_ID;
-	str[3]=0xff;
-	str[4]=MSG_POSITION;
-    str[5]=x;
-    str[6]=0x00;
-    str[7]=y;
-    str[8]=0x00;
-	write(s,str,9);
-	Sleep(1000);
-}
-void send_mapdata_pos(int16_t x,int16_t y,char r,char g,char b){
-    char str[58];
-	*((uint16_t*)str)=msgId++;
-	str[2]=TEAM_ID;
-	str[3]=0xff;
-	str[4]=5;
-    str[5]=x;
-    str[6]=0x00;
-    str[7]=y;
-    str[8]=0x00;
-	str[9]=r;
-	str[10]=g;
-	str[11]=b;
-	write(s,str,12);
-	Sleep(100);
-}
-void send_obstacle_pos(int act,uint16_t x,uint16_t y){
-    char str[58];
-	*((uint16_t*)str)=msgId++;
-	str[2]=TEAM_ID;
-	str[3]=0xff;
-	str[4]=7;
-    str[5]=act;
-    str[6]=x;
-    str[7]=0x00;
-    str[8]=y;
-    str[9]=0x00;
-	write(s,str,10);
-	Sleep(1000);
-}
 
 // ------------------------------ Robot Position
 
