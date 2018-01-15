@@ -205,6 +205,31 @@ void almost_the_real_stuff(){
     printf("- done -");
 }
 
+//case12
+void send_from_file(){
+    FILE* f=fopen("mymap.txt","r");
+    char c=getc(f);
+    uint16_t x=0;
+    uint16_t y=0;
+    while(c!=EOF){
+        switch(c){
+            case 'M':
+                send_mapdata(x,y,255,0,0);
+                x++;
+                break;
+            case 'X':
+                send_mapdata(x,y,,0,0,255);
+                x++;
+                break;
+            case '\n':
+                y++;
+                break;
+        }
+        c=getc(f);
+    }
+    send_mapdone();
+}
+
 //------------------------ ROBOT ------------------------
 int robot(int sw,int arg1,int arg2){
     printf("case no: %d\n", sw);
@@ -273,6 +298,9 @@ int robot(int sw,int arg1,int arg2){
                 printf("color:   %d\n",get_color());
                 sleep(2);
             }
+            break;
+        case 12:
+            send_from_file();
             break;
     }
 }
