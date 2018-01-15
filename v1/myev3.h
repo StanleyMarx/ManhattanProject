@@ -1461,7 +1461,6 @@ void deplacement(int sonarThreshold , int speed ) {
     while(get_X_position()!=Xinit && get_Y_position()!=Yinit) {
         if (lastMove == 50) {
             //do newforward_sonar
-            newbackwardSonar(sonarThreshold, speed);
             newforwardSonar(sonarThreshold, speed);
             //newisThisABall(25);
 
@@ -1480,7 +1479,6 @@ void deplacement(int sonarThreshold , int speed ) {
             }
         }else {
             //do move_a_bit
-            newbackwardSonar(sonarThreshold, speed);
             newforwardTimed(2.5, 80);
 
             turn_approx(lastTurn);
