@@ -1379,3 +1379,147 @@ int send_map_from_file(){
     printf("map sent to the server\n");
     return 0;
 }
+
+
+
+
+
+
+
+/********************
+
+
+
+void newbackwardSonar(float sonarThreshold, float speed) {
+    float sonarVal = get_sonar();
+    if (sonarVal < sonarThreshold-10) {
+        move_forever(speed, speed);
+        while (sonarVal < sonarThreshold) {
+            sonarVal = get_sonar();
+        }
+        move_forever(0, 0);
+    }
+}
+
+void newforwardTimed(int seconds, int speed) {
+    move_forever(speed, speed);
+    sleep(seconds);
+    move_forever(0, 0);
+}
+
+void newtake_object() {
+    newforwardSonar(80.0, 100);
+    printf("[PELLE] opening pelle\n");//--------open pelle
+    set_tacho_speed_sp(sn_pelle, -80);
+    set_tacho_command(sn_pelle, "run-forever");
+    sleep(2);
+    //set_tacho_command(sn_pelle, "stop");
+    newforwardTimed(2, 100);//---------moveforward
+    printf("[PELLE] closing pelle\n");//-------close pelle
+    set_tacho_command(sn_pelle, "stop");
+    set_tacho_speed_sp(sn_pelle, 80);
+    set_tacho_command(sn_pelle, "run-forever");
+    sleep(2);
+    set_tacho_command(sn_pelle, "stop");
+}
+
+void newdrop_object() {
+    turn_approx(180);//-------half turn
+    newforwardTimed(2, 80);//---------moveforward
+    printf("[PELLE] opening pelle\n");//----------open pelle
+    set_tacho_speed_sp(sn_pelle, -80);
+    set_tacho_command(sn_pelle, "run-forever");
+    sleep(2);
+    //set_tacho_command(sn_pelle, "stop");
+    newforwardTimed(2, -80);//---------movebackward
+    Tturn_approx(-180);//-------half turn
+    printf("[PELLE] closing pelle\n");//----------close pelle
+    set_tacho_command(sn_pelle, "stop");
+    set_tacho_speed_sp(sn_pelle, 80);
+    set_tacho_command(sn_pelle, "run-forever");
+    sleep(2);
+    set_tacho_command(sn_pelle, "stop");
+}
+
+void newisThisABall(float delta) {
+    newforwardSonar(50.0, 100);
+    turn_approx(delta);
+    sleep(0.5);
+    float sonarValG = get_sonar();
+    turn_approx(-delta);
+    sleep(0.5);
+    turn_approx(-delta);
+    sleep(0.5);
+    float sonarValD = get_sonar();
+    turn_approx(delta);
+    if ((sonarValG > 150) && (sonarValD > 150)){
+        printf("movable object\n");
+        newtake_object();
+        newdrop_object();
+    }else {
+        printf("UNmovable object\n");
+        turn_approx(-90);
+    }
+}
+
+void deplacement(int sonarThreshold , int speed ) {
+    int Xinit=get_X_position();
+    int Yinit=get_Y_position();
+    //int sonarThreshold = 60;
+    //int speed = 200;
+
+    turn_approx(90);
+    forward_sonar(sonarThreshold, speed);
+
+    int lastMove = 50;
+    int lastTurn = 90;
+    int firstOrientation = 90;
+
+    while(get_X_position()!=Xinit && get_Y_position()!=Yinit) {
+        if (lastMove == 50) {
+            //do forward_sonar
+            newbackwardSonar(sonarThreshold, speed);
+            newforward_sonar(sonarThreshold, speed);
+            //newisThisABall(25);
+
+            lastTurn*=-1;
+            turn_approx(lastTurn);
+            if (isThereSomethingInFront()) {
+                lastTurn*=-1;
+                turn_approx(lastTurn);
+                if (isThereSomethingInFront()) {
+                    turn_approx(lastTurn);
+                } else {
+                    lastMove=01;
+                }
+            } else {
+                lastMove=01;
+            }
+        }else {
+            //do move_a_bit
+            newbackwardSonar(sonarThreshold, speed);
+            newforwardTimed(2.5, 80);
+
+            turn_approx(lastTurn);
+            if (isThereSomethingInFront()) {
+                lastTurn*=-1;
+                turn_approx(2*lastTurn);
+                if (isThereSomethingInFront()) {
+                    lastTurn*=-1;
+                    turn_approx(lastTurn);
+                    if (isThereSomethingInFront()) {
+                        turn_approx(2*lastTurn);
+                    }
+                } else {
+                    lastMove=50;
+                }
+            } else {
+                lastMove=50;
+            }
+        }
+
+    }
+}
+
+
+//**********************
