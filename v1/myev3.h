@@ -828,8 +828,8 @@ void position_in_front(int nature) {
 	int actualX = get_X_position();
 	int actualY = get_Y_position();
 	float sonarVal = get_sonar();
-	int xObj = (int) (X + cos(T)*(sonarVal/10))/SQUARE_SIZE;
-	int yObj = (int) (Y + sin(T)*(sonarVal/10))/SQUARE_SIZE;
+	int xObj = (int) (X + cos(T)*(sonarVal/4))/SQUARE_SIZE;
+	int yObj = (int) (Y + sin(T)*(sonarVal/4))/SQUARE_SIZE;
 	printf("[OBJECT POSITION] front is at x=%d, y=%d (robot is at x=%d, y=%d)\n", xObj, yObj, actualX, actualY);
 	append_pos_file(xFront, yFront, nature);
 }
