@@ -1403,7 +1403,7 @@ void newbackwardSonar(float sonarThreshold, float speed) {
 }
 
 void newforwardTimed(float seconds, int speed) {
-    move_forever(speed, speed);
+    move_forever(200, 200);
     sleep(seconds);
     move_forever(0, 0);
 }
