@@ -74,7 +74,7 @@ void debug_sensors(){
 
 //--------------------------- CASE 6 ----------------
 
-int test_explore_mountain() {
+int test_explore_mountain(int x0, int y0) {
 	set_sensor_mode(sn_gyro, "GYRO-G&A");
 	set_sensor_mode(sn_gyro, "GYRO-ANG");
 	T = get_gyro();
@@ -225,9 +225,9 @@ int robot(int sw,int arg1,int arg2){
 	    	break;
 	    case 6:
 	    	printf("TEST JB - explore mountain\n");
-	    	set_initial_coordinates(arg1, arg2);
-	    	test_explore_mountain();
-	    	create_map(arg1, arg2);
+	    	//set_initial_coordinates(arg1, arg2);
+	    	test_explore_mountain(arg1, arg2);
+	    	//create_map(arg1, arg2);
 	    	printf("END OF TEST 6 JB\n");
 	    	break;
 	    case 7:
