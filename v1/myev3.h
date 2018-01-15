@@ -1452,7 +1452,7 @@ void deplacement(int sonarThreshold , int speed ) {
     //int speed = 200;
 
     turn_approx(90);
-    newforward_sonar(sonarThreshold, speed);
+    newforwardSonar(sonarThreshold, speed);
 
     int lastMove = 50;
     int lastTurn = 90;
@@ -1462,7 +1462,7 @@ void deplacement(int sonarThreshold , int speed ) {
         if (lastMove == 50) {
             //do newforward_sonar
             newbackwardSonar(sonarThreshold, speed);
-            newforward_sonar(sonarThreshold, speed);
+            newforwardSonar(sonarThreshold, speed);
             //newisThisABall(25);
 
             lastTurn*=-1;
@@ -1513,7 +1513,7 @@ void* test_Update_position2(){
     pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
-    deplacement(70, 200) 
+    deplacement(70, 200);
     //THE END OF THE INITIALISATION____________________________________________
 
     /* debut SC2 */
