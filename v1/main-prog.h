@@ -118,7 +118,7 @@ int go_random(int x0, int y0) {
     
     int side;
     int i;
-    for (i=0; i<7; i++) {
+    for (i=0; i<3; i++) {
     	forward_sonar_jb();
     	side = rand() % 2;
 		if (side==0) {
