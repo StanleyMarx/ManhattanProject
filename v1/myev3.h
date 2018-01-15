@@ -1138,7 +1138,6 @@ int create_map(int x0, int y0) {
         printf("[ERROR] create_map(): couldn't open pos.txt\n");
         exit(1);
     }
-    send_mapdone();
     for (y=maxY; y>minY-1; y--) {
     	for (x=minX; x<maxX+1; x++) {
     		found = 0;
@@ -1171,7 +1170,7 @@ int create_map(int x0, int y0) {
 					send_mapdata(x, y, 0, 255, 0);
 				} else if (nature==1) {
 					printf(" + "); //this is a non-movable object
-					send_mapdata(x, y, 0, 0, 0);
+					send_mapdata(x, y, 255, 0, 0);
 				} else {
 					printf(" o "); // this is a movable obj
 					send_mapdata(x, y, 255, 0, 0);
@@ -1184,7 +1183,7 @@ int create_map(int x0, int y0) {
 		printf("\n");
 	}
 	printf("\n");
-	//send_mapdone();
+	send_mapdone();
     return 0;
 }
 
