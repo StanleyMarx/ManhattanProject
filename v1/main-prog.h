@@ -116,9 +116,9 @@ int go_random(int x0, int y0) {
     pthread_t send_pos;
     pthread_create(&send_pos,NULL,send_pos_entry,NULL);
     move_forever(35, 35);
-    sleep(1);
+    sleep(2);
     move_forever(0,0);
-    printf("x = %d, y = %d\n", X, Y);
+    //printf("x = %d, y = %d\n");
     int side;
     int i;
     for (i=0; i<3; i++) {
