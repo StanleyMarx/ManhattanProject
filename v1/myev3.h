@@ -831,7 +831,7 @@ void position_in_front(int nature) {
 	int xObj = (int) (X + cos(T)*(sonarVal/4))/SQUARE_SIZE;
 	int yObj = (int) (Y + sin(T)*(sonarVal/4))/SQUARE_SIZE;
 	printf("[OBJECT POSITION] front is at x=%d, y=%d (robot is at x=%d, y=%d)\n", xObj, yObj, actualX, actualY);
-	append_pos_file(xFront, yFront, nature);
+	append_pos_file(xObj, yObj, nature);
 }
 
 int isThereSomethingInFront() {
