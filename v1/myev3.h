@@ -23,7 +23,7 @@ FILE* posFile = NULL;
 // robot movements
 const int CHECK_TIMER = 2;
 const float SONAR_THRESHOLD = 90.0;
-const int POS_THRESHOLD = -100;
+const int POS_THRESHOLD = -1000;
 // shovel
 int count_take = 1; //begin with an obstacle in the shovel
 int count_drop = 0;
