@@ -115,7 +115,8 @@ int go_random(int x0, int y0) {
     pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
     
     int side;
-    while(1) {
+    int i;
+    while(i=0; i<7; i++) {
     	forward_sonar_jb();
     	side = rand() % 2;
 		if (side==0) {
