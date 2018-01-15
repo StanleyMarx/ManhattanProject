@@ -1477,7 +1477,7 @@ void newdrop_object() {
 }
 
 void newisThisABall(float sonarThreshold, float speed) {
-    float delta=20;
+    float delta=25;
     forward_sonar_jb();
     turn_approx(delta);
     sleep(0.5);
