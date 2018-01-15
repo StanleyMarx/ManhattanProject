@@ -1478,7 +1478,7 @@ void deplacement(float sonarThreshold , int speed ) {
     int lastTurn = 90;
     int firstOrientation = 90;
 
-    while(get_X_position()!=Xinit && get_Y_position()!=Yinit) {
+    while(get_X_position()!=Xinit || get_Y_position()!=Yinit) {
 	printf("enter the while\n");
         if (lastMove == 50) {
             //do newforward_sonar
