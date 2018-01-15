@@ -1,5 +1,13 @@
 # Manhattan Project
 
+## Welcome!
+
+Here is our code for the EV3 OS Project.<br/>
+It is located in ```./v1```: the most important script files are:
+* ```./v1/main.c```, which is our main script in charge of launching everything.
+* ```./v1/main-prog.h```, which is where we set up our different test scripts.
+* ```./v1/myev3.h```, which is where we store all of our functions. 
+
 ## Ressources
 
 + [Site de l'équipe](http://ninofiliu.fr/OS_project/)
@@ -7,14 +15,6 @@
 + [Project repository](https://gitlab.eurecom.fr/ludovic.apvrille/OS_Robot_Project_Fall2017)
 + [Documentation de la librairie EV3DEV-C](http://in4lio.github.io/ev3dev-c/)
 + [Documentation sur les tachos](http://docs.ev3dev.org/projects/lego-linux-drivers/en/ev3dev-jessie/motors.html#tacho-motor-subsystem)
-
-## Welcome!
-
-Here is our code for the EV3 OS Project.<br/>
-It is located in ```./v1```: the most important script files are:
-* ```main.c```, which is our main script in charge of launching everything.
-* ```main-prog.h```, which is where we set up our different test scripts.
-* ```myev3.h```, which is where we store all of our functions. 
 
 # TESTS AND TO-DO LISTS
 
