@@ -1540,7 +1540,7 @@ void deplacement(float sonarThreshold , int speed) {
             }
         }else {
             //do move_a_bit
-            move_real_debug(800,800);
+            move_real_debug(500,500);
 
 
             turn_exact_gyro(lastTurn,1);
@@ -1572,8 +1572,15 @@ void deplacement(float sonarThreshold , int speed) {
 
 
 void* test_Update_position2(){
+    pthread_t update_pos;
+    pthread_create(&update_pos,NULL,update_pos_entry,NULL);
+    deplacement(70.0,200);
+    ThreadSituation=1;
+    pthread_join(update_pos,NULL);
+    
+    
     // by Henri
-    /* get the position while moving */
+    /* get the position while moving
     pthread_t myUpdate_position;
     pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
 
@@ -1581,14 +1588,14 @@ void* test_Update_position2(){
     deplacement(70.0, 200);
     //THE END OF THE INITIALISATION____________________________________________
 
-    /* debut SC2 */
+    /* debut SC2 
     pthread_mutex_lock(&mutex);
     ThreadSituation = 1;
     pthread_mutex_unlock(&mutex);
-    /* fin SC2 */
+    /* fin SC2 
 
     pthread_join(myUpdate_position,NULL);
-    pthread_mutex_destroy(&mutex);
+    pthread_mutex_destroy(&mutex);*/
 }
 
 /* THREADS */
@@ -1641,7 +1648,7 @@ void* update_pos_entry(){
 char SEND_POS_ENABLE=1;
 void* send_pos_entry(){
     while(SEND_POS_ENABLE){
-        send_position((int)(X/SQUARE_SIZE),(int)(Y/SQUARE_SIZE));
+        send_position((int16_t)(Xpos),(int16_t)(Ypos));
         sleep(2);
     }
 }
