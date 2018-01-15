@@ -1468,12 +1468,12 @@ void newisThisABall(float delta) {
     }
 }
 
-void deplacement(float sonarThreshold , int speed ) {
+void deplacement(float sonarThreshold , int speed , int number) {
     int Xinit=get_X_position();
     int Yinit=get_Y_position();
     //int sonarThreshold = 60;
     //int speed = 200;
-
+	
     turn_exact_gyro(90,1);
     printf("finish turn\n");
     newforwardSonar(sonarThreshold, speed);
