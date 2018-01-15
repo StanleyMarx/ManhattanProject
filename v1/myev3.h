@@ -1403,7 +1403,7 @@ void newtake_object() {
     set_tacho_command(sn_shovel, "run-forever");
     sleep(2);
     //set_tacho_command(sn_shovel, "stop");
-    nmove_real_debug(200,200);;//---------moveforward
+    move_real_debug(200,200);;//---------moveforward
     printf("[PELLE] closing pelle\n");//-------close pelle
     set_tacho_command(sn_shovel, "stop");
     set_tacho_speed_sp(sn_shovel, 150);
