@@ -517,7 +517,7 @@ int forward_sonar_jb() {
     int localRCycle=50;
     int localLCycle=50;*/
     printf("[MOTORS] starting motors\n");
-    while (frontClear && sidesClear && Y>POS_THRESHOLD && X>POS_THRESHOLD) {
+    while (frontClear && sidesClear) {// && Y>POS_THRESHOLD && X>POS_THRESHOLD) {
         yPos = get_Y_position();
         xPos = get_X_position();
         /*checkGyro = get_gyro();   
@@ -549,7 +549,7 @@ int forward_sonar_jb() {
         return 1; // obstacle to the right/left
     }
     printf("[POSITION] reached one axis\n");
-    forwardTimed(2,-100);
+    //forwardTimed(2,-100);
     return 0;
 }
 
