@@ -41,8 +41,12 @@ void test_cs(){
     send_position(-1,-2);
     send_obstacle(1,2,3);
     send_obstacle(0,4,5);
-    send_position_pos(1,2);
-    send_position_pos(-1,-2);
+    for (int x=0; x<32; x++){
+        for (int y=0; y<32; y++){
+            send_mapdata(x,y,8*x,0,8*y);
+        }
+    }
+    send_mapdone();
 }
 //----------------------- CASE_3 -----------------------
 void test_turn(int rat){
@@ -212,6 +216,7 @@ int robot(int sw,int arg1,int arg2){
 		    testDetectType();
 		        break;
         case 2:
+            printf("test the CS communication. Sends a few coordinates and a red/blue gradient map.\n");
             test_cs();
             break;
         case 3:
