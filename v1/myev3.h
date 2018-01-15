@@ -1508,7 +1508,7 @@ void deplacement(float sonarThreshold , int speed ) {
         }else {
             //do move_a_bit
             move_real_debug(200,200);
-            sleep(2);
+            sleep(1);
             move_real_debug(0,0);
 
 
