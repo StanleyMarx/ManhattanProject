@@ -292,5 +292,6 @@ int robot(int sw,int arg1,int arg2){
                 printf("color:   %d\n",get_color());
                 sleep(2);
             }
+            break;
     }
 }
