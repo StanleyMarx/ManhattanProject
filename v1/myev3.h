@@ -98,7 +98,7 @@ int create_map(int x0, int y0);
 int append_pos_file(int x, int y, int nature);
 int known_point(int checkX, int checkY);
 void set_initial_coordinates(int x, int y);
-// Nino map
+// Nino map ?
 void print_int_list(int* list, int len);
 int pos_exists(int x, int y, int* x_list, int* y_list, int len);
 int send_map_from_file();
@@ -287,11 +287,11 @@ void turn_exact_rel(float delta,float prec){
 
 //unused? 
 void turn_exact_gyro(float delta,float prec){
-    float anglCurr=get_gyro();
+    float anglCurr=-get_gyro();
     float anglDest=anglCurr+delta;
     while (abs(delta)>prec){
         turn_approx(delta);
-        anglCurr=get_gyro();
+        anglCurr=-get_gyro();
         delta=anglDest-anglCurr;
     }
 }
@@ -1378,35 +1378,29 @@ int send_map_from_file(){
 void newforwardSonar(float sonarThreshold, int speed) {
 	float sonarVal = get_sonar();
 	if (sonarVal > sonarThreshold+10) {
-		set_tacho_speed_sp(sn_rwheel, speed);
-		set_tacho_speed_sp(sn_lwheel, speed);
-		printf("[TACHO] starting tachos\n");
-		set_tacho_command(sn_lwheel, "run-forever");
-		set_tacho_command(sn_rwheel, "run-forever");
+        	move_real_debug(speed, speed);
 		while (sonarVal > sonarThreshold) {
 			sonarVal = get_sonar();
 		}
-		printf("[TACHO] stopping tachos\n");
-		set_tacho_command(sn_lwheel, "stop");
-		set_tacho_command(sn_rwheel, "stop");
+        move_real_debug(0, 0);
 	}
 }
 
 void newbackwardSonar(float sonarThreshold, float speed) {
     float sonarVal = get_sonar();
     if (sonarVal < sonarThreshold-10) {
-        move_forever(speed, speed);
+        move_real_debug(-speed, -speed);
         while (sonarVal < sonarThreshold) {
             sonarVal = get_sonar();
         }
-        move_forever(0, 0);
+        move_real_debug(0, 0);
     }
 }
 
 void newforwardTimed(int seconds, int speed) {
-    move_forever(speed, speed);
+    move_real_debug(speed, speed);
     sleep(seconds);
-    move_forever(0, 0);
+    move_real_debug(0, 0);
 }
 
 void newtake_object() {
@@ -1426,7 +1420,7 @@ void newtake_object() {
 }
 
 void newdrop_object() {
-    turn_approx(180);//-------half turn
+    turn_exact_gyro(180);//-------half turn
     newforwardTimed(2, 80);//---------moveforward
     printf("[PELLE] opening pelle\n");//----------open pelle
     set_tacho_speed_sp(sn_shovel, -80);
@@ -1434,7 +1428,7 @@ void newdrop_object() {
     sleep(2);
     //set_tacho_command(sn_shovel, "stop");
     newforwardTimed(2, -80);//---------movebackward
-    turn_approx(-180);//-------half turn
+    turn_exact_gyro(-180);//-------half turn
     printf("[PELLE] closing pelle\n");//----------close pelle
     set_tacho_command(sn_shovel, "stop");
     set_tacho_speed_sp(sn_shovel, 80);
@@ -1445,22 +1439,22 @@ void newdrop_object() {
 
 void newisThisABall(float delta) {
     newforwardSonar(50.0, 100);
-    turn_approx(delta);
+    turn_exact_gyro(delta);
     sleep(0.5);
     float sonarValG = get_sonar();
-    turn_approx(-delta);
+    turn_exact_gyro(-delta);
     sleep(0.5);
-    turn_approx(-delta);
+    turn_exact_gyro(-delta);
     sleep(0.5);
     float sonarValD = get_sonar();
-    turn_approx(delta);
+    turn_exact_gyro(delta);
     if ((sonarValG > 150) && (sonarValD > 150)){
         printf("movable object\n");
         newtake_object();
         newdrop_object();
     }else {
         printf("UNmovable object\n");
-        turn_approx(-90);
+        turn_exact_gyro(-90);
     }
 }
 
@@ -1470,7 +1464,7 @@ void deplacement(float sonarThreshold , int speed ) {
     //int sonarThreshold = 60;
     //int speed = 200;
 
-    turn_approx(90);
+    turn_exact_gyro(90);
     printf("finish turn\n");
     newforwardSonar(sonarThreshold, speed);
     printf("finish forward\n");
@@ -1487,12 +1481,12 @@ void deplacement(float sonarThreshold , int speed ) {
             //newisThisABall(25);
 
             lastTurn*=-1;
-            turn_approx(lastTurn);
+            turn_exact_gyro(lastTurn);
             if (isThereSomethingInFront()) {
                 lastTurn*=-1;
-                turn_approx(lastTurn);
+                turn_exact_gyro(lastTurn);
                 if (isThereSomethingInFront()) {
-                    turn_approx(lastTurn);
+                    turn_exact_gyro(lastTurn);
                 } else {
                     lastMove=01;
                 }
@@ -1503,15 +1497,15 @@ void deplacement(float sonarThreshold , int speed ) {
             //do move_a_bit
             newforwardTimed(2.5, 80);
 
-            turn_approx(lastTurn);
+            turn_exact_gyro(lastTurn);
             if (isThereSomethingInFront()) {
                 lastTurn*=-1;
-                turn_approx(2*lastTurn);
+                turn_exact_gyro(2*lastTurn);
                 if (isThereSomethingInFront()) {
                     lastTurn*=-1;
-                    turn_approx(lastTurn);
+                    turn_exact_gyro(lastTurn);
                     if (isThereSomethingInFront()) {
-                        turn_approx(2*lastTurn);
+                        turn_exact_gyro(2*lastTurn);
                     }
                 } else {
                     lastMove=50;
