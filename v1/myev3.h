@@ -1426,8 +1426,9 @@ void newdrop_object() {
     set_tacho_command(sn_shovel, "stop");
 }
 
-void newisThisABall(float delta) {
-    newforwardSonar(50.0, 100);
+void newisThisABall(float sonarThreshold, float speed) {
+    float delta=20;
+    newforwardSonar(sonarThreshold, speed);
     turn_exact_gyro(delta,1);
     sleep(0.5);
     float sonarValG = get_sonar();
@@ -1441,9 +1442,9 @@ void newisThisABall(float delta) {
         printf("movable object\n");
         newtake_object();
         newdrop_object();
+	newisThisABall(sonarThreshold, speed);
     }else {
         printf("UNmovable object\n");
-        turn_exact_gyro(-90,-1);
     }
 }
 
@@ -1455,7 +1456,7 @@ void deplacement(float sonarThreshold , int speed) {
 	
     turn_exact_gyro(90,1);
     printf("finish turn\n");
-    newforwardSonar(sonarThreshold, speed);
+    newisThisABall(sonarThreshold, speed);
     printf("finish forward\n");
 
     int nextMove = 50;
@@ -1466,7 +1467,7 @@ void deplacement(float sonarThreshold , int speed) {
     printf("enter the while\n");
         if (nextMove == 50) {
             //do newforward_sonar
-            newforwardSonar(sonarThreshold, speed);
+            newisThisABall(sonarThreshold, speed);
             //newisThisABall(25);
 
             lastTurn*=-1;
