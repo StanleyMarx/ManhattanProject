@@ -22,7 +22,7 @@ int maxY = 0;
 FILE* posFile = NULL;
 // robot movements
 const int CHECK_TIMER = 2;
-const float SONAR_THRESHOLD = 70.0;
+const float SONAR_THRESHOLD = 90.0;
 const int POS_THRESHOLD = 0;
 // shovel
 int count_take = 1; //begin with an obstacle in the shovel
@@ -1491,7 +1491,7 @@ void deplacement(float sonarThreshold , int speed ) {
             sleep(0.2);
             if (isThereSomethingInFront()) {
                 lastTurn*=-1;
-                turn_exact_gyro(lastTurn,1);
+                turn_exact_gyro(2*lastTurn,1);
                 sleep(0.2);
                 if (isThereSomethingInFront()) {
                     turn_exact_gyro(lastTurn,1);
@@ -1504,7 +1504,7 @@ void deplacement(float sonarThreshold , int speed ) {
         }else {
             //do move_a_bit
             move_real_debug(200,200);
-            sleep(1);
+            sleep(2);
             move_real_debug(0,0);
 
 
