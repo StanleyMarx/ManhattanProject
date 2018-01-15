@@ -1571,33 +1571,6 @@ void deplacement(float sonarThreshold , int speed) {
 
 
 
-void* test_Update_position2(){
-    pthread_t update_pos;
-    pthread_create(&update_pos,NULL,update_pos_entry,NULL);
-    deplacement(70.0,200);
-    ThreadSituation=1;
-    pthread_join(update_pos,NULL);
-    
-    
-    // by Henri
-    /* get the position while moving
-    pthread_t myUpdate_position;
-    pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
-
-    //THE MOVEMENT FUNCTIONS___________________________________________________
-    deplacement(70.0, 200);
-    //THE END OF THE INITIALISATION____________________________________________
-
-    /* debut SC2 
-    pthread_mutex_lock(&mutex);
-    ThreadSituation = 1;
-    pthread_mutex_unlock(&mutex);
-    /* fin SC2 
-
-    pthread_join(myUpdate_position,NULL);
-    pthread_mutex_destroy(&mutex);*/
-}
-
 /* THREADS */
 
 
@@ -1651,4 +1624,31 @@ void* send_pos_entry(){
         send_position((int16_t)(Xpos),(int16_t)(Ypos));
         sleep(2);
     }
+}
+
+void* test_Update_position2(){
+    pthread_t update_pos;
+    pthread_create(&update_pos,NULL,update_pos_entry,NULL);
+    deplacement(70.0,200);
+    ThreadSituation=1;
+    pthread_join(update_pos,NULL);
+    
+    
+    // by Henri
+    /* get the position while moving
+    pthread_t myUpdate_position;
+    pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+
+    //THE MOVEMENT FUNCTIONS___________________________________________________
+    deplacement(70.0, 200);
+    //THE END OF THE INITIALISATION____________________________________________
+
+    /* debut SC2 
+    pthread_mutex_lock(&mutex);
+    ThreadSituation = 1;
+    pthread_mutex_unlock(&mutex);
+    /* fin SC2 
+
+    pthread_join(myUpdate_position,NULL);
+    pthread_mutex_destroy(&mutex);*/
 }

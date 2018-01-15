@@ -212,16 +212,18 @@ void send_from_file(){
     uint16_t x=0;
     uint16_t y=0;
     while(c!=EOF){
+        printf("c = char %c = int %d\n",c,c);
         switch(c){
             case 'M':
                 send_mapdata(x,y,255,0,0);
                 x++;
                 break;
             case 'X':
-                send_mapdata(x,y,,0,0,255);
+                send_mapdata(x,y,0,0,255);
                 x++;
                 break;
             case '\n':
+                x=0;
                 y++;
                 break;
         }
