@@ -634,7 +634,6 @@ void send_position(int16_t x,int16_t y){
 	str[7]=y;
     if (y<0){str[8]=0xff;} else {str[8]=0x00;}
 	write(s,str,9);
-	Sleep(1000);
 }
 void send_mapdata(int16_t x,int16_t y,char r,char g,char b){
     char str[58];
@@ -650,7 +649,6 @@ void send_mapdata(int16_t x,int16_t y,char r,char g,char b){
 	str[10]=g;
 	str[11]=b;
 	write(s,str,12);
-	Sleep(1000);
 }
 void send_mapdone(){
     char str[58];
@@ -659,7 +657,6 @@ void send_mapdone(){
 	str[3]=0xff;
 	str[4]=6;
 	write(s,str,5);
-	Sleep(1000);
 }
 void send_obstacle(int act,uint16_t x,uint16_t y){
     char str[58];
@@ -673,7 +670,6 @@ void send_obstacle(int act,uint16_t x,uint16_t y){
 	str[8]=y;
     if (y<0){str[9]=0xff;} else {str[9]=0x00;}
 	write(s,str,10);
-	Sleep(1000);
 }
 
 
@@ -759,7 +755,7 @@ void* Update_position2(){
         if ((Xpos != XposOld) || (Ypos != YposOld)) {
             XposOld = Xpos;
             YposOld = Ypos;
-            append_pos_file2(Xpos, Ypos, 0);
+            append_pos_file(Xpos, Ypos, 0);
         }
     }
     pthread_mutex_unlock(&mutex);
