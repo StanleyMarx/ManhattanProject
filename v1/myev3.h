@@ -10,6 +10,7 @@ uint8_t sn_gyro;
 uint8_t sn_sonar;
 uint8_t sn_rwheel;
 uint8_t sn_lwheel;
+uint8_t sn_shovel;
 uint8_t sn;
 uint8_t sn_color;
 int max_speed;
@@ -787,16 +788,7 @@ void* test_Update_position2(){
     pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
 
     //THE MOVEMENT FUNCTIONS___________________________________________________
-    move_forever(40,40);
-    printf("\nmoving\n");
-    sleep(5);
-    move_forever(0,0);
-    printf("\turning\n");
-    turn_approx(90);
-    move_forever(40,40);
-    printf("\nmoving\n");
-    sleep(5);
-    move_forever(0,0);
+    deplacement(70, 200) 
     //THE END OF THE INITIALISATION____________________________________________
 
     /* debut SC2 */
