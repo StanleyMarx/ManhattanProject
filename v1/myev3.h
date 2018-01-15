@@ -23,7 +23,7 @@ FILE* posFile = NULL;
 // robot movements
 const int CHECK_TIMER = 2;
 const float SONAR_THRESHOLD = 90.0;
-const int POS_THRESHOLD = 0;
+const int POS_THRESHOLD = -100;
 // shovel
 int count_take = 1; //begin with an obstacle in the shovel
 int count_drop = 0;
@@ -833,6 +833,9 @@ void position_in_front(int nature) {
 	int xObj = (int) (X + cos(T)*(sonarVal/4))/SQUARE_SIZE;
 	int yObj = (int) (Y + sin(T)*(sonarVal/4))/SQUARE_SIZE;
 	printf("[OBJECT POSITION] front is at x=%d, y=%d (robot is at x=%d, y=%d)\n", xObj, yObj, actualX, actualY);
+	if (nature==2) {
+		send_obstacle(0, xObj, yObj);
+	}
 	append_pos_file(xObj, yObj, nature);
 }
 
@@ -867,6 +870,8 @@ int isThereSomethingInFront() {
 			return 1;
 		}
 		printf("[OBJECT] movable\n");
+		take_object();
+		drop_object();
 		position_in_front(2);
 		return 1;
 	}
