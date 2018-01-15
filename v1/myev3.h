@@ -1065,6 +1065,52 @@ int explore_mountain() {
 
 // ------------------------------ Mapping 
 
+void send_map_jb() {
+	/*
+        by JB
+        sends map
+    */
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+    int x, y, color;
+    char *token;
+
+    posFile = fopen("pos.txt", "r");
+    if (posFile == NULL)
+        exit(1);
+
+    while ((read = getline(&line, &len, posFile)) != -1) {
+        x = -1000;
+        y = -1000;
+        color = -1;
+        token = strtok(line, ",");
+        while(token) {
+            if (x==-1000) {
+                x = atoi(token);
+            } else if (y==-1000) {
+                y = atoi(token);
+            } else if (color==-1) {
+            	color = atoi(token);
+            }
+            token = strtok(NULL, ",");
+        }
+        if (color==0) {
+        	send_mapdata(x, y, 0, 255, 0);
+        } else if  (color==1) {
+        	send_mapdata(x, y, 0, 0, 0);
+        } else if (color==2) {
+        	send_mapdata(x, y, 255, 0, 0);
+        } else {
+        	send_mapdata(x, y, 0, 0, 255);
+        }
+    }
+    fclose(posFile);
+    if (line) free(line);
+    send_mapdone();
+    printf("[MAP] done sending map\n");
+}
+
 void find_corners() {
     /*
         by JB

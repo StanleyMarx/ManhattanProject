@@ -302,5 +302,9 @@ int robot(int sw,int arg1,int arg2){
         case 12:
             send_from_file();
             break;
+        case 13: 
+        	printf("[CASE 13] about to send map from pos.txt\n");
+        	send_map_jb();
+        	break;
     }
 }
