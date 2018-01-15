@@ -1389,7 +1389,6 @@ void newforwardSonar(float sonarThreshold, int speed) {
         }
     set_tacho_command(sn_lwheel, "stop");
     set_tacho_command(sn_rwheel, "stop");
-    }
 }
 
 void newbackwardSonar(float sonarThreshold, float speed) {
