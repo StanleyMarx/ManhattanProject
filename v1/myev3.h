@@ -1373,17 +1373,17 @@ int send_map_from_file(){
 void newforwardSonar(float sonarThreshold, int speed) {
 	float sonarVal = get_sonar();
 	if (sonarVal > sonarThreshold+10) {
-		set_tacho_speed_sp(sn_right, speed);
-		set_tacho_speed_sp(sn_left, speed);
+		set_tacho_speed_sp(sn_rwheel, speed);
+		set_tacho_speed_sp(sn_lwheel, speed);
 		printf("[TACHO] starting tachos\n");
-		set_tacho_command(sn_left, "run-forever");
-		set_tacho_command(sn_right, "run-forever");
+		set_tacho_command(sn_lwheel, "run-forever");
+		set_tacho_command(sn_rwheel, "run-forever");
 		while (sonarVal > sonarThreshold) {
 			sonarVal = get_sonar();
 		}
 		printf("[TACHO] stopping tachos\n");
-		set_tacho_command(sn_left, "stop");
-		set_tacho_command(sn_right, "stop");
+		set_tacho_command(sn_lwheel, "stop");
+		set_tacho_command(sn_rwheel, "stop");
 	}
 }
 
