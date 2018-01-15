@@ -226,6 +226,7 @@ int robot(int sw,int arg1,int arg2){
             test_turn(arg1);
             break;
         case 4:
+        	set_initial_coordinates(arg1, arg2);
             test_Update_position2();
             create_map(arg1, arg2);
             int x=get_X_position();
