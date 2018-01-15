@@ -77,6 +77,9 @@ void send_position(int16_t x,int16_t y);
 void send_mapdata(int16_t x,int16_t y,char r,char g,char b);
 void send_mapdone();
 void send_obstacle(int act,uint16_t x,uint16_t y);
+void send_position_pos(int16_t x,int16_t y);
+void send_mapdata_pos(int16_t x,int16_t y,char r,char g,char b);
+void send_obstacle_pos(int act,uint16_t x,uint16_t y);
 // Robot Position
 void* Update_position2();
 void* test_Update_position2();
@@ -1377,29 +1380,29 @@ int send_map_from_file(){
 void newforwardSonar(float sonarThreshold, int speed) {
 	float sonarVal = get_sonar();
 	if (sonarVal > sonarThreshold+10) {
-        	move_real_debug(speed, speed);
+        	move_forever(speed, speed);
 		while (sonarVal > sonarThreshold) {
 			sonarVal = get_sonar();
 		}
-        move_real_debug(0, 0);
+        move_forever(0, 0);
 	}
 }
 
 void newbackwardSonar(float sonarThreshold, float speed) {
     float sonarVal = get_sonar();
     if (sonarVal < sonarThreshold-10) {
-        move_real_debug(-speed, -speed);
+        move_forever(-speed, -speed);
         while (sonarVal < sonarThreshold) {
             sonarVal = get_sonar();
         }
-        move_real_debug(0, 0);
+        move_forever(0, 0);
     }
 }
 
 void newforwardTimed(float seconds, int speed) {
-    move_real_debug(speed, speed);
+    move_forever(speed, speed);
     sleep(seconds);
-    move_real_debug(0, 0);
+    move_forever(0, 0);
 }
 
 void newtake_object() {
