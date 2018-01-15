@@ -284,6 +284,7 @@ int robot(int sw,int arg1,int arg2){
         	printf("END OF TEST 10 JB\n");
         	break;
         case 11:
+            printf("displays the sensor values every 2 seconds\n");
             while (1){
                 printf("sonar:   %f\n",get_sonar());
                 printf("gyro:    %f\n",get_gyro());
