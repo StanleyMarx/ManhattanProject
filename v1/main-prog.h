@@ -72,12 +72,29 @@ void debug_sensors(){
     }
 }
 
-// ------------------------ CASE 6 ------------------------
-int test_go_around_map(){
+//--------------------------- CASE 6 ----------------
+
+int test_explore_mountain() {
+	pthread_t myUpdate_position;
+	pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+
+	explore_mountain();
+
+	pthread_mutex_lock(&mutex);
+	ThreadSituation = 1;
+	pthread_mutex_unlock(&mutex);
+
+	pthread_join(myUpdate_position,NULL);
+	pthread_mutex_destroy(&mutex);
+	return 0;
+}
+
+// ------------------------ CASE 7 ------------------------
+int test_go_around_map(int x0, int y0){
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
       
-      go_around_map();
+      go_around_map(x0, y0);
       
       pthread_mutex_lock(&mutex);
       ThreadSituation = 1;
@@ -86,6 +103,35 @@ int test_go_around_map(){
       pthread_join(myUpdate_position,NULL);
       pthread_mutex_destroy(&mutex);
       return 0;
+}
+
+// ----------------------- CASE 10 ---------------------
+int go_random(int x0, int y0) {
+	/*
+		by JB
+		Robot is supposed to go forward in random directions while avoiding obstacles, x axis and y axis
+	*/
+	pthread_t myUpdate_position;
+    pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
+    
+    int side;
+    while(1) {
+    	forward_sonar_jb();
+    	side = rand() % 2;
+		if (side==0) {
+			turn_right();
+		} else {
+			turn_left();
+		}
+    }
+    
+    pthread_mutex_lock(&mutex);
+    ThreadSituation = 1;
+    pthread_mutex_unlock(&mutex);
+      
+    pthread_join(myUpdate_position,NULL);
+    pthread_mutex_destroy(&mutex);
+    return 0;
 }
 
 
@@ -202,7 +248,7 @@ int robot(int sw,int arg1,int arg2){
             break;
         case 4:
             test_Update_position2();
-            create_map();
+            create_map(arg1, arg2);
             int x=get_X_position();
             int y=get_Y_position();
             printf("\nX,Y = %d,%d\n",x,y);
@@ -211,18 +257,17 @@ int robot(int sw,int arg1,int arg2){
 	    	forward_sonar(50);
 	    	break;
 	    case 6:
-	    	printf("Going around map - test JB\n");
-	    	test_go_around_map();
-	    	create_map();
+	    	printf("TEST JB - explore mountain\n");
+	    	set_initial_coordinates(arg1, arg2);
+	    	test_explore_mountain();
+	    	create_map(arg1, arg2);
 	    	printf("END OF TEST 6 JB\n");
 	    	break;
 	    case 7:
-		forward_sonar(50);
-	    	printf("testing take and drop object\n");
-	    	take_object();
-	    	printf("just took object, about to drop it in 5sec\n");
-	    	sleep(5);
-	    	drop_object();
+			printf("TEST JB - changing initial coordinates\n");
+			set_initial_coordinates(arg1, arg2);
+			test_go_around_map(arg1, arg2);
+	    	printf("END OF TEST 7 JB\n");
 	    	break;
         case 8:
             printf("moving for a while and sending the position to the server, then sending the map\n");
@@ -232,6 +277,13 @@ int robot(int sw,int arg1,int arg2){
             printf("sending map from pos.txt...\n");
             send_map_from_file();
             break;
+        case 10:
+        	printf("TEST JB - random going forward and turning, avoiding obstacles, x axis and y axis\n");
+        	set_initial_coordinates(arg1, arg2);
+        	go_random(arg1, arg2);
+        	create_map(arg1, arg2);
+        	printf("END OF TEST 10 JB\n");
+        	break;
     
     }
 }
