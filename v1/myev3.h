@@ -1437,9 +1437,15 @@ void newbackwardSonar(float sonarThreshold, float speed) {
 }
 
 void newforwardTimed(float seconds, int speed) {
-    move_forever(200, 200);
+    float sonarVal = get_sonar();
+    set_tacho_speed_sp(sn_rwheel, speed);
+    set_tacho_speed_sp(sn_lwheel, speed);
+    //printf("[TACHO] starting tachos\n");
+    set_tacho_command(sn_lwheel, "run-forever");
+    set_tacho_command(sn_rwheel, "run-forever");
     sleep(seconds);
-    move_forever(0, 0);
+    set_tacho_command(sn_lwheel, "stop");
+    set_tacho_command(sn_rwheel, "stop");
 }
 
 void newtake_object() {
@@ -1476,9 +1482,38 @@ void newdrop_object() {
     set_tacho_command(sn_shovel, "stop");
 }
 
+void whereIsMyMind(int angle) {
+    turn_approx(-angle);
+    float sonarMin = get_sonar();
+    float gyroMin = get_gyro();
+    float sonarVal = get_sonar();
+    float gyroVal;
+    float gyroValInitial;
+    gyroValInitial = get_gyro();
+    gyroVal = get_gyro();
+    printf("initial gyro value: %f\n", gyroValInitial);
+    set_tacho_speed_sp(sn_lwheel, 50.0);
+    set_tacho_speed_sp(sn_rwheel, -50.0);
+    printf("[TACHO] starting tachos\n");
+    set_tacho_command(sn_lwheel, "run-forever");
+    set_tacho_command(sn_rwheel, "run-forever");
+    while (abs(gyroVal - gyroValInitial) < abs(2*angle)) {
+        gyroVal = get_gyro();
+        sonarVal = get_sonar();
+        if (sonarMin>sonarVal) {
+            sonarMin=sonarVal;
+            gyroMin=gyroVal;
+        }
+    }
+    printf("[TACHO] stopping tachos\n");
+    set_tacho_command(sn_lwheel, "stop");
+    set_tacho_command(sn_rwheel, "stop");
+    turn_approx(gyroValInitial-gyroMin);
+}
+
 void newisThisABall(float sonarThreshold, float speed) {
     float delta=25;
-    forward_sonar_jb();
+    newforwardSonar(sonarThreshold,speed);
     turn_approx(delta);
     sleep(0.5);
     float sonarValG = get_sonar();
@@ -1492,81 +1527,80 @@ void newisThisABall(float sonarThreshold, float speed) {
         printf("movable object\n");
         newtake_object();
         newdrop_object();
-        newisThisABall(sonarThreshold, speed);
+        newisThisABall1(sonarThreshold, speed);
     }else {
         printf("UNmovable object\n");
     }
 }
 
+
+
+
 void deplacement(float sonarThreshold , int speed) {
     int Xinit=get_X_position();
     int Yinit=get_Y_position();
-    //int sonarThreshold = 60;
-    //int speed = 200;
     
-    turn_exact_gyro(90,1);
+    turn_approx(90);
     printf("finish turn\n");
-    newisThisABall(sonarThreshold, speed);
+    newforwardSonar(sonarThreshold, speed);
     printf("finish forward\n");
 
     int nextMove = 50;
     int lastTurn = 90;
     int firstOrientation = 90;
     int number=0;
-    while(number<50) {
-    number=number+1;
-    printf("enter the while\n");
+    while(number<6) {
+        number=number+1;
         if (nextMove == 50) {
-            //do newforward_sonar
-            
+            //printf("dans sonar");
             newisThisABall(sonarThreshold, speed);
-            
-            //newisThisABall(25);
-
             lastTurn*=-1;
-            turn_exact_gyro(lastTurn,1);
+            turn_approx(lastTurn);
             sleep(0.2);
-            if (isThereSomethingInFront()) {
+            nextMove=1;
+            if (get_sonar()<sonarThreshold) {
+                //printf("sonar blocage 1");
                 lastTurn*=-1;
-                turn_exact_gyro(2*lastTurn,1);
+                turn_approx(lastTurn);
+                turn_approx(lastTurn);
                 sleep(0.2);
-                if (isThereSomethingInFront()) {
-                    turn_exact_gyro(lastTurn,1);
-                } else {
-                    nextMove=01;
+                if (get_sonar()<sonarThreshold) {
+                    //printf("sonar blocage 2");
+                    turn_approx(lastTurn);
+                    nextMove=50;
                 }
-            } else {
-                nextMove=01;
             }
         }else {
             //do move_a_bit
-            move_real_debug(500,500);
+            //printf("dans move");
+            newforwardTimed(2.5, speed);
 
-
-            turn_exact_gyro(lastTurn,1);
+            turn_approx(lastTurn);
             sleep(0.2);
-            if (isThereSomethingInFront()) {
+            nextMove=50;
+            if (get_sonar()<sonarThreshold) {
+                //printf("move blocage 1");
                 lastTurn*=-1;
-                turn_exact_gyro(2*lastTurn,1);
+                turn_approx(lastTurn);
+                turn_approx(lastTurn);
                 sleep(0.2);
-                if (isThereSomethingInFront()) {
+                if (get_sonar()<sonarThreshold) {
+                    //printf("move blocage 2");
                     lastTurn*=-1;
-                    turn_exact_gyro(lastTurn,1);
+                    turn_approx(lastTurn);
                     sleep(0.2);
-                    if (isThereSomethingInFront()) {
-                        turn_exact_gyro(2*lastTurn,1);
+                    nextMove=01;
+                    if (get_sonar()<sonarThreshold) {
+                        //printf("move blocage 3");
+                        turn_approx(lastTurn);
+                        turn_approx(lastTurn);
                     }
-                } else {
-                    nextMove=50;
-                }
-            } else {
-                nextMove=50;
-            }
+                } 
+            } 
         }
 
-    }
+    } 
 }
-
 
 
 
