@@ -255,6 +255,15 @@ float get_sonar_map(){
 void go_to_approx(float x, float y){
     printf("[ERROR] go_to_approx is not implemented yet\n");
     exit(1);
+    
+    float ratio=0; // TO CALIBRATE
+    float dx=x-X;
+    float dy=y-Y;
+    if (dy!=0){
+        turn_gyro(-atan(dx/dy));
+    }
+    float d=sqrt(dx*dx+dy*dy);
+    move_real_debug(d*ratio,d*ratio);
 }
 void go_to(float x, float y, float prec){
     // makes the robot does a straight line from its current position to a point in the disk of center (x,y) and of radius prec    
@@ -458,5 +467,28 @@ int robot(int sw,int arg1,int arg2, int arg3){
             printf("implements the strategy n°1\n");
             strategy1(arg1,arg2,arg3);
             break;
-    }
+        case 101:
+            printf("calibrating the go_to ratio\n");
+            UPDATE_POS_ENABLE=1;
+            pthread_t update_pos;
+            pthread_create(&update_pos,NULL,update_pos_entry,NULL);
+            
+            float x=arg1;
+            float y=arg2;
+            float ratio=arg3;
+            X=0;
+            Y=0;
+            
+            float dx=x-X;
+            float dy=y-Y;
+            if (dy!=0){
+                turn_gyro(-atan(dx/dy));
+            }
+            printf("headed to (%f,%f)\n",x,y);
+            float d=sqrt(dx*dx+dy*dy);
+            move_real_debug(d*ratio,d*ratio);
+            printf("advanced to (%f,%f), error=%f\n",X,Y,sqrt((x-X)*(x-X)+(y-Y)*(y-Y)));
+            
+            UPDATE_POS_ENABLE=0;
+            pthread_join(update_pos,NULL);
 }
