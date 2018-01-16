@@ -1572,11 +1572,11 @@ void deplacement(float sonarThreshold , int speed) {
 
 
 /* THREADS */
-
-
 char UPDATE_POS_ENABLE=1;
 void* update_pos_entry(){
     // updates the global variable X and Y given the input of the motors
+    // writes it to a file
+    // uses the gyro
     
     int right_pos, left_pos, right_pos_prev, left_pos_prev, dr, dl;
     get_tacho_position(sn_rwheel,&right_pos_prev);
@@ -1598,8 +1598,8 @@ void* update_pos_entry(){
         
         if (dr*dl>0){
             // advancing
-            X+=(dr+dl)*cos(T/57.29577951308232);
-            Y+=(dr+dl)*sin(T/57.29577951308232);
+            X+=(dr+dl)*cos((T-T0)/57.29577951308232);
+            Y+=(dr+dl)*sin((T-T0)/57.29577951308232);
         } else {
             // turning
             T=get_gyro();
@@ -1625,7 +1625,6 @@ void* send_pos_entry(){
         sleep(2);
     }
 }
-
 
 void* test_Update_position2(){
     // by Henri

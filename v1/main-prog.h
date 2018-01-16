@@ -205,32 +205,127 @@ void almost_the_real_stuff(){
     printf("- done -");
 }
 
-//case12
-void send_from_file(){
-    FILE* f=fopen("mymap.txt","r");
-    char c=getc(f);
-    uint16_t x=0;
-    uint16_t y=0;
-    while(c!=EOF){
-        printf("c = char %c = int %d\n",c,c);
-        switch((int)c){
-            case 77:
-                send_mapdata(x,y,255,0,0);
-                x++;
-                break;
-            case 88:
-                send_mapdata(x,y,0,0,255);
-                x++;
-                break;
-            case 10:
-                x=0;
-                y++;
-                break;
-        }
-        c=getc(f);
-    }
-    send_mapdone();
+//----------------------- CASE 12 ----------------------
+
+float T0=0;
+float T0_COMPASS=0;
+int X_MAP_MAX=10;
+int Y_MAP_MAX=5;
+int map_x(){
+    return round(X/SQUARE_SIZE); 
 }
+int map_y(){
+    return round(Y/SQUARE_SIZE); 
+}
+void matrix_print(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    for (int y=0; y<Y_MAP_MAX; y++){
+        for (int x=0; x<X_MAP_MAX; x++){
+            printf("%d ",mat[y][x]);
+        }
+        printf("\n");
+    }
+}
+int matrix_nb_zeros(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    int res=0;
+    for (int y=0; y<Y_MAP_MAX; y++){
+        for (int x=0; x<X_MAP_MAX; x++){
+            if (mat[y][x]==0){
+                res++;
+            }
+        }
+    }
+    return res;
+}
+float matrix_completion(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    return (float)matrix_nb_zeros*X_MAP_MAX/Y_MAP_MAX;
+}
+float get_sonar_map(){
+    printf("[WARNING] get_conar_map() not implemented yet, returns the sonar value instead.\n");
+    return get_sonar();
+}
+int strategy1(int arg1, int arg2){
+    // params and variables
+    float treshold_explo=0;             // exploration stops when at least 0% of the map is explored
+    int nb_scan=16;                     // during the scan, measure what's in front every 360/16 degrees
+    int nb_point=X_MAP_MAX+Y_MAP_MAX;   // will consider that there is at best nb_points pixels between two random pixels
+    int i,j,x,y;
+    float d,angle,x_pointed,y_pointed;
+    
+    printf("--- STRATEGY 1 ---\n");
+    
+    printf("creating threads...\n");
+    UPDATE_POS_ENABLE=1;
+    SEND_POS_ENABLE=1;
+    pthread_t update_pos;
+    pthread_create(&update_pos,NULL,update_pos_entry,NULL);
+    pthread_t send_pos;
+    pthread_create(&send_pos,NULL,send_pos_entry,NULL);
+    
+    printf("initiating the position...\n");
+    X=SQUARE_SIZE*arg1;
+    Y=SQUARE_SIZE*arg2;
+    T0=get_gyro();
+    T0_COMPASS=get_compass();
+    
+    printf("starting the exploration!\n")
+    int map[Y_MAP_MAX][X_MAP_MAX];
+    map[map_y][map_x]=1;
+    while (matrix_completion(map)<treshold_explo)){
+        
+        // scan
+        printf("scanning...\n");
+        for (i=0; i<nb_scan; i++){
+            angle=360*i/nb_scan;
+            d=50*get_sonar_map(); // sonar value is in mm, so d is in pixel
+            dx_pointed=sin(angle)*d;
+            dy_pointed=cos(angle)*d;
+            for (j=0; j<nb_point; j++){
+                y=round(map_y()+dy_pointed*j/nb_point);
+                x=round(map_x()+dx_pointed*j/nb_point);
+                if (x>=0 && y>=0 && x<X_MAP_MAX && y<Y_MAP_MAX){
+                    // (x,y) is in the arena
+                    if (map[y][x]==0){
+                        // (x,y) is still unexplored
+                        if (j<nb_point){
+                            // (x,y) is empty
+                            map[y][x]=1;
+                        } else {
+                            // (x,y) is the object that made the sonar's ultrasound stop
+                            map[y][x]=2;
+                        }
+                        
+                    }
+                }
+            }
+            turn_approx(360/nb_scan);
+        }
+        printf("scan finished, map updated:\n");
+        matrix_print(map);
+        
+        /* choses an empty neighbouring point */
+        /* go there */
+    }
+    printf("finished the exploration. map:\n");
+    matrix_print(map);
+    
+    
+    printf("stopping and joining the threads...\n");
+    UPDATE_POS_ENABLE=0;
+    SEND_POS_ENABLE=0;
+    pthread_join(update_pos,NULL);
+    pthread_join(send_pos,NULL);
+    printf("sending map...\n");
+    send_map_from_var(map);
+    
+    printf("--- EXITING : SUCCESS ---\n ");
+}
+/*
+content of variable map
+    0 = unexplored
+    1 = empty
+    2 = unmovable
+    3 = movable
+*/
 
 //------------------------ ROBOT ------------------------
 int robot(int sw,int arg1,int arg2){
@@ -302,7 +397,8 @@ int robot(int sw,int arg1,int arg2){
             }
             break;
         case 12:
-            send_from_file();
+            printf("implements the strategy n°1\n");
+            strategy1(arg1,arg2);
             break;
         case 13: 
         	printf("[CASE 13] about to send map from pos.txt\n");
