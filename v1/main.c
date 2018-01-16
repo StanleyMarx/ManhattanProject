@@ -11,9 +11,9 @@
 #include <math.h>
 #include <pthread.h>
 
-// #define SERV_ADDR "30:3a:64:ea:bf:0e" // server = nino-hp
+#define SERV_ADDR "30:3a:64:ea:bf:0e" // server = nino-hp
 // #define SERV_ADDR "dc:53:60:ad:61:90" // server = laetitia
-#define SERV_ADDR "00:1a:7d:da:71:06" // server = french 
+// #define SERV_ADDR "00:1a:7d:da:71:06" // server = french 
 
 #define TEAM_ID 12
 
@@ -62,6 +62,8 @@ int read_from_server (int sock, char *buffer, size_t maxSize) {
 #include "main-prog.h"
 
 int main(int argc, char **argv) {
+    
+    srand(time(NULL)); //initialises the seed for random numbers
     
     while(ev3_tacho_init()<1) Sleep( 1000 );
     ev3_sensor_init();
@@ -114,7 +116,11 @@ int main(int argc, char **argv) {
         if (argc>3){
           arg2=atoi(argv[3]);
         }
-        robot(atoi(argv[1]),arg1,arg2);
+        int arg3=0;
+        if (argc>4){
+          arg3=atoi(argv[4]);
+        }
+        robot(atoi(argv[1]),arg1,arg2,arg3);
         /* ROBOT - END */
       
       

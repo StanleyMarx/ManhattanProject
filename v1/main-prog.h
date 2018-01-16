@@ -205,10 +205,9 @@ void almost_the_real_stuff(){
     printf("- done -");
 }
 
-//----------------------- CASE 12 ----------------------
 
-float T0=0;
-float T0_COMPASS=0;
+//----------------------- CASE 100 ----------------------
+
 int X_MAP_MAX=10;
 int Y_MAP_MAX=5;
 int map_x(){
@@ -237,19 +236,49 @@ int matrix_nb_zeros(int mat[Y_MAP_MAX][X_MAP_MAX]){
     return res;
 }
 float matrix_completion(int mat[Y_MAP_MAX][X_MAP_MAX]){
-    return (float)matrix_nb_zeros*X_MAP_MAX/Y_MAP_MAX;
+    float total=X_MAP_MAX*Y_MAP_MAX;
+    float explo=total-matrix_nb_zeros(mat);
+    float res=explo/total;
+    return res;
 }
 float get_sonar_map(){
-    printf("[WARNING] get_conar_map() not implemented yet, returns the sonar value instead.\n");
-    return get_sonar();
+    float d=get_sonar();
+    float t=fmod(T-T0+180,360);
+    if (abs(t)<90){
+        float dd=Y/cos(t);
+        if (dd<d){
+            return dd;
+        }
+    }
+    return d;
 }
-int strategy1(int arg1, int arg2){
+void go_to_approx(float x, float y){
+    printf("[ERROR] go_to_approx is not implemented yet\n");
+    exit(1);
+}
+void go_to(float x, float y, float prec){
+    // makes the robot does a straight line from its current position to a point in the disk of center (x,y) and of radius prec    
+    float d=sqrt(pow((x-X),2)+pow((y-Y),2));
+    while (d>prec){
+        go_to_approx(x,y);
+    }
+    turn_exact_abs(T0_COMPASS,1);
+}
+void go_to_map(int x, int y){
+    printf("[ERROR] go_to_map is not implemented yet\n");
+    exit(1);
+}
+void send_map_from_var(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    printf("[ERROR] send_map_from_var is not implemented yet\n");
+    exit(1);
+}
+int strategy1(int arg1, int arg2, int arg3){
     // params and variables
-    float treshold_explo=0;             // exploration stops when at least 0% of the map is explored
-    int nb_scan=16;                     // during the scan, measure what's in front every 360/16 degrees
-    int nb_point=X_MAP_MAX+Y_MAP_MAX;   // will consider that there is at best nb_points pixels between two random pixels
+    float treshold_explo=(float)arg3/1000;  // exploration stops when at least 0% of the map is explored
+    int nb_scan=16;                         // during the scan, measure what's in front every 360/16 degrees
+    int nb_point=X_MAP_MAX+Y_MAP_MAX;       // will consider that there is at best nb_points pixels between two random pixels
     int i,j,x,y;
-    float d,angle,x_pointed,y_pointed;
+    float d,angle,dx_pointed,dy_pointed;
     
     printf("--- STRATEGY 1 ---\n");
     
@@ -267,18 +296,25 @@ int strategy1(int arg1, int arg2){
     T0=get_gyro();
     T0_COMPASS=get_compass();
     
-    printf("starting the exploration!\n")
+    printf("starting the exploration!\nwill finish when %f%% of the map will have been explored.\n",treshold_explo*100);
     int map[Y_MAP_MAX][X_MAP_MAX];
-    map[map_y][map_x]=1;
-    while (matrix_completion(map)<treshold_explo)){
+    for (y=0; y<Y_MAP_MAX; y++){
+        for (x=0; x<X_MAP_MAX; x++){
+            map[y][x]=0;
+        }
+    }
+    map[map_y()][map_x()]=1;
+    while (matrix_completion(map)<treshold_explo){
         
         // scan
-        printf("scanning...\n");
+        printf("-map explored at %f%%-\nscanning...\n",100*matrix_completion(map));
         for (i=0; i<nb_scan; i++){
             angle=360*i/nb_scan;
             d=50*get_sonar_map(); // sonar value is in mm, so d is in pixel
             dx_pointed=sin(angle)*d;
             dy_pointed=cos(angle)*d;
+            
+            // updates the pixels from its position to the stuff that is being pointed by the sonar 
             for (j=0; j<nb_point; j++){
                 y=round(map_y()+dy_pointed*j/nb_point);
                 x=round(map_x()+dx_pointed*j/nb_point);
@@ -297,15 +333,28 @@ int strategy1(int arg1, int arg2){
                     }
                 }
             }
-            turn_approx(360/nb_scan);
+            turn_gyro(360/nb_scan);
         }
         printf("scan finished, map updated:\n");
         matrix_print(map);
         
-        /* choses an empty neighbouring point */
-        /* go there */
+        // choses an empty neighbouring point
+        printf("choosing a neighbouring point to go to...\n");
+        x=map_x();
+        y=map_y();
+        while((x<0||x>=X_MAP_MAX||y<0||y>=X_MAP_MAX) || (x==map_x() && y==map_y()) || map[y][x]!=1){
+            // (x,y) is either not a valid coordinate, the position of the robot, or a non-empty space
+            printf("(%d,%d) is not valid. ",x,y);
+            x=map_x()-3+rand()%7;
+            y=map_y()-3+rand()%7;
+            printf("maybe (%d,%d) will do?\n",x,y);
+        }
+        printf("chose (%d,%d)!\n",x,y);
+        
+        // goes there
+        go_to_map(x,y);
     }
-    printf("finished the exploration. map:\n");
+    printf("finished the exploration!\nmap explored at %f%%\nmap:\n",100*matrix_completion(map));
     matrix_print(map);
     
     
@@ -328,7 +377,7 @@ content of variable map
 */
 
 //------------------------ ROBOT ------------------------
-int robot(int sw,int arg1,int arg2){
+int robot(int sw,int arg1,int arg2, int arg3){
     printf("case no: %d\n", sw);
     switch (sw){
         case 0:
@@ -397,12 +446,17 @@ int robot(int sw,int arg1,int arg2){
             }
             break;
         case 12:
-            printf("implements the strategy n°1\n");
-            strategy1(arg1,arg2);
+            printf("test the turn_gyro function\n");
+            turn_gyro(arg1);
             break;
         case 13: 
         	printf("[CASE 13] about to send map from pos.txt\n");
         	send_map_jb();
         	break;
+            
+        case 100:
+            printf("implements the strategy n°1\n");
+            strategy1(arg1,arg2,arg3);
+            break;
     }
 }

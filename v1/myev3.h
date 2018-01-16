@@ -38,6 +38,8 @@ float lambda=1/21.21*86/35;
 pthread_mutex_t mutex;
 int ThreadSituation=0;
 float X=0, Y=0, T=0;
+float T0=0;
+float T0_COMPASS=0;
 float SQUARE_SIZE=200; // size of a 5cm square in the units of X
 
 // ---------------------------------- Signatures
@@ -284,6 +286,18 @@ void turn_exact_rel(float delta,float prec){
     turn_exact_abs(fmod(t0+delta,360),prec);
 }
 
+void turn_gyro(float delta){
+    float t0=get_gyro();
+    if (delta>0){
+        move_forever(10,-10);
+        while(get_gyro()<t0+delta);
+        move_forever(0,0);
+    } else {
+        move_forever(-10,10);
+        while(get_gyro()>t0+delta);
+        move_forever(0,0);
+    }
+}
 void turn_exact_gyro(float delta,float prec){
     float anglCurr=get_gyro();
     float anglDest=anglCurr+delta;
@@ -1512,6 +1526,9 @@ void whereIsMyMind(int angle) {
 }
 
 void newisThisABall(float sonarThreshold, float speed) {
+    /*  DOESN'T COMPILE
+        warning: implicit declaration of function ‘newisThisABall1’
+    
     float delta=25;
     newforwardSonar(sonarThreshold,speed);
     turn_approx(delta);
@@ -1531,9 +1548,8 @@ void newisThisABall(float sonarThreshold, float speed) {
     }else {
         printf("UNmovable object\n");
     }
+    */
 }
-
-
 
 
 void deplacement(float sonarThreshold , int speed) {
@@ -1601,7 +1617,6 @@ void deplacement(float sonarThreshold , int speed) {
 
     } 
 }
-
 
 
 
