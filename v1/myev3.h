@@ -287,6 +287,7 @@ void turn_exact_rel(float delta,float prec){
 }
 
 void turn_gyro(float delta){
+    // turns untill the gyro measures the right value
     float t0=get_gyro();
     if (delta>0){
         move_forever(10,-10);
@@ -297,6 +298,14 @@ void turn_gyro(float delta){
         while(get_gyro()>t0+delta);
         move_forever(0,0);
     }
+}
+void turn_gyro_abs(float agl){
+    // turns to the absolute position T0+agl
+    float delta=fmod(agl-get_gyro()+T0,360);
+    if (delta>180){
+        delta=delta-360;
+    }
+    turn_gyro(delta);
 }
 void turn_exact_gyro(float delta,float prec){
     float anglCurr=get_gyro();

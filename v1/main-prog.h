@@ -241,6 +241,20 @@ float matrix_completion(int mat[Y_MAP_MAX][X_MAP_MAX]){
     float res=explo/total;
     return res;
 }
+float angle_from_coor(float x, float y){
+    if (x=0){
+        if (y>0){
+            return 90;
+        } else {
+            return 270;
+        }
+    }
+    if (x>0){
+        return atan(y/x)*57.29577951308232;
+    } else {
+        return atan(y/x)*57.29577951308232+180;
+    }
+}
 float get_sonar_map(){
     float d=get_sonar();
     float t=fmod(T-T0+180,360);
@@ -344,6 +358,7 @@ int strategy1(int arg1, int arg2, int arg3){
             }
             turn_gyro(360/nb_scan);
         }
+        turn_gyro_abs(T0);
         printf("scan finished, map updated:\n");
         matrix_print(map);
         
@@ -406,13 +421,14 @@ int robot(int sw,int arg1,int arg2, int arg3){
             test_turn(arg1);
             break;
         case 4:
+            /*
         	set_initial_coordinates(arg1, arg2);
             test_Update_position2();
             create_map(arg1, arg2);
             int x=get_X_position();
             int y=get_Y_position();
             printf("\nX,Y = %d,%d\n",x,y);
-            break;
+            break;*/
         case 5:
 	    	forward_sonar(50);
 	    	break;
@@ -455,20 +471,30 @@ int robot(int sw,int arg1,int arg2, int arg3){
             }
             break;
         case 12:
-            printf("test the turn_gyro function\n");
-            turn_gyro(arg1);
+            printf("test the turn_gyro and turn_gyro_abs functions\n");
+            
+            T0=get_gyro();
+            printf("current angle: %f\n",get_gyro());
+            turn_gyro(90);
+            printf("made a 90° turn, now at %f\n",get_gyro());
+            turn_gyro_abs(0);
+            printf("went back to T0=%f, now at %f\n",T0,get_gyro());
+            
             break;
         case 13: 
         	printf("[CASE 13] about to send map from pos.txt\n");
         	send_map_jb();
         	break;
+        
             
+        // STRATEGY 1
         case 100:
             printf("implements the strategy n°1\n");
             strategy1(arg1,arg2,arg3);
             break;
         case 101:
             printf("calibrating the go_to ratio\n");
+            T0=get_gyro();
             UPDATE_POS_ENABLE=1;
             pthread_t update_pos;
             pthread_create(&update_pos,NULL,update_pos_entry,NULL);
@@ -478,12 +504,13 @@ int robot(int sw,int arg1,int arg2, int arg3){
             float ratio=arg3;
             X=0;
             Y=0;
+            T0=get_gyro();
             
             float dx=x-X;
             float dy=y-Y;
-            if (dy!=0){
-                turn_gyro(-atan(dx/dy));
-            }
+            printf("current angle = %f\n",T-T0);
+            turn_gyro_abs(angle_from_coor(dx,dy));
+            printf("current angle = %f\n",T-T0);
             printf("headed to (%f,%f)\n",x,y);
             float d=sqrt(dx*dx+dy*dy);
             move_real_debug(d*ratio,d*ratio);
@@ -491,4 +518,7 @@ int robot(int sw,int arg1,int arg2, int arg3){
             
             UPDATE_POS_ENABLE=0;
             pthread_join(update_pos,NULL);
+            break;
+    }
+        
 }
