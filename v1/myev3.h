@@ -228,15 +228,13 @@ int get_color(){
     return (int) ret; // { "?", "BLACK", "BLUE", "GREEN", "YELLOW", "RED", "WHITE", "BROWN" };
 }
 
-// ------------------------------ Simple Movement Functions
-//used
+// Simple Movement Functions
 void move_forever(int rcycle,int lcycle){
     set_tacho_duty_cycle_sp(sn_rwheel,rcycle);
     set_tacho_duty_cycle_sp(sn_lwheel,lcycle);
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_DIRECT);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_DIRECT);
 }
-//unused? 
 void move_real(int r,int l,int speed){
     set_tacho_stop_action_inx(sn_rwheel,TACHO_BRAKE);
     set_tacho_stop_action_inx(sn_lwheel,TACHO_BRAKE);
@@ -251,19 +249,15 @@ void move_real(int r,int l,int speed){
     set_tacho_command_inx(sn_rwheel,TACHO_RUN_TO_REL_POS);
     set_tacho_command_inx(sn_lwheel,TACHO_RUN_TO_REL_POS);
 }
- 
 void move_real_debug(int r,int l){
     int time_ratio=4500;
     move_real(r,l,100);
     usleep(time_ratio*(abs(r)+abs(l)));
 }
-
 void turn_approx(float angle){
     float ratio=2.66;
     move_real_debug(ratio*angle,-ratio*angle);
 }
-
-//unused? 
 void turn_exact_abs(float anglDest,float prec){
     float ratio=2.5;
     float anglCurr=get_compass();
@@ -279,13 +273,10 @@ void turn_exact_abs(float anglDest,float prec){
         if (delta<-180){delta=delta+180;}
     }
 }
-
-//unused? 
 void turn_exact_rel(float delta,float prec){
     float t0=get_compass();
     turn_exact_abs(fmod(t0+delta,360),prec);
 }
-
 void turn_gyro(float delta){
     // turns untill the gyro measures the right value
     float t0=get_gyro();

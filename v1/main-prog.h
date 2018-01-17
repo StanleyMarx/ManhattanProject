@@ -78,9 +78,7 @@ void debug_sensors(){
         sleep(2);
     }
 }
-
 //--------------------------- CASE 6 ----------------
-
 int test_explore_mountain(int x0, int y0) {
 	set_sensor_mode(sn_gyro, "GYRO-G&A");
 	set_sensor_mode(sn_gyro, "GYRO-ANG");
@@ -106,8 +104,7 @@ int test_explore_mountain(int x0, int y0) {
     printf("- done -");
     return 0;
 }
-
-// ------------------------ CASE 7 ------------------------
+// ---------------------- CASE 7 ----------------------
 int test_go_around_map(int x0, int y0){
       pthread_t myUpdate_position;
       pthread_create(&myUpdate_position,NULL,Update_position2,NULL);
@@ -122,8 +119,7 @@ int test_go_around_map(int x0, int y0){
       pthread_mutex_destroy(&mutex);
       return 0;
 }
-
-// ----------------------- CASE 10 ---------------------
+// ---------------------- CASE 10 ---------------------
 int go_random(int x0, int y0) {
 	/*
 		by JB
@@ -166,7 +162,6 @@ int go_random(int x0, int y0) {
     printf("- done -");
     return 0;
 }
-
 //----------------------- CASE_8 -----------------------
 void almost_the_real_stuff(){
     pthread_t update_pos;
@@ -204,10 +199,7 @@ void almost_the_real_stuff(){
     send_map_from_file();
     printf("- done -");
 }
-
-
-//----------------------- CASE 100 ----------------------
-
+//----------------------- CASE 100 ---------------------
 int X_MAP_MAX=10;
 int Y_MAP_MAX=5;
 int map_x(){
@@ -241,20 +233,6 @@ float matrix_completion(int mat[Y_MAP_MAX][X_MAP_MAX]){
     float res=explo/total;
     return res;
 }
-float angle_from_coor(float x, float y){
-    if (x=0){
-        if (y>0){
-            return 90;
-        } else {
-            return 270;
-        }
-    }
-    if (x>0){
-        return atan(y/x)*57.29577951308232;
-    } else {
-        return atan(y/x)*57.29577951308232+180;
-    }
-}
 float get_sonar_map(){
     float d=get_sonar();
     float t=fmod(T-T0+180,360);
@@ -267,32 +245,33 @@ float get_sonar_map(){
     return d;
 }
 void go_to_approx(float x, float y){
-    printf("[ERROR] go_to_approx is not implemented yet\n");
-    exit(1);
-    
-    float ratio=0; // TO CALIBRATE
+    // given (X,Y,T), moves straight to (x,y,[complicated]) in one way
+    // tested - it should work properly
+    float ratio=0.5;
     float dx=x-X;
     float dy=y-Y;
-    if (dy!=0){
-        turn_gyro(-atan(dx/dy));
-    }
+    turn_gyro_abs(atan2(dy,dx)*57.29577951308232);
     float d=sqrt(dx*dx+dy*dy);
     move_real_debug(d*ratio,d*ratio);
 }
 void go_to(float x, float y, float prec){
-    // makes the robot does a straight line from its current position to a point in the disk of center (x,y) and of radius prec    
+    // makes the robot move from its original position to a point in the disk of center (x,y) and of radius prec
+    // tested, should work, a precision of 80 (=2cm) is already pretty fine
     float d=sqrt(pow((x-X),2)+pow((y-Y),2));
     while (d>prec){
         go_to_approx(x,y);
+        d=sqrt(pow((x-X),2)+pow((y-Y),2));
     }
-    turn_exact_abs(T0_COMPASS,1);
 }
 void go_to_map(int x, int y){
-    printf("[ERROR] go_to_map is not implemented yet\n");
-    exit(1);
+    // goes to (x,y) on the map, so x and y are pixel coordinates
+    // not tested but should work
+    go_to(round(x*SQUARE_SIZE),round(y*SQUARE_SIZE),100);
 }
 void send_map_from_var(int mat[Y_MAP_MAX][X_MAP_MAX]){
-    printf("[ERROR] send_map_from_var is not implemented yet\n");
+    printf("[ERROR] send_map_from_var is not implemented yet, printing matrix instead:\n\n");
+    matrix_print(mat);
+    printf("\n");
     exit(1);
 }
 int strategy1(int arg1, int arg2, int arg3){
@@ -332,13 +311,14 @@ int strategy1(int arg1, int arg2, int arg3){
         // scan
         printf("-map explored at %f%%-\nscanning...\n",100*matrix_completion(map));
         for (i=0; i<nb_scan; i++){
-            angle=360*i/nb_scan;
-            d=50*get_sonar_map(); // sonar value is in mm, so d is in pixel
+            angle=(T-T0)/57.29577951308232;
+            d=get_sonar()/50; // sonar value is in mm, so d is in pixel. Replace get_sonar() by get_sonar_map() ?
             dx_pointed=sin(angle)*d;
             dy_pointed=cos(angle)*d;
             
+            printf("object located at (%f,%f), cleaning the path...\n",X+dx_pointed,Y+dy_pointed);
             // updates the pixels from its position to the stuff that is being pointed by the sonar 
-            for (j=0; j<nb_point; j++){
+            for (j=1; j<=nb_point; j++){
                 y=round(map_y()+dy_pointed*j/nb_point);
                 x=round(map_x()+dx_pointed*j/nb_point);
                 if (x>=0 && y>=0 && x<X_MAP_MAX && y<Y_MAP_MAX){
@@ -348,9 +328,11 @@ int strategy1(int arg1, int arg2, int arg3){
                         if (j<nb_point){
                             // (x,y) is empty
                             map[y][x]=1;
+                            printf("(%d,%d) is empty\n",x,y);
                         } else {
                             // (x,y) is the object that made the sonar's ultrasound stop
                             map[y][x]=2;
+                            printf("(%d,%d) is an object\n",x,y);
                         }
                         
                     }
@@ -358,7 +340,6 @@ int strategy1(int arg1, int arg2, int arg3){
             }
             turn_gyro(360/nb_scan);
         }
-        turn_gyro_abs(T0);
         printf("scan finished, map updated:\n");
         matrix_print(map);
         
@@ -368,10 +349,8 @@ int strategy1(int arg1, int arg2, int arg3){
         y=map_y();
         while((x<0||x>=X_MAP_MAX||y<0||y>=X_MAP_MAX) || (x==map_x() && y==map_y()) || map[y][x]!=1){
             // (x,y) is either not a valid coordinate, the position of the robot, or a non-empty space
-            printf("(%d,%d) is not valid. ",x,y);
             x=map_x()-3+rand()%7;
             y=map_y()-3+rand()%7;
-            printf("maybe (%d,%d) will do?\n",x,y);
         }
         printf("chose (%d,%d)!\n",x,y);
         
@@ -493,28 +472,19 @@ int robot(int sw,int arg1,int arg2, int arg3){
             strategy1(arg1,arg2,arg3);
             break;
         case 101:
-            printf("calibrating the go_to ratio\n");
-            T0=get_gyro();
+            printf("goes to (arg1,arg2) in a precision of arg3\n");
             UPDATE_POS_ENABLE=1;
             pthread_t update_pos;
             pthread_create(&update_pos,NULL,update_pos_entry,NULL);
-            
-            float x=arg1;
-            float y=arg2;
-            float ratio=arg3;
+
+            T0=get_gyro();
+            T=get_gyro();
             X=0;
             Y=0;
-            T0=get_gyro();
             
-            float dx=x-X;
-            float dy=y-Y;
-            printf("current angle = %f\n",T-T0);
-            turn_gyro_abs(angle_from_coor(dx,dy));
-            printf("current angle = %f\n",T-T0);
-            printf("headed to (%f,%f)\n",x,y);
-            float d=sqrt(dx*dx+dy*dy);
-            move_real_debug(d*ratio,d*ratio);
-            printf("advanced to (%f,%f), error=%f\n",X,Y,sqrt((x-X)*(x-X)+(y-Y)*(y-Y)));
+            printf("(X,Y,T)=(%f,%f,%f)\n",X,Y,T);
+            go_to(arg1,arg2,arg3);
+            printf("(X,Y,T)=(%f,%f,%f)\n",X,Y,T);
             
             UPDATE_POS_ENABLE=0;
             pthread_join(update_pos,NULL);
