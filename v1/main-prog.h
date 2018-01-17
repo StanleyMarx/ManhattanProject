@@ -208,7 +208,7 @@ int strategy1(int arg1, int arg2, int arg3){
     
     // params and variables
     float treshold_explo=(float)arg3/1000;  // exploration stops when at least 0% of the map is explored
-    int nb_scan=16;                         // during the scan, measure what's in front every 360/16 degrees
+    int nb_scan=32;                         // during the scan, measure what's in front every 360/16 degrees
     int nb_point=X_MAP_MAX+Y_MAP_MAX;       // will consider that there is at best nb_points pixels between two random pixels
     int i,j,x,y;
     float d,angle,dx_pointed,dy_pointed;
@@ -241,32 +241,27 @@ int strategy1(int arg1, int arg2, int arg3){
     while (matrix_completion(map)<treshold_explo){
         
         // scan
-        printf("-map explored at %f%%-\nscanning...\n",100*matrix_completion(map));
+        printf("\n\n\n-map explored at %f%%-\ncurrent coordinates: (%d,%d,%f)\n\nscanning...\n",100*matrix_completion(map),map_x(),map_y(),fmod(T-T0,360));
         for (i=0; i<nb_scan; i++){
             angle=(T-T0)/57.29577951308232;
             d=get_sonar()/50; // sonar value is in mm, so d is in pixel. Might eplace get_sonar() by get_sonar_map() for the invisible wall stuff.
-            dx_pointed=sin(angle)*d;
-            dy_pointed=cos(angle)*d;
+            dx_pointed=cos(angle)*d;
+            dy_pointed=sin(angle)*d;
             
-            printf("object located at (%f,%f), cleaning the path...\n",X+dx_pointed,Y+dy_pointed);
             // updates the pixels from its position to the stuff that is being pointed by the sonar 
             for (j=1; j<=nb_point; j++){
                 y=round(map_y()+dy_pointed*j/nb_point);
                 x=round(map_x()+dx_pointed*j/nb_point);
                 if (x>=0 && y>=0 && x<X_MAP_MAX && y<Y_MAP_MAX){
                     // (x,y) is in the arena
-                    if (map[y][x]==0){
-                        // (x,y) is still unexplored
-                        if (j==nb_point){
-                            // (x,y) is the object that made the sonar's ultrasound stop
-                            map[y][x]=2;
-                            printf("(%d,%d) is an object\n",x,y);
-                        } else {
+                    if (j==nb_point){
+                        // (x,y) is the object that made the sonar's ultrasound stop
+                        map[y][x]=2;
+                    } else {
+                        if (map[y][x]==0){
                             // (x,y) is empty
                             map[y][x]=1;
-                            printf("(%d,%d) is empty\n",x,y);
                         }
-                        
                     }
                 }
             }
@@ -275,21 +270,11 @@ int strategy1(int arg1, int arg2, int arg3){
         printf("scan finished, map updated:\n");
         matrix_print(map);
         
-        
-        
-        // choses an empty neighbouring point
-        printf("choosing a neighbouring point to go to...\n");
-        x=map_x();
-        y=map_y();
-        while((x<0||x>=X_MAP_MAX||y<0||y>=X_MAP_MAX) || (x==map_x() && y==map_y()) || map[y][x]!=1){
-            // (x,y) is either not a valid coordinate, the position of the robot, or a non-empty space
-            x=map_x()-10+rand()%21;
-            y=map_y()-3+rand()%21;
-        }
-        printf("chose (%d,%d)!\n",x,y);
-        
-        // goes there
+        // choses the next point to explore and goes there
+        chose_next_point(map,&x,&y);
+        printf("moving to (%d,%d)...\n",x,y);
         go_to_map(x,y);
+        printf("moved. current position: (%d,%d)\n",map_x(),map_y());
     }
     printf("finished the exploration!\nmap explored at %f%%\nmap:\n",100*matrix_completion(map));
     matrix_print(map);

@@ -282,11 +282,11 @@ void turn_gyro(float delta){
     float t0=get_gyro();
     if (delta>0){
         move_forever(20,-20);
-        while(get_gyro()<t0+delta-2);
+        while(get_gyro()<t0+delta-1.6);
         move_forever(0,0);
     } else {
         move_forever(-20,20);
-        while(get_gyro()>t0+delta+2);
+        while(get_gyro()>t0+delta+1.6);
         move_forever(0,0);
     }
 }
@@ -1631,7 +1631,20 @@ int map_y(){
 void matrix_print(int mat[Y_MAP_MAX][X_MAP_MAX]){
     for (int y=0; y<Y_MAP_MAX; y++){
         for (int x=0; x<X_MAP_MAX; x++){
-            printf("%d ",mat[y][x]);
+            switch(mat[y][x]){
+                case 0:
+                    printf("??");
+                    break;
+                case 1:
+                    printf(". ");
+                    break;
+                case 2:
+                    printf("NN");
+                    break;
+                case 3:
+                    printf("MM");
+                    break;
+            }
         }
         printf("\n");
     }
@@ -1685,7 +1698,7 @@ char is_path_empty(int mat[Y_MAP_MAX][X_MAP_MAX],int x, int y){
     return 1;
 }
 void chose_next_point(int mat[Y_MAP_MAX][X_MAP_MAX],int* x_ptr, int* y_ptr){
-    printf("-- chose_next_point --\ncurrently at (%d,%d)\n",map_x(),map_y());
+    printf("(chose_next_point) currently at (%d,%d)\n",map_x(),map_y());
     int x=rand()%X_MAP_MAX;
     int y;
     
@@ -1695,9 +1708,9 @@ void chose_next_point(int mat[Y_MAP_MAX][X_MAP_MAX],int* x_ptr, int* y_ptr){
         while(!is_path_empty(mat,x,y)){
             y++;
             x=rand()%X_MAP_MAX;
-            if (y==map_y()){
+            if (y==map_y()+5){
                 y=0;
-                printf("[WARNING] chose_next_point: y reset to 0. Not an error but suspicious behavior\n");
+                printf("(chose_next_point) [WARNING] y reset to 0. Not an error but suspicious behavior\n");
             }
         }
     } else {
@@ -1706,15 +1719,16 @@ void chose_next_point(int mat[Y_MAP_MAX][X_MAP_MAX],int* x_ptr, int* y_ptr){
         while(!is_path_empty(mat,x,y)){
             y--;
             x=rand()%X_MAP_MAX;
-            if (y==map_y()){
+            if (y==map_y()-5){
                 y=Y_MAP_MAX-1;
-                printf("[WARNING] chose_next_point: y reset to Y_MAP_MAX-1. Not an error but suspicious behavior\n");
+                printf("(chose_next_point) [WARNING] y reset to Y_MAP_MAX-1. Not an error but suspicious behavior\n");
             }
         }        
     }
     
     *x_ptr=x;
     *y_ptr=y;
+    printf("(chose_next_point) chose (%d,%d)\n",x,y);
 }
 
 float get_sonar_map(){
