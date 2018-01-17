@@ -281,12 +281,12 @@ void turn_gyro(float delta){
     // turns untill the gyro measures the right value
     float t0=get_gyro();
     if (delta>0){
-        move_forever(10,-10);
-        while(get_gyro()<t0+delta);
+        move_forever(20,-20);
+        while(get_gyro()<t0+delta-2);
         move_forever(0,0);
     } else {
-        move_forever(-10,10);
-        while(get_gyro()>t0+delta);
+        move_forever(-20,20);
+        while(get_gyro()>t0+delta+2);
         move_forever(0,0);
     }
 }
@@ -1619,8 +1619,146 @@ void deplacement(float sonarThreshold , int speed) {
 }
 
 
+/* STRATEGY 1 */
+int X_MAP_MAX=24;
+int Y_MAP_MAX=40;
+int map_x(){
+    return round(X/SQUARE_SIZE); 
+}
+int map_y(){
+    return round(Y/SQUARE_SIZE); 
+}
+void matrix_print(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    for (int y=0; y<Y_MAP_MAX; y++){
+        for (int x=0; x<X_MAP_MAX; x++){
+            printf("%d ",mat[y][x]);
+        }
+        printf("\n");
+    }
+}
+int matrix_nb_zeros(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    int res=0;
+    for (int y=0; y<Y_MAP_MAX; y++){
+        for (int x=0; x<X_MAP_MAX; x++){
+            if (mat[y][x]==0){
+                res++;
+            }
+        }
+    }
+    return res;
+}
+float matrix_completion(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    float total=X_MAP_MAX*Y_MAP_MAX;
+    float explo=total-matrix_nb_zeros(mat);
+    float res=explo/total;
+    return res;
+}
 
-/* THREADS */
+char is_freespace_large(int mat[Y_MAP_MAX][X_MAP_MAX],int x, int y, int width){
+    int xx,yy;
+    for (yy=y-width; yy<=y+width; yy++){
+        for (xx=x-width; xx<=x+width; xx++){
+            if (xx<0 && xx>=X_MAP_MAX && yy<0 && yy>=Y_MAP_MAX){
+                // (x,y) trop près du bord
+                return 0;
+            } else {
+                if (mat[yy][xx]!=1){
+                    // (x,y) trop près d'un obstacle
+                    return 0;
+                }
+            }
+        }
+    }
+    return 1;
+}
+char is_path_empty(int mat[Y_MAP_MAX][X_MAP_MAX],int x, int y){
+    int i,max=Y_MAP_MAX*X_MAP_MAX,xx,yy,dx=x-map_x(),dy=y-map_y();
+    if (x>=0 && x<X_MAP_MAX && y>=0 && y<Y_MAP_MAX){
+        for (i=0; i<=max; i++){
+            xx=map_x()+dx*i/max;
+            yy=map_y()+dy*i/max;
+            if (!is_freespace_large(mat,xx,yy,1)){
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+void chose_next_point(int mat[Y_MAP_MAX][X_MAP_MAX],int* x_ptr, int* y_ptr){
+    printf("-- chose_next_point --\ncurrently at (%d,%d)\n",map_x(),map_y());
+    int x=rand()%X_MAP_MAX;
+    int y;
+    
+    if (map_y()>Y_MAP_MAX*0.75){
+        // goes toward Y=0;
+        y=0;
+        while(!is_path_empty(mat,x,y)){
+            y++;
+            x=rand()%X_MAP_MAX;
+            if (y==map_y()){
+                y=0;
+                printf("[WARNING] chose_next_point: y reset to 0. Not an error but suspicious behavior\n");
+            }
+        }
+    } else {
+        // goes toward Y=+inf
+        y=Y_MAP_MAX-1;
+        while(!is_path_empty(mat,x,y)){
+            y--;
+            x=rand()%X_MAP_MAX;
+            if (y==map_y()){
+                y=Y_MAP_MAX-1;
+                printf("[WARNING] chose_next_point: y reset to Y_MAP_MAX-1. Not an error but suspicious behavior\n");
+            }
+        }        
+    }
+    
+    *x_ptr=x;
+    *y_ptr=y;
+}
+
+float get_sonar_map(){
+    float d=get_sonar();
+    float t=fmod(T-T0+180,360);
+    if (abs(t)<90){
+        float dd=Y/cos(t);
+        if (dd<d){
+            return dd;
+        }
+    }
+    return d;
+}
+void go_to_approx(float x, float y){
+    // given (X,Y,T), moves straight to (x,y,[complicated]) in one way
+    // tested - it should work properly
+    float ratio=0.5;
+    float dx=x-X;
+    float dy=y-Y;
+    turn_gyro_abs(atan2(dy,dx)*57.29577951308232);
+    float d=sqrt(dx*dx+dy*dy);
+    move_real_debug(d*ratio,d*ratio);
+}
+void go_to(float x, float y, float prec){
+    // makes the robot move from its original position to a point in the disk of center (x,y) and of radius prec
+    // tested, should work, a precision of 80 (=2cm) is already pretty fine
+    float d=sqrt(pow((x-X),2)+pow((y-Y),2));
+    while (d>prec){
+        go_to_approx(x,y);
+        d=sqrt(pow((x-X),2)+pow((y-Y),2));
+    }
+}
+void go_to_map(int x, int y){
+    // goes to (x,y) on the map, so x and y are pixel coordinates
+    // not tested but should work
+    go_to(round(x*SQUARE_SIZE),round(y*SQUARE_SIZE),100);
+}
+void send_map_from_var(int mat[Y_MAP_MAX][X_MAP_MAX]){
+    printf("[ERROR] send_map_from_var is not implemented yet, printing matrix instead:\n\n");
+    matrix_print(mat);
+    printf("\n");
+    exit(1);
+}
+
 char UPDATE_POS_ENABLE=1;
 void* update_pos_entry(){
     // updates the global variable X and Y given the input of the motors
@@ -1653,15 +1791,6 @@ void* update_pos_entry(){
             // turning
             T=get_gyro();
         }
-        x_towrite=(int)(X/SQUARE_SIZE);
-        y_towrite=(int)(Y/SQUARE_SIZE);
-        if (x_towrite!=x_lastwritten || y_towrite!=y_lastwritten){
-            file_pos=fopen("pos.txt","a");
-            fprintf(file_pos,"%d,%d,0\n",x_towrite,y_towrite);
-            x_lastwritten=x_towrite;
-            y_lastwritten=y_towrite; 
-            fclose(file_pos);
-        }
         
         right_pos_prev=right_pos;
         left_pos_prev=left_pos;
@@ -1670,10 +1799,19 @@ void* update_pos_entry(){
 char SEND_POS_ENABLE=1;
 void* send_pos_entry(){
     while(SEND_POS_ENABLE){
-        send_position((int16_t)(Xpos),(int16_t)(Ypos));
+        send_position(map_x(),map_y());
         sleep(2);
     }
 }
+
+
+
+
+
+
+
+
+
 
 void* test_Update_position2(){
     // by Henri

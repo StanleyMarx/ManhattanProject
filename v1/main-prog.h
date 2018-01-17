@@ -200,81 +200,12 @@ void almost_the_real_stuff(){
     printf("- done -");
 }
 //----------------------- CASE 100 ---------------------
-int X_MAP_MAX=10;
-int Y_MAP_MAX=5;
-int map_x(){
-    return round(X/SQUARE_SIZE); 
-}
-int map_y(){
-    return round(Y/SQUARE_SIZE); 
-}
-void matrix_print(int mat[Y_MAP_MAX][X_MAP_MAX]){
-    for (int y=0; y<Y_MAP_MAX; y++){
-        for (int x=0; x<X_MAP_MAX; x++){
-            printf("%d ",mat[y][x]);
-        }
-        printf("\n");
-    }
-}
-int matrix_nb_zeros(int mat[Y_MAP_MAX][X_MAP_MAX]){
-    int res=0;
-    for (int y=0; y<Y_MAP_MAX; y++){
-        for (int x=0; x<X_MAP_MAX; x++){
-            if (mat[y][x]==0){
-                res++;
-            }
-        }
-    }
-    return res;
-}
-float matrix_completion(int mat[Y_MAP_MAX][X_MAP_MAX]){
-    float total=X_MAP_MAX*Y_MAP_MAX;
-    float explo=total-matrix_nb_zeros(mat);
-    float res=explo/total;
-    return res;
-}
-float get_sonar_map(){
-    float d=get_sonar();
-    float t=fmod(T-T0+180,360);
-    if (abs(t)<90){
-        float dd=Y/cos(t);
-        if (dd<d){
-            return dd;
-        }
-    }
-    return d;
-}
-void go_to_approx(float x, float y){
-    // given (X,Y,T), moves straight to (x,y,[complicated]) in one way
-    // tested - it should work properly
-    float ratio=0.5;
-    float dx=x-X;
-    float dy=y-Y;
-    turn_gyro_abs(atan2(dy,dx)*57.29577951308232);
-    float d=sqrt(dx*dx+dy*dy);
-    move_real_debug(d*ratio,d*ratio);
-}
-void go_to(float x, float y, float prec){
-    // makes the robot move from its original position to a point in the disk of center (x,y) and of radius prec
-    // tested, should work, a precision of 80 (=2cm) is already pretty fine
-    float d=sqrt(pow((x-X),2)+pow((y-Y),2));
-    while (d>prec){
-        go_to_approx(x,y);
-        d=sqrt(pow((x-X),2)+pow((y-Y),2));
-    }
-}
-void go_to_map(int x, int y){
-    // goes to (x,y) on the map, so x and y are pixel coordinates
-    // not tested but should work
-    go_to(round(x*SQUARE_SIZE),round(y*SQUARE_SIZE),100);
-}
-void send_map_from_var(int mat[Y_MAP_MAX][X_MAP_MAX]){
-    printf("[ERROR] send_map_from_var is not implemented yet, printing matrix instead:\n\n");
-    matrix_print(mat);
-    printf("\n");
-    exit(1);
-}
 int strategy1(int arg1, int arg2, int arg3){
+    // usage
+    if (arg1==0 && arg2==0 && arg3==0){
+        printf("usage:\n\targ1 = x pixel coordinate at the beginning\n\targ2 = y pixel coordinate at the beginning\n\targ3 = 1000 * the exploration treshold. arg3=900 -> the exploration will stop after 90% of the map having been explored\n");
+    }
+    
     // params and variables
     float treshold_explo=(float)arg3/1000;  // exploration stops when at least 0% of the map is explored
     int nb_scan=16;                         // during the scan, measure what's in front every 360/16 degrees
@@ -296,6 +227,7 @@ int strategy1(int arg1, int arg2, int arg3){
     X=SQUARE_SIZE*arg1;
     Y=SQUARE_SIZE*arg2;
     T0=get_gyro();
+    T=get_gyro();
     T0_COMPASS=get_compass();
     
     printf("starting the exploration!\nwill finish when %f%% of the map will have been explored.\n",treshold_explo*100);
@@ -312,7 +244,7 @@ int strategy1(int arg1, int arg2, int arg3){
         printf("-map explored at %f%%-\nscanning...\n",100*matrix_completion(map));
         for (i=0; i<nb_scan; i++){
             angle=(T-T0)/57.29577951308232;
-            d=get_sonar()/50; // sonar value is in mm, so d is in pixel. Replace get_sonar() by get_sonar_map() ?
+            d=get_sonar()/50; // sonar value is in mm, so d is in pixel. Might eplace get_sonar() by get_sonar_map() for the invisible wall stuff.
             dx_pointed=sin(angle)*d;
             dy_pointed=cos(angle)*d;
             
@@ -325,14 +257,14 @@ int strategy1(int arg1, int arg2, int arg3){
                     // (x,y) is in the arena
                     if (map[y][x]==0){
                         // (x,y) is still unexplored
-                        if (j<nb_point){
-                            // (x,y) is empty
-                            map[y][x]=1;
-                            printf("(%d,%d) is empty\n",x,y);
-                        } else {
+                        if (j==nb_point){
                             // (x,y) is the object that made the sonar's ultrasound stop
                             map[y][x]=2;
                             printf("(%d,%d) is an object\n",x,y);
+                        } else {
+                            // (x,y) is empty
+                            map[y][x]=1;
+                            printf("(%d,%d) is empty\n",x,y);
                         }
                         
                     }
@@ -343,14 +275,16 @@ int strategy1(int arg1, int arg2, int arg3){
         printf("scan finished, map updated:\n");
         matrix_print(map);
         
+        
+        
         // choses an empty neighbouring point
         printf("choosing a neighbouring point to go to...\n");
         x=map_x();
         y=map_y();
         while((x<0||x>=X_MAP_MAX||y<0||y>=X_MAP_MAX) || (x==map_x() && y==map_y()) || map[y][x]!=1){
             // (x,y) is either not a valid coordinate, the position of the robot, or a non-empty space
-            x=map_x()-3+rand()%7;
-            y=map_y()-3+rand()%7;
+            x=map_x()-10+rand()%21;
+            y=map_y()-3+rand()%21;
         }
         printf("chose (%d,%d)!\n",x,y);
         
