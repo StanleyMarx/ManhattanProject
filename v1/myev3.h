@@ -1697,28 +1697,42 @@ char is_path_empty(int mat[Y_MAP_MAX][X_MAP_MAX],int x, int y){
     }
     return 1;
 }
-void chose_next_point(int mat[Y_MAP_MAX][X_MAP_MAX],int* x_ptr, int* y_ptr){
+int chose_next_point(int mat[Y_MAP_MAX][X_MAP_MAX],int* x_ptr, int* y_ptr){
     printf("(chose_next_point) currently at (%d,%d)\n",map_x(),map_y());
     int x=rand()%X_MAP_MAX;
     int y;
+    int x0;
     
     if (map_y()>Y_MAP_MAX*0.75){
         // goes toward Y=0;
         y=0;
-        while(!is_path_empty(mat,x,y)){
+        while(1){
+            for (x=0; x<X_MAP_MAX; x++){
+                if (is_path_empty(mat,x,y)){
+                    *x_ptr=x;
+                    *y_ptr=y;
+                    return 0;
+                }
+            }
             y++;
-            x=rand()%X_MAP_MAX;
             if (y==map_y()+5){
                 y=0;
                 printf("(chose_next_point) [WARNING] y reset to 0. Not an error but suspicious behavior\n");
             }
         }
-    } else {
-        // goes toward Y=+inf
+    }
+    else {
+        // goes toward Y=0;
         y=Y_MAP_MAX-1;
-        while(!is_path_empty(mat,x,y)){
+        while(1){
+            for (x=0; x<X_MAP_MAX; x++){
+                if (is_path_empty(mat,x,y)){
+                    *x_ptr=x;
+                    *y_ptr=y;
+                    return 0;
+                }
+            }
             y--;
-            x=rand()%X_MAP_MAX;
             if (y==map_y()-5){
                 y=Y_MAP_MAX-1;
                 printf("(chose_next_point) [WARNING] y reset to Y_MAP_MAX-1. Not an error but suspicious behavior\n");

@@ -203,7 +203,8 @@ void almost_the_real_stuff(){
 int strategy1(int arg1, int arg2, int arg3){
     // usage
     if (arg1==0 && arg2==0 && arg3==0){
-        printf("usage:\n\targ1 = x pixel coordinate at the beginning\n\targ2 = y pixel coordinate at the beginning\n\targ3 = 1000 * the exploration treshold. arg3=900 -> the exploration will stop after 90% of the map having been explored\n");
+        printf("usage:\n\targ1 = x pixel coordinate at the beginning\n\targ2 = y pixel coordinate at the beginning\n\targ3 = 1000 * the exploration treshold. arg3=900 -> the exploration will stop after 90%% of the map having been explored\n");
+        return 1;
     }
     
     // params and variables
@@ -241,10 +242,12 @@ int strategy1(int arg1, int arg2, int arg3){
     while (matrix_completion(map)<treshold_explo){
         
         // scan
-        printf("\n\n\n-map explored at %f%%-\ncurrent coordinates: (%d,%d,%f)\n\nscanning...\n",100*matrix_completion(map),map_x(),map_y(),fmod(T-T0,360));
+        printf("-map explored at %f%%-\ncurrent coordinates: (%d,%d,%f)\nscanning...\n",100*matrix_completion(map),map_x(),map_y(),fmod(T-T0,360));
         for (i=0; i<nb_scan; i++){
             angle=(T-T0)/57.29577951308232;
+            usleep(100000);
             d=get_sonar()/50; // sonar value is in mm, so d is in pixel. Might eplace get_sonar() by get_sonar_map() for the invisible wall stuff.
+            printf("object detected, d=%f\n",d);
             dx_pointed=cos(angle)*d;
             dy_pointed=sin(angle)*d;
             
@@ -255,8 +258,10 @@ int strategy1(int arg1, int arg2, int arg3){
                 if (x>=0 && y>=0 && x<X_MAP_MAX && y<Y_MAP_MAX){
                     // (x,y) is in the arena
                     if (j==nb_point){
-                        // (x,y) is the object that made the sonar's ultrasound stop
-                        map[y][x]=2;
+                        if (map[y][x]==0){
+                            // (x,y) is the object that made the sonar's ultrasound stop
+                            map[y][x]=2;
+                        }
                     } else {
                         if (map[y][x]==0){
                             // (x,y) is empty
@@ -289,6 +294,7 @@ int strategy1(int arg1, int arg2, int arg3){
     send_map_from_var(map);
     
     printf("--- EXITING : SUCCESS ---\n ");
+    return 0;
 }
 /*
 content of variable map
@@ -408,6 +414,40 @@ int robot(int sw,int arg1,int arg2, int arg3){
             UPDATE_POS_ENABLE=0;
             pthread_join(update_pos,NULL);
             break;
+        case 102:
+            printf("tests a simple send map\n");
+            
+            for (int y=0; y<32; y++){
+                for (int x=0; x<32; x++){
+                    send_mapdata(x,y,8*x,0,8*y);
+                    printf("sent %d %d %d 0 %d",x,y,8*x,8*y);
+                }
+            }
+            send_mapdone();
+            printf("sent mapdone\n");
     }
         
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
